@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../styles/cart.css'
 import Helmet from '../components/Helmet/Helmet'
 import CommonSection from '../components/UI/CommonSection'
@@ -7,10 +7,16 @@ import { motion } from 'framer-motion'
 import { cartActions } from '../redux/slices/cartSlice'
 import { useSelector,useDispatch} from 'react-redux'
 import { Link } from 'react-router-dom'
+import useGetData from '../custom-hooks/useGetData'
 
 const Cart = () => {
-  const cartItems = useSelector(state =>state.cart.cartItems)
+  const [cartItems, setCartItems] = useState([])
 const totalAmount = useSelector(state => state.cart.totalAmount);
+const { data: cart, loading: isLoad } = useGetData("cart");
+const { data: products, loading } = useGetData("products");
+useEffect(() => {
+setCartItems([...products.filter(obj1 => cart.filter((e) => e.userID == JSON.parse(localStorage.getItem('user'))?.uid).some(obj2 => obj2.productID === obj1.id))])
+}, [cart])
   return (
     <>
    <Helmet title='Cart'></Helmet>
@@ -20,7 +26,7 @@ const totalAmount = useSelector(state => state.cart.totalAmount);
     <Row>
       <Col lg='9'>
         {
-          cartItems.length === 0 ? <h2 className='fs-4 text-center'>No item added to the cart!</h2> : 
+          cartItems?.length === 0 ? <h2 className='fs-4 text-center'>No item added to the cart!</h2> : 
           <table className='table bordered'>
           <thead>
             <tr>
@@ -33,7 +39,7 @@ const totalAmount = useSelector(state => state.cart.totalAmount);
           </thead>
           <tbody>
            {
-            cartItems.map((item,index)=>( 
+            cartItems?.map((item,index)=>( 
             <Tr item = {item} key={index}/>
             ))
            }

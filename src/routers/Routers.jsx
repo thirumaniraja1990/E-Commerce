@@ -14,6 +14,7 @@ import AllProducts from "../admin/AllProducts";
 import Dashboard from "../admin/Dashboard";
 import Users from "../admin/Users";
 import Reviews from "../pages/Reviews";
+import AddCategory from "../admin/AddCategory";
 
 
 const Routers = () => {
@@ -31,6 +32,7 @@ const Routers = () => {
       <Route path="dashboard" element={<Dashboard />} /> 
       <Route path="dashboard/all-products" element={<AllProducts />} /> 
       <Route path="dashboard/add-product" element={<AddProducts />} /> 
+      <Route path="dashboard/add-category" element={<AddCategory />} /> 
       <Route path="dashboard/users" element={<Users />} /> 
       </Route>
 

@@ -6,24 +6,31 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { cartActions } from "../../redux/slices/cartSlice";
 import { toast } from 'react-toastify';
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../firebase.config";
 
 
 const ProductCard = ({item}) => {
 
 const dispatch = useDispatch()
 
-const addToCart = () => {
-  dispatch(cartActions.addItem
-    (
-      {
-        id : item.id,
-        productName : item.productName,
-        price : item.price,
-        imgUrl : item.imgUrl,
-      }
-
-    ));
-    toast.success('Product added to the Cart');
+const addToCart = async () => {
+  try {
+    const docRef = await collection(db, "cart");
+      
+            await addDoc(docRef, {
+              userID: JSON.parse(localStorage.getItem('user')).uid,
+              productID: item.id,
+            
+            });
+         
+      
+      toast.success('Product added to the Cart');
+      
+  } catch (error) {
+    
+  }
+  
 };
 
   return (

@@ -49,6 +49,7 @@ const Header = () => {
 
   const logout = () => {
     signOut(auth).then(()=>{
+      localStorage.clear()
       toast.success("Logged out")
       navigate('/home')
     }).catch(err=>{
@@ -127,7 +128,6 @@ toast.error(err.message)
                 <div
                   className="profile__actions"
                   ref={profileActionRef}
-                  onClick={toggleProfileActions}
                 >
                   {currentUser ? (
                     <span onClick={logout}>Logout</span>

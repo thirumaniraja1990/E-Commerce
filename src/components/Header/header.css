@@ -90,11 +90,10 @@ position: relative;
 {
     position: absolute;
     top: 98%;
-    left: 0;
+    left: -60px;
     width: 150px;
     z-index: 10;
     padding: 15px;
-    display: flex;
     align-items: center;
     flex-direction: column;
     background: var(--card-bg-01);
@@ -104,7 +103,7 @@ position: relative;
 }
 .show__profileActions
 {
-    display: block;
+    display: block !important;
 }
 
 .mobile__menu

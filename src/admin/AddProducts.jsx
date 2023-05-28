@@ -5,6 +5,7 @@ import { db, storage } from "../firebase.config";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import useGetData from "../custom-hooks/useGetData";
 
 const AddProducts = () => {
   const [enterTitle, setEnterTitle] = useState("");
@@ -13,6 +14,7 @@ const AddProducts = () => {
   const [enterCategory, setEnterCategory] = useState("");
   const [enterPrice, setEnterPrice] = useState("");
   const [enterProductImg, setEnterProductImg] = useState(null);
+  const { data: category, loading: isLoad } = useGetData("category");
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -115,12 +117,12 @@ const AddProducts = () => {
                         onChange={(e) => setEnterCategory(e.target.value)}
                         required
                       >
-                        <option >Select Category</option>
-                        <option value="chair">Chair</option>
-                        <option value="sofa">Sofa</option>
-                        <option value="mobile">Mobile</option>
-                        <option value="watch">Watch</option>
-                        <option value="wireless">Wireless</option>
+                        <option disabled>Select Category</option>
+                      
+                        {category.map((item,index) => (
+                           <option value={item.categoryName}>{item.categoryName}</option>
+                        ))}
+                       
                       </select>
                     </FormGroup>
                   </div>

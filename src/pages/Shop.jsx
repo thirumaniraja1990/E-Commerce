@@ -12,40 +12,15 @@ const Shop = () => {
   //const [productsData, setProductsData] = useState(products);
   const { data: products, loading } = useGetData("products");
   const [data, setData] = useState(products);
+  const { data: category, loading: isLoad } = useGetData("category");
 
   const handleFilter = (e) => {
     const filterValue = e.target.value;
-
-    if (filterValue === "sofa") {
-      const filteredProducts = products.filter(
-        (item) => item.category === "sofa"
-      );
-      setData(filteredProducts);
-    }
-    if (filterValue === "mobile") {
-      const filteredProducts = products.filter(
-        (item) => item.category === "mobile"
-      );
-      setData(filteredProducts);
-    }
-    if (filterValue === "chair") {
-      const filteredProducts = products.filter(
-        (item) => item.category === "chair"
-      );
-      setData(filteredProducts);
-    }
-    if (filterValue === "watch") {
-      const filteredProducts = products.filter(
-        (item) => item.category === "watch"
-      );
-      setData(filteredProducts);
-    }
-    if (filterValue === "wireless") {
-      const filteredProducts = products.filter(
-        (item) => item.category === "wireless"
-      );
-      setData(filteredProducts);
-    }
+    const filteredProducts = products.filter(
+      (item) => item.category === e.target.value
+    );
+    setData(filteredProducts);
+    
   };
 
   const handleSearch = (e) => {
@@ -56,7 +31,6 @@ const Shop = () => {
     setData(searchedProducts);
   };
 
-  console.log(data);
 
   return (
     <>
@@ -68,14 +42,11 @@ const Shop = () => {
             <Col lg="3" md="6">
               <div className="filter__widget">
                 <select onChange={handleFilter}>
-                  <option>Filter by Category</option>
-                  <option value="sofa" selected>
-                    Sofa
-                  </option>
-                  <option value="mobile">Mobile</option>
-                  <option value="chair">Chair</option>
-                  <option value="watch">Watch</option>
-                  <option value="wireless">Wireless</option>
+                  <option disabled>Filter by Category</option>
+                  <option disabled>Select Category</option>
+                    {category.map((item,index) => (
+                           <option value={item.categoryName}>{item.categoryName}</option>
+                     ))}
                 </select>
               </div>
             </Col>

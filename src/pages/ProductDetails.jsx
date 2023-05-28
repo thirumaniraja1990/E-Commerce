@@ -34,7 +34,6 @@ const ProductDetails = () => {
       if (docSnap.exists()) {
         setProduct(docSnap.data());
       } else {
-        console.log("no product!");
       }
     };
     getProduct();

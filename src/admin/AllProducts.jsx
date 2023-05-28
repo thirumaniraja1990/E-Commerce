@@ -13,7 +13,6 @@ function AllProducts() {
     toast.success("Product deleted!");
   };
 
-  console.log(productsData);
 
   return (
     <section>
