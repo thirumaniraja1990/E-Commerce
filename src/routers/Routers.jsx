@@ -15,6 +15,7 @@ import Dashboard from "../admin/Dashboard";
 import Users from "../admin/Users";
 import Reviews from "../pages/Reviews";
 import AddCategory from "../admin/AddCategory";
+import Order from "../pages/Orders";
 
 
 const Routers = () => {
@@ -26,7 +27,7 @@ const Routers = () => {
       <Route path="shop" element={<Shop />} />
       <Route path="shop/:id" element={<ProductDetails />} />
       <Route path="cart" element={<Cart />} />
-      
+      <Route path="order" element={<Order />} />
       <Route path="/*" element={<ProductedRoute />}>
       <Route path="checkout" element={<Checkout />} /> 
       <Route path="dashboard" element={<Dashboard />} /> 

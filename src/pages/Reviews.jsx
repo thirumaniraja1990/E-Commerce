@@ -13,7 +13,7 @@ const Reviews = () => {
           data-use-service-core
           defer
         ></script>
-        <div class="elfsight-app-8f1088ba-2565-4396-9c18-9ea8212abad6"></div>
+        <div className="elfsight-app-8f1088ba-2565-4396-9c18-9ea8212abad6"></div>
       </section>
     </>
   );

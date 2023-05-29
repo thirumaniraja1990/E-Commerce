@@ -46,7 +46,7 @@ const addToCart = async () => {
         <div className="product__card-bottom d-flex align-items-center justify-content-between">
           <span className="price">{item.price}</span>
           <motion.span whileHover={{scale : 1.2}} onClick={addToCart}>
-            <i class="ri-add-line"></i>
+            <i className="ri-add-line"></i>
           </motion.span>
         </div>
       </div>

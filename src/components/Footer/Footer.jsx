@@ -51,7 +51,7 @@ const Footer = () => {
               <ListGroup className="footer-contact">
                 <ListGroupItem className="ps-0 border-0 d-flex align-items-center gap-2">
                   <span>
-                    <i class="ri-map-pin-line"></i>
+                    <i className="ri-map-pin-line"></i>
                   </span>
                   <p>
                     MSM Angadi LLC, 2772, Cleopatra Dr, Franklin, Ohio 45005,
@@ -60,7 +60,7 @@ const Footer = () => {
                 </ListGroupItem>
                 <ListGroupItem className="ps-0 border-0 d-flex align-items-center gap-2">
                 <span>
-                    <i class="ri-map-pin-line"></i>
+                    <i className="ri-map-pin-line"></i>
                   </span>
                   <p>
                     2/486A South street,Sivan Nagar, Vinagar Colony,
@@ -77,21 +77,21 @@ const Footer = () => {
                 <ListGroupItem className="ps-0 border-0 d-flex align-items-center gap-2">
                   <span>
                     {" "}
-                    <i class="ri-phone-line"></i>{" "}
+                    <i className="ri-phone-line"></i>{" "}
                   </span>
                   <p>USA +1 201 647 1716 </p>
                 </ListGroupItem>
                 <ListGroupItem className="ps-0 border-0 d-flex align-items-center gap-2">
                   <span>
                     {" "}
-                    <i class="ri-phone-line"></i>{" "}
+                    <i className="ri-phone-line"></i>{" "}
                   </span>
                   <p>India +91 82480 93484 </p>
                 </ListGroupItem>
                 <ListGroupItem className="ps-0 border-0 d-flex align-items-center gap-2">
                   <span>
                     {" "}
-                    <i class="ri-mail-line"></i>
+                    <i className="ri-mail-line"></i>
                   </span>
                   <p>msm.eangadi@gmail.com</p>
                 </ListGroupItem>

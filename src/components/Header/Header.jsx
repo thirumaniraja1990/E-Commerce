@@ -25,6 +25,10 @@ const nav__links = [
     path: "cart",
     display: "Cart",
   },
+  {
+    path: "order",
+    display: "Order",
+  },
 ];
 
 const Header = () => {
