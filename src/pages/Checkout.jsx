@@ -21,7 +21,9 @@ const Checkout = () => {
   const totalAmount = useSelector(state=>state.cart.totalAmount)
   const [prod, setProd] = useState([])
   useEffect(()=> {
-    setProd([...JSON.parse(localStorage.getItem('products'))])
+    if (JSON.parse(localStorage.getItem('products'))?.length) {
+      setProd([...JSON.parse(localStorage.getItem('products'))])
+    }
   }, [])
   const checkout = async (e) => {
     e.preventDefault()

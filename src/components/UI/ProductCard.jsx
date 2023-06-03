@@ -28,7 +28,7 @@ const addToCart = async () => {
       toast.success('Product added to the Cart');
       
   } catch (error) {
-    
+    console.log(error);
   }
   
 };

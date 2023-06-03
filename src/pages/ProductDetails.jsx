@@ -50,7 +50,7 @@ const ProductDetails = () => {
     category,
   } = product;
 
-  const relatedProducts = products.filter((item) => item.category === category);
+  const relatedProducts = products.filter((item) => item?.category === category);
 
   /* const submitHandler = (e) => {
     e.preventDefault();
@@ -91,7 +91,7 @@ const ProductDetails = () => {
         <Container>
           <Row>
             <Col lg="6">
-              <img src={imgUrl} alt="" />
+              <img style={{width: '60%'}} src={imgUrl} alt="" />
             </Col>
              <Col lg="6">
               <div className="product__details">
@@ -119,7 +119,7 @@ const ProductDetails = () => {
                 </div>
                 <div className="d-flex align-items-center gap-5">
                   <span className="product__price">${price}</span>
-                  <span>Category : {category.toUpperCase()}</span>
+                  <span>Category : {category?.toUpperCase()}</span>
                 </div> 
                 <p className="mt-3">{shortDesc}</p>
                 <motion.button
