@@ -134,7 +134,13 @@ toast.error(err.message)
                   ref={profileActionRef}
                 >
                   {currentUser ? (
+                    <>
+                    <div style={{display: 'grid'}}>
+                    <span><Link to="/dashboard">Dashboard</Link></span>
                     <span onClick={logout}>Logout</span>
+                    </div>
+                    
+                    </>
                   ) : (
                     <div className=" d-flex align-items-center justify-content-center flex-column">
                       <Link to="/signup">Signup</Link>
