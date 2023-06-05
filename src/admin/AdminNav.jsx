@@ -2,7 +2,7 @@ import React from 'react'
 import { Container,Row,Col } from 'reactstrap'
 import useAuth from '../custom-hooks/useAuth'
 import '../styles/admin-nav.css'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 const admin__nav = [
     {
@@ -52,6 +52,7 @@ const AdminNav = () => {
                     <span><i className="ri-notification-3-line"></i></span>
                     <span><i className="ri-settings-2-line"></i></span>
                     <img src={ currentUser && currentUser.photoURL} alt="" />
+                    <span><Link to="/home"><i class="ri-home-4-fill"></i></Link></span>
                 </div>
             </div>
         </Container>

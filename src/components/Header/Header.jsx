@@ -44,9 +44,9 @@ const Header = () => {
         document.body.scrollTop > 80 ||
         document.documentElement.scrollTop > 80
       ) {
-        headerRef.current.classList.add("sticky__header");
+          headerRef.current.className += " sticky__header";
       } else {
-        headerRef.current.classList.remove("sticky__header");
+          headerRef.current.className = headerRef?.current?.className.replace(" sticky__header", "");
       }
     });
   };
@@ -66,14 +66,26 @@ toast.error(err.message)
     return () => window.removeEventListener("scroll", stickyHeaderFunc);
   });
 
-  const menuToggle = () => menuRef.current.classList.toggle("active__menu");
+  const menuToggle = () => {
+    if (menuRef.current.className == 'active__menu') {
+      menuRef.current.className = profileActionRef?.current?.className.replace(" active__menu", "");
+    } else {
+      menuRef.current.className += " active__menu";
+    }
+  }
 
   const navigateToCart = () => {
     navigate("/cart");
   };
 
-  const toggleProfileActions = () =>
-    profileActionRef.current.classList.toggle("show__profileActions");
+  const toggleProfileActions = () => {
+    if (profileActionRef.current.className == 'show__profileActions') {
+      profileActionRef.current.className = profileActionRef?.current?.className.replace(" show__profileActions", "");
+    } else {
+      profileActionRef.current.className += " show__profileActions";
+    }
+  }
+  
   return (
     <header className="header" ref={headerRef}>
       <Container>

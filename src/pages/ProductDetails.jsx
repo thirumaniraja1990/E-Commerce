@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { db } from "../firebase.config";
 import { doc, getDoc } from "firebase/firestore";
 import useGetData from "../custom-hooks/useGetData";
+import { collection, addDoc } from "firebase/firestore";
 
 const ProductDetails = () => {
   const [tab, setTab] = useState("desc");
@@ -52,32 +53,39 @@ const ProductDetails = () => {
 
   const relatedProducts = products.filter((item) => item?.category === category);
 
-  /* const submitHandler = (e) => {
-    e.preventDefault();
-
-    const reviewUserName = reviewUser.current.value;
-    const reviewUserMsg = reviewMsg.current.value;
-    //console.log(reviewUserName,reviewUserMsg,rating);
-    const reviewObj = {
-      userName: reviewUserName,
-      text: reviewUserMsg,
-      rating,
-    };
-    console.log(reviewObj);
-    toast.success("Review submitted");
-  }; */
-
-  const addToCart = () => {
-    dispatch(
-      cartActions.addItem({
-        id,
-        image: imgUrl,
-        productName,
-        price,
-      })
-    );
-    toast.success("Product added successfully");
+ 
+  const addToCart = async () => {
+    if (JSON.parse(localStorage.getItem('user'))?.uid) {
+      try {
+        const docRef = await collection(db, "cart");
+          
+                await addDoc(docRef, {
+                  userID: JSON.parse(localStorage.getItem('user')).uid,
+                  productID: id,
+                
+                });
+             
+          
+          toast.success('Product added to the Cart');
+          
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      dispatch(
+        cartActions.addItem({
+          id,
+          imgUrl: imgUrl,
+          productName,
+          price,
+        })
+      );
+      toast.success("Product added successfully");
+    }
+    
+    
   };
+ 
 
   useEffect(() => {
     window.scrollTo(0, 0);

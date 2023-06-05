@@ -8,6 +8,8 @@ import { cartActions } from '../redux/slices/cartSlice'
 import { useSelector,useDispatch} from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import useGetData from '../custom-hooks/useGetData'
+import Address from '../components/UI/CommonAddress'
+import { Divider } from '@mui/material'
 
 const Order = () => {
   const [myOrders, setMyOrder] = useState([])
@@ -49,12 +51,8 @@ const handleCheckout = () => {
               <th>Price</th>
               <th>Quantity</th>
               <th>Amount</th>
-              <th>Total Amount</th>
-              <th>Name</th>
-              <th>Ph Num</th>
-              <th>Email</th>
               <th>Address</th>
-              <th>City</th>
+              <th>Total Amount</th>
             </tr>
           </thead>
           <tbody>
@@ -78,25 +76,12 @@ const handleCheckout = () => {
               <td>${e.price * e.quantity}</td>
               {productIndex === 0 && (
                 <>
+           
+            <td style={{ verticalAlign: "middle" }} rowSpan={productCount}><Address details={{name: item.name, phNo: item.phNo, email: item.email, address: item.address, city:item.city}}/></td>
             <td style={{ verticalAlign: "middle" }} rowSpan={productCount}>
               ${totalAmount.toFixed(2)}
             </td>
-            <td style={{ verticalAlign: "middle" }} rowSpan={productCount}>
-            {item.name}
-          </td>
-          <td style={{ verticalAlign: "middle" }} rowSpan={productCount}>
-            {item.phNo}
-          </td>
-          <td style={{ verticalAlign: "middle" }} rowSpan={productCount}>
-            {item.email}
-          </td>
-          <td style={{ verticalAlign: "middle" }} rowSpan={productCount}>
-            {item.address}
-          </td>
-          <td style={{ verticalAlign: "middle" }} rowSpan={productCount}>
-            {item.city}
-          </td>
-         
+            <Divider/>
           </>
           )}
             </tr>

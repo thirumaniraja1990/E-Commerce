@@ -13,31 +13,45 @@ import { db } from "../../firebase.config";
 const ProductCard = ({item}) => {
 
 const dispatch = useDispatch()
-
 const addToCart = async () => {
-  try {
-    const docRef = await collection(db, "cart");
-      
-            await addDoc(docRef, {
-              userID: JSON.parse(localStorage.getItem('user')).uid,
-              productID: item.id,
-            
-            });
-         
-      
-      toast.success('Product added to the Cart');
-      
-  } catch (error) {
-    console.log(error);
+  if (JSON.parse(localStorage.getItem('user'))?.uid) {
+    try {
+      const docRef = await collection(db, "cart");
+        
+              await addDoc(docRef, {
+                userID: JSON.parse(localStorage.getItem('user')).uid,
+                productID: item.id,
+              
+              });
+           
+        
+        toast.success('Product added to the Cart');
+        
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    console.log(item);
+    dispatch(
+      cartActions.addItem({
+        id: item.id,
+        imgUrl: item.imgUrl,
+        productName: item.productName,
+        price: item.price,
+      })
+    );
+    toast.success("Product added successfully");
   }
   
+  
 };
+
 
   return (
     <Col lg="3" md="4" className="mb-2" >
       <div className="product__item">
         <div className="product__img">
-          <motion.img whileHover={{scale : 0.9}} src={item.imgUrl} alt="" />
+        <Link to={`/shop/${item.id}`}>  <motion.img whileHover={{scale : 0.9}} src={item.imgUrl} alt="" /></Link>
         </div>
         <div className="p-2 product__info">
         <h3 className="product__name"> <Link to={`/shop/${item.id}`}>{item.productName} </Link></h3>

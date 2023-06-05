@@ -12,22 +12,36 @@ import useGetData from '../custom-hooks/useGetData'
 const Cart = () => {
   const [cartItems, setCartItems] = useState([])
   const navigate = useNavigate()
+  const cartItems2 = useSelector(state =>state.cart.cartItems)
 const totalAmount = useSelector(state => state.cart.totalAmount);
 const { data: cart, loading: isLoad } = useGetData("cart");
 const { data: products, loading } = useGetData("products");
 useEffect(() => {
-  const cartItems1 = products.filter(obj1 =>
-    cart.filter(e => e.userID === JSON.parse(localStorage.getItem('user'))?.uid)
-        .some(obj2 => obj2.productID === obj1.id)
-  );
+  if (JSON.parse(localStorage.getItem('user'))?.uid) {
+    const cartItems1 = products.filter(obj1 =>
+      cart.filter(e => e.userID === JSON.parse(localStorage.getItem('user'))?.uid)
+          .some(obj2 => obj2.productID === obj1.id)
+    );
+    
+    const setCartItems1 = cartItems1.map(product => {
+      const quantity = cart.filter(e => e.productID === product.id && e.userID === JSON.parse(localStorage.getItem('user'))?.uid).length;
+      return { ...product, quantity };
+    });
   
-  const setCartItems1 = cartItems1.map(product => {
-    const quantity = cart.filter(e => e.productID === product.id && e.userID === JSON.parse(localStorage.getItem('user'))?.uid).length;
-    return { ...product, quantity };
-  });
-
-setCartItems([...setCartItems1])
+  setCartItems([...setCartItems1])
+  }
+  
 }, [cart])
+useEffect(() => {
+if (cartItems2.length) {
+  setCartItems([...cartItems2.map((e) => {
+    return {
+      ...e,
+      quantity: 1
+    }
+  })])
+}
+}, [cartItems2])
 
 const handleCheckout = () => {
   localStorage.setItem('products', JSON.stringify(cartItems))
