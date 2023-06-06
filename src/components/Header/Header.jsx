@@ -38,6 +38,7 @@ const Header = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const profileActionRef = useRef(null);
+  const isAdmin = JSON.parse(localStorage.getItem('user'))?.isAdmin
   const stickyHeaderFunc = () => {
     window.addEventListener("scroll", () => {
       if (
@@ -148,7 +149,7 @@ toast.error(err.message)
                   {currentUser ? (
                     <>
                     <div style={{display: 'grid'}}>
-                    <span><Link to="/dashboard">Dashboard</Link></span>
+                    {isAdmin &&  <span><Link to="/dashboard">Dashboard</Link></span>}
                     <span onClick={logout}>Logout</span>
                     </div>
                     
@@ -157,7 +158,7 @@ toast.error(err.message)
                     <div className=" d-flex align-items-center justify-content-center flex-column">
                       <Link to="/signup">Signup</Link>
                       <Link to="/login">Login</Link>
-                      <Link to="/dashboard">Dashboard</Link>
+                      {isAdmin &&    <Link to="/dashboard">Dashboard</Link>}
                     </div>
                   )}
                 </div>

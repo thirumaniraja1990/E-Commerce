@@ -7,20 +7,25 @@ import '../styles/login.css'
 import {signInWithEmailAndPassword} from "firebase/auth";
 import {auth} from "../firebase.config";
 import {toast} from 'react-toastify';
+import useGetData from '../custom-hooks/useGetData'
 
 const Login = () => {
   const [email,setEmail] = useState('')
   const [password,setPassword] = useState('')
   const [loading,setLoading] = useState(false);
   const navigate = useNavigate()
+  const { data: users, loading: load } = useGetData("users");
 
   const signIn = async (e)=> {
     e.preventDefault()
     setLoading(true)
     try {
       const userCredential = await signInWithEmailAndPassword(auth,email,password)
-      const user = userCredential.user;
-      console.log(user)
+      let user = userCredential.user;
+      user = {
+        ...user,
+        isAdmin: users.find((e) => e.uid == user.uid).isAdmin
+      }
       localStorage.setItem('user', JSON.stringify(user))
       setLoading(false)
       toast.success('Successfully logged in')

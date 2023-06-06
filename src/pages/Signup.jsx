@@ -60,6 +60,7 @@ const Signup = () => {
               displayName: username,
               email,
               photoURL: downloadURL,
+              isAdmin: false
             });
           });
         }
