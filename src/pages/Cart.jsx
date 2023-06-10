@@ -113,6 +113,9 @@ const Tr = ({item, index,  cartItems, setCartItems}) => {
   }
   const handleSub = () => {
     const arr = [...cartItems]
+    if (arr[index].quantity == 1) {
+      return
+    }
     arr[index].quantity =   arr[index].quantity - 1
     setCartItems([
       ...arr
@@ -129,7 +132,16 @@ return <>
     <Button color="danger" onClick={handleSub}>
      -
     </Button>
-    <Input type='number' bsSize="sm" value={item.quantity} placeholder="Quantity" />
+    <Input type='number' bsSize="sm" onChange={(e) => {
+      if (e.target.value > 0) {
+        const arr = [...cartItems]
+      arr[index].quantity =   e.target.value
+      setCartItems([
+        ...arr
+      ])
+      }
+      
+    }} value={item.quantity} placeholder="Quantity" />
     <Button color="success" onClick={() => handleAdd()}>
      +
     </Button>

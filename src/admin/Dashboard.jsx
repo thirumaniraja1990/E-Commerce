@@ -56,7 +56,7 @@ useEffect(() => {
       return acc + productTotal;
     }
     return acc;
-  }, 0)}</span>
+}, 0).toFixed(2)}</span>
           </div>
           </Col>
           <Col className="lg-3" > 

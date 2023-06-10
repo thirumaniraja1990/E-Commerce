@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommonSection from "../components/UI/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
 import { Container, Col, Row } from "reactstrap";
@@ -30,6 +30,13 @@ const Shop = () => {
     );
     setData(searchedProducts);
   };
+
+  useEffect(() => {
+    const filteredProducts = products.filter(
+      (item) => item.category === category[0].categoryName
+    );
+    setData(filteredProducts);
+  }, [category])
 
 
   return (

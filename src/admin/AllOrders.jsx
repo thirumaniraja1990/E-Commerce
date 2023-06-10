@@ -73,7 +73,7 @@ const handleCheckout = () => {
               <td>{e.productName}</td>
               <td>${e.price}</td>
               <td>{e.quantity}</td>
-              <td>${e.price * e.quantity}</td>
+              <td>${(e.price * e.quantity).toFixed(2)}</td>
               {productIndex === 0 && (
                 <>
            
