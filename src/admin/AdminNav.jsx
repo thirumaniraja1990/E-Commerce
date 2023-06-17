@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Container,Row,Col } from 'reactstrap'
 import useAuth from '../custom-hooks/useAuth'
 import '../styles/admin-nav.css'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { signOut } from 'firebase/auth'
+import { auth } from '../firebase.config'
+import { toast } from 'react-toastify'
+import { motion } from "framer-motion";
+import userIcon from "../assets/images/user-icon.png";
 
 const admin__nav = [
     {
@@ -34,7 +39,26 @@ const admin__nav = [
 const AdminNav = () => {
 
     const {currentUser} = useAuth()
-
+    const profileActionRef = useRef(null);
+    const isAdmin = JSON.parse(localStorage.getItem('user'))?.isAdmin
+    const navigate = useNavigate();
+    const logout = () => {
+        signOut(auth).then(()=>{
+          localStorage.clear()
+          toast.success("Logged out")
+          navigate('/home')
+        }).catch(err=>{
+    toast.error(err.message)
+        })
+      }
+      const toggleProfileActions = () => {
+        console.log(profileActionRef.current?.className);
+        if (profileActionRef.current?.className.includes('show__profileActions')) {
+          profileActionRef.current.className = profileActionRef?.current?.className.replace(" show__profileActions", "");
+        } else {
+          profileActionRef.current.className += " show__profileActions";
+        }
+      }
   return (
   <>
   <header className='admin__header'>
@@ -49,10 +73,33 @@ const AdminNav = () => {
                     <span><i className="ri-search-line"></i></span>
                 </div>
                 <div className="admin__nav-top-right">
-                    <span><i className="ri-notification-3-line"></i></span>
-                    <span><i className="ri-settings-2-line"></i></span>
-                    <img src={ currentUser && currentUser.photoURL} alt="" />
+                   
+                    <motion.img
+                  whileTap={{ scale: 1.2 }}
+                  src={currentUser ? currentUser.photoURL : userIcon}
+                  onClick={toggleProfileActions}
+                />
                     <span><Link to="/home"><i class="ri-home-4-fill"></i></Link></span>
+                </div>
+                <div
+                  className="profile__actions"
+                  ref={profileActionRef}
+                >
+                  {currentUser ? (
+                    <>
+                    <div style={{display: 'grid'}}>
+                    <span><Link to="/home">Home</Link></span>
+                    <span onClick={logout}>Logout</span>
+                    </div>
+                    
+                    </>
+                  ) : (
+                    <div className=" d-flex align-items-center justify-content-center flex-column">
+                      <Link to="/signup">Signup</Link>
+                      <Link to="/login">Login</Link>
+                      {isAdmin &&    <Link to="/dashboard">Dashboard</Link>}
+                    </div>
+                  )}
                 </div>
             </div>
         </Container>

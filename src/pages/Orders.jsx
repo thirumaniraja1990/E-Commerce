@@ -9,21 +9,32 @@ import { useSelector,useDispatch} from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import useGetData from '../custom-hooks/useGetData'
 import Address from '../components/UI/CommonAddress'
-import { Divider } from '@mui/material'
-
+import { Divider, formControlClasses } from '@mui/material'
+import { firestore } from 'firebase/firestore';
+import { Timestamp } from 'firebase/firestore';
 const Order = () => {
   const [myOrders, setMyOrder] = useState([])
   const navigate = useNavigate()
 const { data: checkoutProducts, loading } = useGetData("checkout");
 useEffect(() => {
-  setMyOrder([...checkoutProducts.filter((e) => e.uid === JSON.parse(localStorage.getItem('user')).uid)
-  .map((el) => {
-    return {
-      ...el,
-      products: JSON.parse(el.products)
-    }
-  })
-])
+  
+
+setMyOrder(
+  checkoutProducts
+    .filter((e) => e.uid === JSON.parse(localStorage.getItem('user')).uid)
+    .map((el) => {
+      const orderedDate = Timestamp.fromDate(new Date(el.orderedDate?.seconds * 1000)).toDate();
+      console.log(orderedDate);
+      const formattedDate = orderedDate.toLocaleString(); // Adjust the date formatting as per your requirements
+      console.log(formattedDate);
+      return {
+        ...el,
+        products: JSON.parse(el.products),
+        orderedDate: formattedDate,
+      };
+    })
+);
+
 
 }, [checkoutProducts])
 
@@ -53,11 +64,12 @@ const handleCheckout = () => {
               <th>Amount</th>
               <th>Address</th>
               <th>Total Amount</th>
+              <th>Ordered Date</th>
             </tr>
           </thead>
           <tbody>
           {myOrders?.map((item, index) => {
-      const productCount = item.products.length +1;
+      const productCount = item.products?.length +1;
       const totalAmount = item?.products?.reduce((total, product) => total + product.quantity * product.price, 0) || 0;
 
       return (
@@ -65,7 +77,7 @@ const handleCheckout = () => {
           <tr style={{ verticalAlign: "middle" }}>
             <td rowSpan={productCount}>{index + 1}</td>
           </tr>
-          {item.products.map((e, productIndex) => (
+          {item.products?.map((e, productIndex) => (
             <tr key={productIndex}>
               <td>
                 <img src={e.imgUrl} alt="" />
@@ -80,6 +92,9 @@ const handleCheckout = () => {
             <td style={{ verticalAlign: "middle" }} rowSpan={productCount}><Address details={{name: item.name, phNo: item.phNo, email: item.email, address: item.address, city:item.city}}/></td>
             <td style={{ verticalAlign: "middle" }} rowSpan={productCount}>
               ${totalAmount.toFixed(2)}
+            </td>
+            <td style={{ verticalAlign: "middle" }} rowSpan={productCount}>
+              {item.orderedDate === 'Invalid Date' ? '-' : item.orderedDate}
             </td>
             <Divider/>
           </>

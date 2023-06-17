@@ -4,9 +4,11 @@ import useGetData from "../custom-hooks/useGetData";
 import { db } from "../firebase.config";
 import { doc, deleteDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function AllProducts() {
   const { data: productsData, loading } = useGetData("products");
+  const navigate = useNavigate();
 
   const deleteProduct = async (id) => {
     await deleteDoc(doc(db, "products", id));
@@ -42,6 +44,14 @@ function AllProducts() {
                       <td>{item.category}</td>
                       <td>${item.price}</td>
                       <td>
+                      <button
+                          onClick={() => {
+                            navigate(`/dashboard/add-product?id=${item.id}`);
+                          }}
+                          className="btn"
+                        >
+                          Edit
+                        </button>
                         <button
                           onClick={() => {
                             deleteProduct(item.id);

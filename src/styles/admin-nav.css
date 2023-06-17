@@ -75,3 +75,22 @@
 {
     background: whitesmoke  ;
 }
+.show__profileActions
+{
+    display: block !important;
+}
+ .profile__actions
+{
+    position: absolute;
+    top: 10%;
+    left: 82%;
+    width: 150px;
+    z-index: 10;
+    padding: 15px;
+    align-items: center;
+    flex-direction: column;
+    background: var(--card-bg-01);
+    line-height: 30px;
+    display: none;
+    cursor: pointer;
+}

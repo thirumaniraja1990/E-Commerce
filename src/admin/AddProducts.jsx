@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, FormGroup, Container, Row, Col } from "reactstrap";
 import { toast } from "react-toastify";
 import { db, storage } from "../firebase.config";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { collection, addDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
+import { useLocation, useNavigate } from "react-router-dom";
 import useGetData from "../custom-hooks/useGetData";
 
 const AddProducts = () => {
@@ -15,13 +15,51 @@ const AddProducts = () => {
   const [enterPrice, setEnterPrice] = useState("");
   const [enterProductImg, setEnterProductImg] = useState(null);
   const { data: category, loading: isLoad } = useGetData("category");
+  const { data: productsData } = useGetData("products");
+  const [isEdit, setIsEdit] = useState(false);
 
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+    const id = queryParams.get('id');
+  useEffect(() => {
+    // Access query parameters
+    
+    
+    // Do something with the query parameter value
+    if (id != null) {
+      setIsEdit(true)
+      setEnterTitle(productsData.find(e => e.id == id)?.productName)
+      setEnterShortDesc(productsData.find(e => e.id == id)?.shortDesc)
+      setEnterDescription(productsData.find(e => e.id == id)?.description)
+      setEnterCategory(productsData.find(e => e.id == id)?.category)
+      setEnterPrice(productsData.find(e => e.id == id)?.price)
+      setEnterProductImg(productsData.find(e => e.id == id)?.imgUrl)
+
+    }
+  }, [productsData]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const handleCancel = () => {
+    navigate("/dashboard/all-products");
+  }
   const addProduct = async (e) => {
     e.preventDefault();
     setLoading(true);
+    if (isEdit) {
+      const docRef = doc(db, "products", id);
+      await updateDoc(docRef, {
+        productName: enterTitle,
+        shortDesc: enterShortDesc,
+        description: enterDescription,
+        category: enterCategory,
+        price: enterPrice,
+        imgUrl: enterProductImg,
+      });
+      setLoading(false);
+      toast.success("Product successfully updated!");
+      navigate("/dashboard/all-products");
+      return
+    }
 
     try {
       const docRef = await collection(db, "products");
@@ -66,7 +104,7 @@ const AddProducts = () => {
               <h4 className="py-5">Loading.......</h4>
             ) : (
               <>
-                <h4 className="mb-5">Add Products</h4>
+                <h4 className="mb-5">{isEdit ? 'Edit' : 'Add'} Products</h4>
                 <Form onSubmit={addProduct}>
                   <FormGroup className="form__group">
                     <span>Product title</span>
@@ -132,13 +170,15 @@ const AddProducts = () => {
                       <input
                         type="file"
                         onChange={(e) => setEnterProductImg(e.target.files[0])}
-                        required
                       />
                     </FormGroup>
                   </div>
                   <button className="buy__btn" type="submit">
-                    Add Product
+                  {isEdit ? 'Update' : 'Add'} Product
                   </button>
+                  {isEdit && <button className="btn btn-danger ms-2" onClick={handleCancel}>
+                  Cancel
+                  </button>}
                 </Form>
               </>
             )}

@@ -42,8 +42,8 @@ const Header = () => {
   const stickyHeaderFunc = () => {
     window.addEventListener("scroll", () => {
       if (
-        document.body.scrollTop > 80 ||
-        document.documentElement.scrollTop > 80
+        (document.body.scrollTop > 80 ||
+        document.documentElement.scrollTop > 80) 
       ) {
           headerRef.current.className += " sticky__header";
       } else {
@@ -80,7 +80,7 @@ toast.error(err.message)
   };
 
   const toggleProfileActions = () => {
-    if (profileActionRef.current.className == 'show__profileActions') {
+    if (profileActionRef.current.className.includes('show__profileActions')) {
       profileActionRef.current.className = profileActionRef?.current?.className.replace(" show__profileActions", "");
     } else {
       profileActionRef.current.className += " show__profileActions";
@@ -126,10 +126,7 @@ toast.error(err.message)
             </div>
 
             <div className="nav__icons">
-              <span className="fav__icon">
-                <i className="ri-heart-line"></i>
-                <span className="badge">1</span>
-              </span>
+             
 
               <span className="cart__icon" onClick={navigateToCart}>
                 <i className="ri-shopping-bag-line"></i>

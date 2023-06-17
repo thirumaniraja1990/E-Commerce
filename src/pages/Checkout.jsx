@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify';
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
+import firebase from 'firebase/compat/app';
 const Checkout = () => {
   const [payload, setPayload] = useState({
     name: '',
@@ -39,8 +40,8 @@ const Checkout = () => {
                 address: payload.address,
                 city: payload.city,
                 postalCode: payload.postalCode,
-                country: payload.country
-              
+                country: payload.country,
+                orderedDate: new Date()
               });
            
         
