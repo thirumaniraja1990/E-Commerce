@@ -8,6 +8,9 @@ import { cartActions } from '../redux/slices/cartSlice'
 import { useSelector,useDispatch} from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import useGetData from '../custom-hooks/useGetData'
+import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore'
+import { db } from '../firebase.config'
+import { toast } from 'react-toastify'
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([])
@@ -101,8 +104,21 @@ const handleCheckout = () => {
 
 const Tr = ({item, index,  cartItems, setCartItems}) => {
   const dispatch = useDispatch()
-  const deleteProduct = () => {
-    dispatch(cartActions.deleteItem(item.id))
+  const deleteProduct = async () => {
+    try {
+    const cartQuery = query(collection(db, 'cart'), where('productID', '==', item.id));
+    const querySnapshot = await getDocs(cartQuery);
+
+    querySnapshot.forEach(async (queryDoc) => {
+      const docRef = doc(db, 'cart', queryDoc.id);
+      await deleteDoc(docRef);
+    });
+
+    dispatch(cartActions.deleteItem(item.productID));
+    toast.error('Product removed from the Cart');
+  } catch (error) {
+    console.log('Error deleting product:', error);
+  }
   }
   const handleAdd = () => {
     const arr = [...cartItems]

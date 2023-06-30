@@ -8,6 +8,8 @@ import { toast } from 'react-toastify';
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 import firebase from 'firebase/compat/app';
+import emailjs from '@emailjs/browser';
+
 const Checkout = () => {
   const [payload, setPayload] = useState({
     name: '',
