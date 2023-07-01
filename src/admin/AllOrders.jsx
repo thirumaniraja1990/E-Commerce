@@ -20,7 +20,7 @@ import Address from "../components/UI/CommonAddress";
 import { Divider } from "@mui/material";
 import logo from "../assets/images/Logo-Latest.jpeg";
 import { db } from "../firebase.config";
-import { doc, updateDoc } from "firebase/firestore";
+import { Timestamp, doc, updateDoc } from "firebase/firestore";
 
 const AllOrder = () => {
   const [myOrders, setMyOrder] = useState([]);
@@ -29,9 +29,14 @@ const AllOrder = () => {
   useEffect(() => {
     setMyOrder([
       ...checkoutProducts.map((el) => {
+        const orderedDate = Timestamp.fromDate(
+          new Date(el.orderedDate?.seconds * 1000)
+        ).toDate();
+        const formattedDate = orderedDate.toLocaleString();
         return {
           ...el,
           products: JSON.parse(el.products),
+          orderedDate: formattedDate,
         };
       }),
     ]);
@@ -223,7 +228,11 @@ const AllOrder = () => {
     (currentPage - 1) * ordersPerPage,
     currentPage * ordersPerPage
   );
-
+  const sortedOrders = currentOrders.slice().sort((a, b) => {
+    const dateA = new Date(a.orderedDate);
+    const dateB = new Date(b.orderedDate);
+    return dateB - dateA;
+  });
   // Function to handle page navigation
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -251,12 +260,13 @@ const AllOrder = () => {
                       <th>Address</th>
                       <th>Total Amount</th>
                       <th>Print</th>
+                      <th>Ordered Date</th>
                       <th>Order Status</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {currentOrders?.map((item, index) => {
-                      const productCount = item.products.length + 1;
+                    {sortedOrders?.map((item, index) => {
+                      const productCount = item.products?.length + 1;
                       const totalAmount =
                         item?.products?.reduce(
                           (total, product) =>
@@ -269,7 +279,7 @@ const AllOrder = () => {
                           <tr style={{ verticalAlign: "middle" }}>
                             <td rowSpan={productCount}>{index + 1}</td>
                           </tr>
-                          {item.products.map((e, productIndex) => (
+                          {item?.products?.map((e, productIndex) => (
                             <tr key={productIndex}>
                               <td>
                                 <img src={e.imgUrl} alt="" />
@@ -307,6 +317,14 @@ const AllOrder = () => {
                                     <div onClick={() => handlePrint(item)}>
                                       <i class="ri-printer-fill"></i>
                                     </div>
+                                  </td>
+                                  <td
+                                    style={{ verticalAlign: "middle" }}
+                                    rowSpan={productCount}
+                                  >
+                                    {item.orderedDate === "Invalid Date"
+                                      ? "-"
+                                      : item.orderedDate}
                                   </td>
                                   <td
                                     style={{ verticalAlign: "middle" }}
