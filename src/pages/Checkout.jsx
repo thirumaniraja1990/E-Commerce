@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 import firebase from "firebase/compat/app";
-import emailjs from "@emailjs/browser";
+import emailjs from '@emailjs/browser';
 import axios from "axios";
 
 const Checkout = () => {
@@ -21,6 +21,93 @@ const Checkout = () => {
     postalCode: "",
     country: "",
   });
+  const sendEmail = (payload) => {
+    return new Promise((resolve, reject) => {
+      // Your email service configuration
+      const serviceId = 'service_jtcn1v8';
+      const templateId = 'template_c1aydzs';
+      const userId = '1U-pNmW5LeO3UJgUA';
+  
+      // Construct the email body with dynamic data
+      let emailBody = `<html>
+      <head>
+        <style>
+          table {
+            border-collapse: collapse;
+            width: 100%;
+          }
+          th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+          }
+          th {
+            background-color: #f2f2f2;
+          }
+          .total-price {
+            font-weight: bold;
+            background-color: #000;
+            color: #ffffff;
+          }
+        </style>
+      </head>
+      <body>
+        <p>Hello ${payload.name},</p>
+        <p>Thanks for your order with MSM Angadi. Kindly wait for further updates.</p>
+        <p>Here is the order details:</p>
+        <table>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>`;
+    
+    let totalPrice = 0; // Initialize total price
+    
+    // Iterate over the products array and add rows to the table
+    JSON.parse(localStorage.getItem('products')).forEach((product) => {
+      const { productName, quantity, price } = product;
+      const productTotal = quantity * price; // Calculate individual product total
+      totalPrice += productTotal; // Add to the total price
+      emailBody += `<tr>
+        <td>${productName}</td>
+        <td>${quantity}</td>
+        <td>$${price}</td>
+        <td>$${productTotal}</td>
+      </tr>`;
+    });
+    
+    // Add closing lines to the email body
+    emailBody += `</table>
+      <p class="total-price">Total Price: $${totalPrice}</p>
+      <p>Best wishes,<br>MSM team</p>
+    </body>
+    </html>`;
+    
+  
+      const templateParams = {
+        to: payload.email,
+        to_name: payload.name,
+        reply_to: 'msmangadi.etagers@gmail.com',
+        emailBody: emailBody
+        // Other template parameters...
+      };
+  
+      // Send the email
+      emailjs.send(serviceId, templateId, templateParams, userId)
+        .then((response) => {
+          console.log('Email successfully sent!', response.status, response.text);
+          resolve(); // Resolve the promise when the email is sent successfully
+        })
+        .catch((error) => {
+          console.error('Error sending email:', error);
+          reject(error); // Reject the promise if there's an error sending the email
+        });
+    });
+  };
+  
+  
   const totalQty = useSelector((state) => state.cart.totalQuantity);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const [prod, setProd] = useState([]);
@@ -29,6 +116,7 @@ const Checkout = () => {
       setProd([...JSON.parse(localStorage.getItem("products"))]);
     }
   }, []);
+  
   const checkout = async (e) => {
     e.preventDefault();
     try {
@@ -46,19 +134,11 @@ const Checkout = () => {
         country: payload.country,
         orderedDate: new Date(),
       });
-
-      axios.post("http://localhost:3010/sendMail", {
-        to: payload.email,
-        subject: "MSM Angadi",
-        text: "Thanks for your order with MSM Angadi. Kindly Wait for further update. Thank You",
-      }).then(() => {
-        console.log("Product placed successfully");
-      }).catch((err) => {
-        console.log(err);
-      }).finally(() => {
+      sendEmail(payload).then(() => {
         toast.success("Product placed successfully");
         localStorage.removeItem("products");
-      });
+      })
+     
       
     } catch (error) {
       toast.error("error");
