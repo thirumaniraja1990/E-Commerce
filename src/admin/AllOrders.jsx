@@ -210,7 +210,24 @@ const AllOrder = () => {
       console.log('Error updating document:', error);
     }
   }
+  const ordersPerPage = 5;
 
+  // State to keep track of the current page
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(myOrders.length / ordersPerPage);
+
+  // Get the orders for the current page
+  const currentOrders = myOrders.slice(
+    (currentPage - 1) * ordersPerPage,
+    currentPage * ordersPerPage
+  );
+
+  // Function to handle page navigation
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   return (
     <>
       <Helmet title="Cart"></Helmet>
@@ -238,7 +255,7 @@ const AllOrder = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {myOrders?.map((item, index) => {
+                    {currentOrders?.map((item, index) => {
                       const productCount = item.products.length + 1;
                       const totalAmount =
                         item?.products?.reduce(
@@ -302,13 +319,19 @@ const AllOrder = () => {
                                         onChange={(e) => updateOrderStatus(item.id,e.target.value)}
                                         required
                                       >
-                                        <option disabled>
-                                          Select Category
+                                        <option >
+                                          Select Status
                                         </option>
 
                                         <option value="Hold">Hold</option>
+                                        <option value="Shipped">
+                                          Shipped
+                                        </option>
                                         <option value="Completed">
                                           Completed
+                                        </option>
+                                        <option value="Rejected">
+                                          Rejected
                                         </option>
                                       </select>
                                     </FormGroup>
@@ -324,6 +347,31 @@ const AllOrder = () => {
                   </tbody>
                 </table>
               )}
+              <div className="pagination">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              Prev
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+              (page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={currentPage === page ? "active" : ""}
+                >
+                  {page}
+                </button>
+              )
+            )}
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              Next
+            </button>
+          </div>
             </Col>
           </Row>
         </Container>

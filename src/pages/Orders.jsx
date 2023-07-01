@@ -176,7 +176,24 @@ const Order = () => {
  
   
   
+  const ordersPerPage = 5;
 
+  // State to keep track of the current page
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(myOrders.length / ordersPerPage);
+
+  // Get the orders for the current page
+  const currentOrders = myOrders.slice(
+    (currentPage - 1) * ordersPerPage,
+    currentPage * ordersPerPage
+  );
+
+  // Function to handle page navigation
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   const handleCheckout = () => {
     localStorage.setItem("products", JSON.stringify(myOrders));
     navigate("/checkout", true);
@@ -206,10 +223,11 @@ const Order = () => {
                       <th>Total Amount</th>
                       <th>Ordered Date</th>
                       <th>Actions</th>
+                      <th>Status</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {myOrders?.map((item, index) => {
+                    {currentOrders?.map((item, index) => {
                       const productCount = item.products?.length + 1;
                       const totalAmount =
                         item?.products?.reduce(
@@ -271,6 +289,12 @@ const Order = () => {
                                       <i class="ri-printer-fill"></i>
                                     </div>
                                   </td>
+                                  <td
+                                    style={{ verticalAlign: "middle" }}
+                                    rowSpan={productCount}
+                                  >
+                                    {item.status ?? 'Not yet updated'}
+                                  </td>
                                   <Divider />
                                 </>
                               )}
@@ -282,6 +306,31 @@ const Order = () => {
                   </tbody>
                 </table>
               )}
+              <div className="pagination">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              Prev
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+              (page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={currentPage === page ? "active" : ""}
+                >
+                  {page}
+                </button>
+              )
+            )}
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              Next
+            </button>
+          </div>
             </Col>
           </Row>
         </Container>
