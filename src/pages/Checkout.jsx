@@ -10,6 +10,7 @@ import { db } from "../firebase.config";
 import firebase from "firebase/compat/app";
 import emailjs from '@emailjs/browser';
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
   const [payload, setPayload] = useState({
@@ -116,7 +117,8 @@ const Checkout = () => {
       setProd([...JSON.parse(localStorage.getItem("products"))]);
     }
   }, []);
-  
+  const navigate = useNavigate();
+
   const checkout = async (e) => {
     e.preventDefault();
     try {
@@ -137,6 +139,7 @@ const Checkout = () => {
       sendEmail(payload).then(() => {
         toast.success("Product placed successfully");
         localStorage.removeItem("products");
+        navigate("/order");
       })
      
       

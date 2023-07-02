@@ -39,18 +39,18 @@ const Header = () => {
   const { currentUser } = useAuth();
   const profileActionRef = useRef(null);
   const isAdmin = JSON.parse(localStorage.getItem('user'))?.isAdmin
-  const stickyHeaderFunc = () => {
-    window.addEventListener("scroll", () => {
-      if (
-        (document.body.scrollTop > 80 ||
-        document.documentElement.scrollTop > 80) 
-      ) {
-          headerRef.current.className += " sticky__header";
-      } else {
-          headerRef.current.className = headerRef?.current?.className.replace(" sticky__header", "");
-      }
-    });
-  };
+  // const stickyHeaderFunc = () => {
+  //   window.addEventListener("scroll", () => {
+  //     if (
+  //       (document.body.scrollTop > 80 ||
+  //       document.documentElement.scrollTop > 80)
+  //     ) {
+  //         headerRef.current.className += " sticky__header";
+  //     } else {
+  //         // headerRef.current.className = headerRef?.current?.className.replace(" sticky__header", "");
+  //     }
+  //   });
+  // };
 
   const logout = () => {
     signOut(auth).then(()=>{
@@ -62,10 +62,10 @@ toast.error(err.message)
     })
   }
 
-  useEffect(() => {
-    stickyHeaderFunc();
-    return () => window.removeEventListener("scroll", stickyHeaderFunc);
-  });
+  // useEffect(() => {
+  //   stickyHeaderFunc();
+  //   return () => window.removeEventListener("scroll", stickyHeaderFunc);
+  // });
 
   const menuToggle = () => {
     if (menuRef.current.className == 'active__menu') {
@@ -88,7 +88,7 @@ toast.error(err.message)
   }
   
   return (
-    <header className="header" ref={headerRef}>
+    <header className="header sticky__header" ref={headerRef}>
       <Container>
         <Row>
           <div className="nav__wrapper">

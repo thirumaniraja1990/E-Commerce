@@ -173,7 +173,7 @@ const Order = () => {
   };
   
 
- 
+  
   
   
   const ordersPerPage = 5;
@@ -189,7 +189,11 @@ const Order = () => {
     (currentPage - 1) * ordersPerPage,
     currentPage * ordersPerPage
   );
-
+  const sortedOrders = currentOrders.slice().sort((a, b) => {
+    const dateA = new Date(a.orderedDate);
+    const dateB = new Date(b.orderedDate);
+    return dateB - dateA;
+  });
   // Function to handle page navigation
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -227,7 +231,7 @@ const Order = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentOrders?.map((item, index) => {
+                    {sortedOrders?.map((item, index) => {
                       const productCount = item.products?.length + 1;
                       const totalAmount =
                         item?.products?.reduce(
