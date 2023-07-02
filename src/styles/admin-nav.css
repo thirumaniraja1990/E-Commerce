@@ -3,6 +3,8 @@
     width: 100%;
     background: var(--primary-color);
     padding: 20px 0px;
+    position: sticky;
+    top: 0;
 }
 .admin__nav-top
 {
