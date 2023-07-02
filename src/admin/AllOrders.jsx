@@ -21,6 +21,7 @@ import { Divider } from "@mui/material";
 import logo from "../assets/images/Logo-Latest.jpeg";
 import { db } from "../firebase.config";
 import { Timestamp, doc, updateDoc } from "firebase/firestore";
+import CommonProduct from "../components/UI/CommonProduct";
 
 const AllOrder = () => {
   const [myOrders, setMyOrder] = useState([]);
@@ -195,7 +196,6 @@ const AllOrder = () => {
     </body>
   </html>`;
 
-    console.log(html);
 
     var printWindow = window.open("", "", "height=500,width=1000");
     printWindow.document.write(html);
@@ -252,16 +252,12 @@ const AllOrder = () => {
                   <thead>
                     <tr>
                       <th>S.No</th>
-                      <th>Image</th>
-                      <th>Title</th>
-                      <th>Price</th>
-                      <th>Quantity</th>
-                      <th>Amount</th>
                       <th>Address</th>
+                      <th>View Products</th>
                       <th>Total Amount</th>
-                      <th>Print</th>
                       <th>Ordered Date</th>
-                      <th>Order Status</th>
+                      <th>Actions</th>
+                      <th>Status</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -276,61 +272,36 @@ const AllOrder = () => {
 
                       return (
                         <React.Fragment key={index}>
-                          <tr style={{ verticalAlign: "middle" }}>
-                            <td rowSpan={productCount}>{index + 1}</td>
-                          </tr>
-                          {item?.products?.map((e, productIndex) => (
-                            <tr key={productIndex}>
-                              <td>
-                                <img src={e.imgUrl} alt="" />
-                              </td>
-                              <td>{e.productName}</td>
-                              <td>${e.price}</td>
-                              <td>{e.quantity}</td>
-                              <td>${(e.price * e.quantity).toFixed(2)}</td>
-                              {productIndex === 0 && (
-                                <>
-                                  <td
-                                    style={{ verticalAlign: "middle" }}
-                                    rowSpan={productCount}
-                                  >
-                                    <Address
-                                      details={{
-                                        name: item.name,
-                                        phNo: item.phNo,
-                                        email: item.email,
-                                        address: item.address,
-                                        city: item.city,
-                                      }}
-                                    />
-                                  </td>
-                                  <td
-                                    style={{ verticalAlign: "middle" }}
-                                    rowSpan={productCount}
-                                  >
-                                    ${totalAmount.toFixed(2)}
-                                  </td>
-                                  <td
-                                    style={{ verticalAlign: "middle" }}
-                                    rowSpan={productCount}
-                                  >
-                                    <div onClick={() => handlePrint(item)}>
-                                      <i class="ri-printer-fill"></i>
-                                    </div>
-                                  </td>
-                                  <td
-                                    style={{ verticalAlign: "middle" }}
-                                    rowSpan={productCount}
-                                  >
-                                    {item.orderedDate === "Invalid Date"
-                                      ? "-"
-                                      : item.orderedDate}
-                                  </td>
-                                  <td
-                                    style={{ verticalAlign: "middle" }}
-                                    rowSpan={productCount}
-                                  >
-                                    <FormGroup className="form__group w-50">
+                          <tr>
+                            <td>{index + 1}</td>
+                            
+                            <td>
+                              <Address
+                                details={{
+                                  name: item.name,
+                                  phNo: item.phNo,
+                                  email: item.email,
+                                  address: item.address,
+                                  city: item.city,
+                                }}
+                              />
+                            </td>
+                            <td>
+                              <CommonProduct product={item.products} />
+                            </td>
+                            <td>${totalAmount.toFixed(2)}</td>
+                            <td>
+                              {item.orderedDate === "Invalid Date"
+                                ? "-"
+                                : item.orderedDate}
+                            </td>
+                            <td>
+                              {/* <PrintIcon/> */}
+                              <div onClick={() => handlePrint(item)}>
+                                <i class="ri-printer-fill"></i>
+                              </div>
+                            </td>
+                            <td><FormGroup className="form__group w-50">
                                       <select
                                         className="p-2"
                                         value={item.status}
@@ -352,13 +323,8 @@ const AllOrder = () => {
                                           Rejected
                                         </option>
                                       </select>
-                                    </FormGroup>
-                                  </td>
-                                  <Divider />
-                                </>
-                              )}
-                            </tr>
-                          ))}
+                                    </FormGroup></td>
+                          </tr>
                         </React.Fragment>
                       );
                     })}
