@@ -23,11 +23,9 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const signUp = async (e) => {
-    console.log("inside signup");
     e.preventDefault();
     setLoading(true);
     try { 
-      console.log("inside try");
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,

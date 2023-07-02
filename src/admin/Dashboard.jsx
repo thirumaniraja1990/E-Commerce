@@ -27,7 +27,6 @@ useEffect(() => {
       const productTotal = obj.products.reduce((sum, product) => {
         return sum + Number(product.price) * Number(product.quantity);
       }, 0);
-      console.log(productTotal);
       return acc + productTotal;
     }
     return acc;

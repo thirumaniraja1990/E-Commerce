@@ -31,7 +31,6 @@ const addToCart = async () => {
       console.log(error);
     }
   } else {
-    console.log(item);
     dispatch(
       cartActions.addItem({
         id: item.id,

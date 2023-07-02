@@ -22,7 +22,7 @@ const Address = ({ details = null }) => {
   return (
     <Box sx={{ width: '100%' }}>
       <Typography variant="body1" gutterBottom>
-      <b> Name </b> : {name} <br />  <b> Mobile </b> :{phNo},<br /> <b> Email </b> :{email}<br /> <b> Address</b> :{address}<br /> <b> City</b> :{city}<br /> 
+      <b> Name </b> : {name} <br />  <b> Mobile </b> : {phNo},<br /> <b> Email </b> : {email}<br /> <b> Address</b> : {address}<br /> <b> City</b> : {city}<br /> 
       </Typography>
       {/* <Typography variant="body2" gutterBottom>
         {second}
