@@ -42,7 +42,7 @@ useEffect(() => {
         <div className="revenue__box">
           <h5>Total Sales</h5>
           <span>
-          {checkout.map((e) => {
+          ${checkout.map((e) => {
     return {
       ...e,
       products: JSON.parse(e.products)

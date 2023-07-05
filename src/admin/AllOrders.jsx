@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/cart.css";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
+import Switch from '@mui/material/Switch';
 import {
   Container,
   Row,
@@ -27,6 +28,7 @@ const AllOrder = () => {
   const [myOrders, setMyOrder] = useState([]);
   const navigate = useNavigate();
   const { data: checkoutProducts, loading } = useGetData("checkout");
+  // const label = { inputProps: { 'aria-label': 'Switch demo' } };
   useEffect(() => {
     setMyOrder([
       ...checkoutProducts.map((el) => {
@@ -215,6 +217,18 @@ const AllOrder = () => {
       console.log('Error updating document:', error);
     }
   }
+
+  /* const updateProductStatus = async (id, status) => {
+    try {
+      const docRef = doc(db, "products", id);
+      await updateDoc(docRef, { productstatus: status });
+    } catch (error) {
+      console.log('Error updating product:', error);
+    }
+  }
+ */
+  
+
   const ordersPerPage = 5;
 
   // State to keep track of the current page
@@ -240,10 +254,11 @@ const AllOrder = () => {
   return (
     <>
       <Helmet title="Cart"></Helmet>
-      <CommonSection title="All Orders" />
+      {/* <CommonSection title="All Orders" /> */}
       <section>
         <Container>
           <Row>
+          <h4 className="mb-5">All Orders</h4>
             <Col lg="12">
               {myOrders?.length === 0 ? (
                 <h2 className="fs-4 text-center">No item added to the cart!</h2>
@@ -258,6 +273,7 @@ const AllOrder = () => {
                       <th>Ordered Date</th>
                       <th>Actions</th>
                       <th>Status</th>
+                      {/* <th>Product Status</th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -324,6 +340,10 @@ const AllOrder = () => {
                                         </option>
                                       </select>
                                     </FormGroup></td>
+                                    {/* <td><FormGroup className="form__group w-50">
+                                    <Switch {...label} defaultChecked 
+                                    onChange={(e) => updateProductStatus(item.id,e.target.value)}/>
+                                    </FormGroup></td> */}
                           </tr>
                         </React.Fragment>
                       );
