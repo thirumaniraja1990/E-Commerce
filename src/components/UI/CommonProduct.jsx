@@ -3,7 +3,6 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'react
 
 function CommonProduct(props) {
   const { product } = props;
-  console.log(product);
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);

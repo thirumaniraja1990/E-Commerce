@@ -38,7 +38,7 @@ const Order = () => {
 
   const handlePrint = (item) => {
     const products = item.products;
-
+    console.log(item);
     const totalPages = Math.ceil(products.length / 20);
 
     let html = `
@@ -49,28 +49,23 @@ const Order = () => {
         <body style="width: 793px; height:283mm; border: 1px solid black; margin-top:20px; font-family: 'Roboto', sans-serif;">
           <div style="display: flex; width: 100%; padding-bottom:20px;">
             <div style="width:50%; padding-left:30px; padding-top:15px;">
-              <div style="font-size:40px; color: #004aab;"><b>ORDERS </b></div> 
+              <div style="font-size:40px; color: #004aab;"><b>MSM e Angadi </b></div> 
               <div style="font-size:14px; padding-top:5px;">
-                2/486A South street,Sivan Nagar, Vinagar Colony, Naranapuram, Sivakasi Tamilnadu - 626130, India
+                Phone no: 1234567890
               </div>
-              <div style="font-size:14px; padding-top:5px;">Mobile -  82480 93484 </div>
               <div style="font-size:14px; padding-top:5px;">Email - msm.eangadi@gmail.com </div>
             </div>
             <div style="width:50%; align-self: center; text-align:right; padding-right:30px;">
               <img src=${logo} style="width:100px;">
             </div>
           </div>
-          <div style="display: flex; width: 100%;">
-            <div style="width:100%; padding:0 0px;">
-              <div style="border-top: 2px solid #eaeaea;"></div>
-            </div> 
-          </div>
-          <div style="display: flex; width:100%; font-size:14px;">
-            <div style=" width:33.3%; padding:20px 40px 20px 40px;">
-              <div style="font-size:16px; padding-bottom:10px; color: #004aab;"><b>Date: </b></div> 
-              <div style="font-size:14px;">${new Date().toLocaleDateString()}</div> 
-            </div>
-          </div>`;
+          
+          <div style="text-align: center;color: #004aab">Tax Invoice</div>
+          <div style="display: flex; justify-content: space-between; font-size:14px; padding:10px 10px 10px 10px;">
+          <div><b>Date:</b> ${new Date().toLocaleDateString()}</div>
+          <div><b>Bill To:</b> ${item.name}</div>
+        </div>
+          `;
 
     for (let page = 1; page <= totalPages; page++) {
       const start = (page - 1) * 20;
@@ -83,23 +78,23 @@ const Order = () => {
           <div style="padding:0 0px;">
             <table style="border-collapse: collapse; width:100%; padding:40px 50px 10px 50px;" class="clr">
               <tr style="font-size:13px; background-color: #004aab; color:#fff;">
-                <th style="width:60px; padding: 15px 15px; text-align: center;">S.NO</th>
-                <th style="width:60px; padding: 15px 15px; text-align: center;">Product Name</th>
-                <th style="width:100px; padding: 15px 15px; text-align: center;">Product Qty</th>
-                <th style="width:60px; padding: 15px 15px; text-align: center;">Product Cost Per Unit</th>
-                <th style="width:60px; padding: 15px 15px; text-align: center;">Product Cost</th>
+                <th style="width:30px; padding: 15px 15px; text-align: center;">#</th>
+                <th style="width:130px; padding: 15px 15px; text-align: center;">Item Name</th>
+                <th style="width:60px; padding: 15px 15px; text-align: center;">Quantity</th>
+                <th style="width:60px; padding: 15px 15px; text-align: center;">Price / unit</th>
+                <th style="width:60px; padding: 15px 15px; text-align: center;">Amount</th>
               </tr> 
               ${pageProducts
                 .map((e, i) => {
                   return `
                     <tr style="font-size:14px; background:#fff; border-bottom:1px solid #ababab; color: #9d9d9d; padding:5px;">
-                      <td style="width:60px;  padding:5px; text-align: center;">${
+                      <td style="width:30px;  padding:5px; text-align: center;">${
                         i + start + 1
                       }</td>
-                      <td style="width:60px; padding:5px; text-align: center;">${
+                      <td style="width:130px; padding:5px; text-align: center;">${
                         e.productName
                       }</td>
-                      <td style="width:100px; padding:5px; text-align: center;">${
+                      <td style="width:60px; padding:5px; text-align: center;">${
                         e.quantity
                       }</td>
                       <td style="width:60px; padding:5px; text-align: center;"> $ ${
@@ -167,9 +162,13 @@ const Order = () => {
     html += `
         <div style="padding:0 0px;">
           <table style="border-collapse: collapse; width:100%; padding:40px 50px 10px 50px;" class="clr">
+         
             <tr style="font-size:14px; background:#fff; color: #004aab;">
-              <td style="width:100px; padding:5px 15px; text-align: right;" colspan="4">Subtotal:</td>
-              <td style="width:10px; padding:5px 25px; text-align: right;" colspan="4">$ ${subtotal.toFixed(
+            <td style="width:100px; padding:5px 15px; text-align: right;" >Inwords:</td>
+            <td style="width:100px; padding:5px 15px; text-align: right;" >hi:</td>
+
+              <td style="width:100px; padding:5px 15px; text-align: right;" >Subtotal:</td>
+              <td style="width:10px; padding:5px 25px; text-align: right;" >$ ${subtotal.toFixed(
                 2
               )}</td>
             </tr>
@@ -189,7 +188,6 @@ const Order = () => {
         </div>
       </body>
     </html>`;
-
 
     var printWindow = window.open("", "", "height=500,width=1000");
     printWindow.document.write(html);
@@ -261,7 +259,7 @@ const Order = () => {
                         <React.Fragment key={index}>
                           <tr>
                             <td>{index + 1}</td>
-                            
+
                             <td>
                               <Address
                                 details={{
