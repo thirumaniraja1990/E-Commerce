@@ -34,6 +34,32 @@ font-weight: 500;
     border-radius: 50px;
 }
 
+.product-card {
+    max-width: 300px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .product-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .product-card.withBackdrop {
+    position: relative;
+  }
+  
+  .product-card.withBackdrop::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust the backdrop color as needed */
+    z-index: 0;
+    opacity: 0.7;
+  }
 @media only screen and (max-width:992px) 
 {
     .product__info h3 a {
@@ -43,10 +69,78 @@ font-weight: 500;
 @media only screen and (max-width:768px) 
 {
     .product__info h3 a {
-        font-size: 1rem;
+        font-size: 10px;
     }
     .product__card-bottom span i 
     {
         font-size: 1rem;
     }
+    .product__card-bottom .price {
+    font-size: 20px;
+    margin-left: 10px;
+    }
+    .product__info span {
+        font-size: 10px;
+    }
+    .product__info h3 {
+        line-height: 0%;
+    }
 }
+.delete-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: red; /* Adjust the color as needed */
+  }
+
+.shop-icon {
+    position: absolute;
+    right: 0;
+    background-color: transparent;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 30%
+  }
+  
+  .quantity-button {
+    background-color: transparent; 
+    border: none;
+    &:hover {
+      background-color: black;
+    }
+  }
+  
+  .quantity-input {
+    flex: 1;
+    height: 20px;
+  }
+  .quantity-input input {
+    height: 100%;
+    border: none;
+    background: transparent !important;
+    border-radius: 0;
+    padding: 0;
+    max-width: 30px;
+}
+  /* Media queries as needed */
+  @media (max-width: 600px) {
+    .quantity-button {
+      width: 20px;
+      height: 20px;
+    }
+    .product__name {
+        white-space: nowrap;
+    }
+  }
+  
+  @media (min-width: 600px) {
+    .quantity-button {
+      width: 32px;
+      height: 32px;
+    }
+  }

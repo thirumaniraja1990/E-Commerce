@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Container, Row, Col } from "reactstrap";
+import { Container, Row, Col, FormGroup, Input, Label } from "reactstrap";
 import useGetData from "../custom-hooks/useGetData";
 import { db } from "../firebase.config";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -15,6 +15,17 @@ function AllProducts() {
     toast.success("Product deleted!");
   };
 
+  const handleUpdateStatus = async (status, id) => {
+    try {
+      const productRef = doc(db, "products", id);
+      const newStatus = status === 1 ? 0 : 1;
+      await updateDoc(productRef, { status: newStatus });
+      toast.success("Product status updated!");
+    } catch (error) {
+      console.error("Error updating product status:", error);
+      toast.error("Failed to update product status.");
+    }
+  };
 
   return (
     <section>
@@ -27,7 +38,8 @@ function AllProducts() {
                   <th>Image</th>
                   <th>Title</th>
                   <th>Category</th>
-                  <th>price</th>
+                  <th>Price</th>
+                  <th>Product Action</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -44,7 +56,18 @@ function AllProducts() {
                       <td>{item.category}</td>
                       <td>${item.price}</td>
                       <td>
-                      <button
+                        <FormGroup switch>
+                          <Input
+                            type="switch"
+                            checked={item.status}
+                            onClick={() => {
+                              handleUpdateStatus(item.status, item.id);
+                            }}
+                          />
+                        </FormGroup>
+                      </td>
+                      <td>
+                        <button
                           onClick={() => {
                             navigate(`/dashboard/add-product?id=${item.id}`);
                           }}

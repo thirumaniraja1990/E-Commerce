@@ -20,28 +20,26 @@ const AddProducts = () => {
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-    const id = queryParams.get('id');
+  const id = queryParams.get("id");
   useEffect(() => {
     // Access query parameters
-    
-    
+
     // Do something with the query parameter value
     if (id != null) {
-      setIsEdit(true)
-      setEnterTitle(productsData.find(e => e.id == id)?.productName)
-      setEnterShortDesc(productsData.find(e => e.id == id)?.shortDesc)
-      setEnterDescription(productsData.find(e => e.id == id)?.description)
-      setEnterCategory(productsData.find(e => e.id == id)?.category)
-      setEnterPrice(productsData.find(e => e.id == id)?.price)
-      setEnterProductImg(productsData.find(e => e.id == id)?.imgUrl)
-
+      setIsEdit(true);
+      setEnterTitle(productsData.find((e) => e.id == id)?.productName);
+      setEnterShortDesc(productsData.find((e) => e.id == id)?.shortDesc);
+      setEnterDescription(productsData.find((e) => e.id == id)?.description);
+      setEnterCategory(productsData.find((e) => e.id == id)?.category);
+      setEnterPrice(productsData.find((e) => e.id == id)?.price);
+      setEnterProductImg(productsData.find((e) => e.id == id)?.imgUrl);
     }
   }, [productsData]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleCancel = () => {
     navigate("/dashboard/all-products");
-  }
+  };
   const addProduct = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -54,11 +52,12 @@ const AddProducts = () => {
         category: enterCategory,
         price: enterPrice,
         imgUrl: enterProductImg,
+        status: 1,
       });
       setLoading(false);
       toast.success("Product successfully updated!");
       navigate("/dashboard/all-products");
-      return
+      return;
     }
 
     try {
@@ -82,6 +81,7 @@ const AddProducts = () => {
               category: enterCategory,
               price: enterPrice,
               imgUrl: downloadURL,
+              status: 1,
             });
           });
         }
@@ -104,7 +104,7 @@ const AddProducts = () => {
               <h4 className="py-5">Loading.......</h4>
             ) : (
               <>
-                <h4 className="mb-5">{isEdit ? 'Edit' : 'Add'} Products</h4>
+                <h4 className="mb-5">{isEdit ? "Edit" : "Add"} Products</h4>
                 <Form onSubmit={addProduct}>
                   <FormGroup className="form__group">
                     <span>Product title</span>
@@ -156,11 +156,12 @@ const AddProducts = () => {
                         required
                       >
                         <option disabled>Select Category</option>
-                      
-                        {category.map((item,index) => (
-                           <option value={item.categoryName}>{item.categoryName}</option>
+
+                        {category.map((item, index) => (
+                          <option value={item.categoryName}>
+                            {item.categoryName}
+                          </option>
                         ))}
-                       
                       </select>
                     </FormGroup>
                   </div>
@@ -174,11 +175,16 @@ const AddProducts = () => {
                     </FormGroup>
                   </div>
                   <button className="buy__btn" type="submit">
-                  {isEdit ? 'Update' : 'Add'} Product
+                    {isEdit ? "Update" : "Add"} Product
                   </button>
-                  {isEdit && <button className="btn btn-danger ms-2" onClick={handleCancel}>
-                  Cancel
-                  </button>}
+                  {isEdit && (
+                    <button
+                      className="btn btn-danger ms-2"
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </button>
+                  )}
                 </Form>
               </>
             )}

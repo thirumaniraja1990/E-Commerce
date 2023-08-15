@@ -10,10 +10,12 @@ import Productslist from "../components/UI/Productslist";
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer/Footer";
 import useGetData from "../custom-hooks/useGetData";
+import { where } from "firebase/firestore";
 
 const Home = () => {
-  
-  const { data: products, loading } = useGetData("products");
+  const whereCondition = where("status", "==", 1);
+
+  const { data: products, loading } = useGetData("products", whereCondition);
   const [data, setData] = useState(products);
 
   useEffect(() => {
