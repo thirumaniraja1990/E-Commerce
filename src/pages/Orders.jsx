@@ -21,7 +21,7 @@ const Order = () => {
   useEffect(() => {
     setMyOrder(
       checkoutProducts
-        .filter((e) => e.uid === JSON.parse(localStorage.getItem("user")).uid)
+        .filter((e) => e.uid === JSON.parse(localStorage.getItem("user"))?.uid)
         .map((el) => {
           const orderedDate = Timestamp.fromDate(
             new Date(el.orderedDate?.seconds * 1000)

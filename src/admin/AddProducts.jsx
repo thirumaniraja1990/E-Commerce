@@ -106,26 +106,30 @@ const AddProducts = () => {
               <>
                 <h4 className="mb-5">{isEdit ? "Edit" : "Add"} Products</h4>
                 <Form onSubmit={addProduct}>
-                  <FormGroup className="form__group">
+
+                <div className="d-flex align-items-center justify-content-between gap-5">
+                    <FormGroup className="form__group w-50">
                     <span>Product title</span>
                     <input
                       type="text"
-                      placeholder="Double Sofa"
+                      placeholder="Enter Product Title"
                       value={enterTitle}
                       onChange={(e) => setEnterTitle(e.target.value)}
                       required
                     />
                   </FormGroup>
-                  <FormGroup className="form__group">
+
+                  <FormGroup className="form__group w-50">
                     <span>Short Description</span>
                     <input
                       type="text"
-                      placeholder="lorem......"
+                      placeholder="Enter Short Description"
                       value={enterShortDesc}
                       onChange={(e) => setEnterShortDesc(e.target.value)}
                       required
                     />
                   </FormGroup>
+                  </div>
                   <FormGroup className="form__group">
                     <span>Description</span>
                     <input
@@ -136,6 +140,7 @@ const AddProducts = () => {
                       required
                     />
                   </FormGroup>
+
                   <div className="d-flex align-items-center justify-content-between gap-5">
                     <FormGroup className="form__group w-50">
                       <span>Price</span>

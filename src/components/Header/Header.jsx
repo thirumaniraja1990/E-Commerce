@@ -130,7 +130,7 @@ toast.error(err.message)
 
               <span className="cart__icon" onClick={navigateToCart}>
                 <i className="ri-shopping-bag-line"></i>
-                <span className="badge">{totalQuantity}</span>
+                {/* <span className="badge">{totalQuantity}</span> */}
               </span>
 
               <div className="profile">
@@ -147,6 +147,7 @@ toast.error(err.message)
                     <>
                     <div style={{display: 'grid'}}>
                     {isAdmin &&  <span><Link to="/dashboard">Dashboard</Link></span>}
+                    <span><Link to="/profile">Profile</Link></span>
                     <span onClick={logout}>Logout</span>
                     </div>
                     

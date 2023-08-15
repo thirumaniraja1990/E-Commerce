@@ -5,11 +5,22 @@ import { db } from "../firebase.config";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+// import Pagination from "react-pagination-js";
+// import "react-pagination-js/dist/styles.css";
+import Switch from "@mui/material/Switch";
+import { InputGroup, Button } from "reactstrap";
 
 function AllProducts() {
   const { data: productsData, loading } = useGetData("products");
   const navigate = useNavigate();
+  const label = { inputProps: { "aria-label": "Switch demo" } };
+  /* const [currentPage, setCurrentPage] = useState(1);
+const itemsPerPage = 5; */
 
+  /* const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = productsData.slice(indexOfFirstItem, indexOfLastItem);
+ */
   const deleteProduct = async (id) => {
     await deleteDoc(doc(db, "products", id));
     toast.success("Product deleted!");
@@ -27,10 +38,25 @@ function AllProducts() {
     }
   };
 
+  const updateProductStatus = async (id, status) => {
+    try {
+      const docRef = doc(db, "products", id);
+      await updateDoc(docRef, { productstatus: status });
+    } catch (error) {
+      console.log("Error updating product:", error);
+    }
+  };
+
+  /* const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+ */
+
   return (
     <section>
       <Container>
         <Row>
+          <h4 className="mb-5">All Products</h4>
           <Col lg="12">
             <table className="table">
               <thead>
@@ -55,6 +81,7 @@ function AllProducts() {
                       <td>{item.productName}</td>
                       <td>{item.category}</td>
                       <td>${item.price}</td>
+
                       <td>
                         <FormGroup switch>
                           <Input
@@ -91,6 +118,12 @@ function AllProducts() {
             </table>
           </Col>
         </Row>
+        {/*  <Pagination
+    currentPage={currentPage}
+    totalSize={productsData.length}
+    sizePerPage={itemsPerPage}
+    onPageChange={handlePageChange}
+  /> */}
       </Container>
     </section>
   );

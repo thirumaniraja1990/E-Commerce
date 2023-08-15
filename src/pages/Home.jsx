@@ -1,7 +1,7 @@
 import React from "react";
 import Helmet from "../components/Helmet/Helmet";
 import { Container, Row, Col } from "reactstrap";
-import heroImg from "../assets/images/hero-img.png";
+import heroImg from "../assets/images/Banner2.png";
 import "../styles/home.css";
 import { Link } from "react-router-dom";
 import { filterProps, motion } from "framer-motion";

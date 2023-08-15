@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/cart.css";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
+import Switch from "@mui/material/Switch";
 import {
   Container,
   Row,
@@ -29,6 +30,7 @@ const AllOrder = () => {
   const [myOrders, setMyOrder] = useState([]);
   const navigate = useNavigate();
   const { data: checkoutProducts, loading } = useGetData("checkout");
+  // const label = { inputProps: { 'aria-label': 'Switch demo' } };
   useEffect(() => {
     setMyOrder([
       ...checkoutProducts.map((el) => {
@@ -291,24 +293,28 @@ const AllOrder = () => {
               <th>Price</th>
               <th>Total</th>
             </tr>
-            ${item.products.map((product) => `
+            ${item.products
+              .map(
+                (product) => `
               <tr>
                 <td>${product.productName}</td>
                 <td>${product.quantity}</td>
                 <td>$${product.price}</td>
                 <td>$${product.quantity * product.price}</td>
               </tr>
-            `).join('')}
+            `
+              )
+              .join("")}
           </table>
-          <p class="total-price">Total Price: $${calculateTotalPrice(item.products)}</p>
+          <p class="total-price">Total Price: $${calculateTotalPrice(
+            item.products
+          )}</p>
           <p>Order Status: ${status}</p>
           <p>Best wishes,<br>MSM team</p>
         </div>
       </body>
       </html>
       `;
-
-      
 
       const templateParams = {
         to: item.email,
@@ -342,7 +348,7 @@ const AllOrder = () => {
       const serviceId = "service_jtcn1v8";
       const templateId = "template_c1aydzs";
       const userId = "1U-pNmW5LeO3UJgUA";
-  
+
       // Construct the email body with dynamic data
       const emailBody = `<html>
       <head>
@@ -428,17 +434,18 @@ const AllOrder = () => {
               </tr>
             `
               )
-              .join('')}
+              .join("")}
           </table>
-          <p class="total-price">Total Price: $${calculateTotalPrice(item.products)}</p>
+          <p class="total-price">Total Price: $${calculateTotalPrice(
+            item.products
+          )}</p>
           <p>Order Status: ${status}</p>
           <p>Best wishes,<br>MSM team</p>
           
         </div>
       </body>
     </html>`;
-    
-  
+
       const templateParams = {
         to: item.email,
         to_name: item.name,
@@ -446,7 +453,7 @@ const AllOrder = () => {
         emailBody: emailBody,
         // Other template parameters...
       };
-  
+
       // Send the email
       emailjs
         .send(serviceId, templateId, templateParams, userId)
@@ -464,7 +471,7 @@ const AllOrder = () => {
         });
     });
   };
-  
+
   const updateOrderStatus = async (id, status, item) => {
     try {
       const docRef = doc(db, "checkout", id);
@@ -474,7 +481,7 @@ const AllOrder = () => {
         sendEmail(status, item).then(() => {
           toast.success("Status changed and Email sent!");
         });
-      } else if (status==='Completed') {
+      } else if (status === "Completed") {
         sendEmailOrderCompleted(status, item).then(() => {
           toast.success("Status changed and Email sent!");
         });
@@ -483,6 +490,16 @@ const AllOrder = () => {
       console.log("Error updating document:", error);
     }
   };
+
+  /* const updateProductStatus = async (id, status) => {
+    try {
+      const docRef = doc(db, "products", id);
+      await updateDoc(docRef, { productstatus: status });
+    } catch (error) {
+      console.log('Error updating product:', error);
+    }
+  }
+ */
 
   const ordersPerPage = 5;
 
@@ -509,10 +526,11 @@ const AllOrder = () => {
   return (
     <>
       <Helmet title="Cart"></Helmet>
-      <CommonSection title="All Orders" />
+      {/* <CommonSection title="All Orders" /> */}
       <section>
         <Container>
           <Row>
+            <h4 className="mb-5">All Orders</h4>
             <Col lg="12">
               {myOrders?.length === 0 ? (
                 <h2 className="fs-4 text-center">No item added to the cart!</h2>
@@ -527,6 +545,7 @@ const AllOrder = () => {
                       <th>Ordered Date</th>
                       <th>Actions</th>
                       <th>Status</th>
+                      {/* <th>Product Status</th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -593,6 +612,10 @@ const AllOrder = () => {
                                 </select>
                               </FormGroup>
                             </td>
+                            {/* <td><FormGroup className="form__group w-50">
+                                    <Switch {...label} defaultChecked 
+                                    onChange={(e) => updateProductStatus(item.id,e.target.value)}/>
+                                    </FormGroup></td> */}
                           </tr>
                         </React.Fragment>
                       );
