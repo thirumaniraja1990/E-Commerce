@@ -28,12 +28,12 @@ const ProductDetails = () => {
   const [product, setProduct] = useState({});
   const docRef = doc(db, "products", id);
 
-
   useEffect(() => {
     const getProduct = async () => {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setProduct(docSnap.data());
+        console.log(docSnap);
       } else {
       }
     };
@@ -51,41 +51,39 @@ const ProductDetails = () => {
     category,
   } = product;
 
-  const relatedProducts = products.filter((item) => item?.category === category);
+  const relatedProducts = products.filter(
+    (item) => item?.category === category
+  );
 
- 
+  const isAuthenticated = !!JSON.parse(localStorage.getItem("user"))?.uid;
   const addToCart = async () => {
-    if (JSON.parse(localStorage.getItem('user'))?.uid) {
+    console.log(product);
+    if (isAuthenticated) {
       try {
         const docRef = await collection(db, "cart");
-          
-                await addDoc(docRef, {
-                  userID: JSON.parse(localStorage.getItem('user')).uid,
-                  productID: id,
-                
-                });
-             
-          
-          toast.success('Product added to the Cart');
-          
+
+        await addDoc(docRef, {
+          userId: JSON.parse(localStorage.getItem("user")).uid,
+          productID: id,
+          quantity: 1,
+        });
+
+        toast.success("Product added to the Cart");
       } catch (error) {
         console.log(error);
       }
     } else {
       dispatch(
         cartActions.addItem({
-          id,
-          imgUrl: imgUrl,
-          productName,
-          price,
+          id: id,
+          imgUrl: product.imgUrl,
+          productName: product.productName,
+          price: product.price,
         })
       );
       toast.success("Product added successfully");
     }
-    
-    
   };
- 
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -95,16 +93,16 @@ const ProductDetails = () => {
     <>
       <Helmet title={productName}></Helmet>
       <CommonSection title={productName} />
-       <section className="pt-0">
+      <section className="pt-0">
         <Container>
           <Row>
             <Col lg="6">
-              <img style={{width: '60%'}} src={imgUrl} alt="" />
+              <img style={{ width: "60%" }} src={imgUrl} alt="" />
             </Col>
-             <Col lg="6">
+            <Col lg="6">
               <div className="product__details">
                 <h2>{productName}</h2>
-                 <div className="product__rating d-flex align-items-center gap-5 mb-4">
+                <div className="product__rating d-flex align-items-center gap-5 mb-4">
                   <div>
                     <span>
                       <i className="ri-star-s-fill"></i>
@@ -122,13 +120,12 @@ const ProductDetails = () => {
                       <i className="ri-star-half-fill"></i>
                     </span>
                   </div>
-                   <p>
-                  </p> 
+                  <p></p>
                 </div>
                 <div className="d-flex align-items-center gap-5">
                   <span className="product__price">${price}</span>
                   <span>Category : {category?.toUpperCase()}</span>
-                </div> 
+                </div>
                 <p className="mt-3">{shortDesc}</p>
                 <motion.button
                   whileHover={{ scale: 1.2 }}
@@ -138,11 +135,11 @@ const ProductDetails = () => {
                   Add to Cart
                 </motion.button>
               </div>
-            </Col> 
+            </Col>
           </Row>
         </Container>
-      </section> 
-   {/*    <section>
+      </section>
+      {/*    <section>
         <Container>
           <Row>
             <Col lg="12">

@@ -23,6 +23,9 @@ import {
   getDocuments,
   updateDocument,
 } from "../../custom-hooks/crud";
+import { AiOutlineClose } from "react-icons/ai";
+import { MdOutlineShoppingCartCheckout } from "react-icons/md";
+
 const ProductCard = ({ item }) => {
   const dispatch = useDispatch();
   const isAuthenticated = !!JSON.parse(localStorage.getItem("user"))?.uid;
@@ -193,14 +196,14 @@ const ProductCard = ({ item }) => {
                 className="shop-icon"
                 onClick={navigateToCart}
               >
-                <i class="ri-shopping-bag-2-line"></i>
+                <MdOutlineShoppingCartCheckout />
               </motion.span>
               <motion.span
                 whileHover={{ scale: 1.2 }}
                 className="delete-icon"
                 onClick={() => handleDelete(item.id)}
               >
-                <i class="ri-close-circle-fill"></i>
+                <AiOutlineClose />
               </motion.span>
               <div className="quantity-control text-center">
                 <Button

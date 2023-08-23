@@ -88,15 +88,22 @@ font-weight: 500;
 }
 .delete-icon {
     position: absolute;
+    font-size: 25px;
+    background-color: #000;
+    border-bottom-left-radius:20%;
     top: 0;
     right: 0;
-    color: red; /* Adjust the color as needed */
+    color: #fff; /* Adjust the color as needed */
   }
 
 .shop-icon {
     position: absolute;
     right: 0;
-    background-color: transparent;
+    bottom: 0;
+    border-top-left-radius:20%;
+    font-size: 25px;
+    background-color: #000;
+    color: #fff;
 }
 
 .quantity-control {
