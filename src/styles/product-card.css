@@ -116,6 +116,7 @@ font-weight: 500;
   }
   
   .quantity-input {
+    margin-left: 20px;
     flex: 1;
     height: 20px;
   }
@@ -123,6 +124,7 @@ font-weight: 500;
     height: 100%;
     border: none;
     background: transparent !important;
+    color:#fff;
     border-radius: 0;
     padding: 0;
     max-width: 30px;

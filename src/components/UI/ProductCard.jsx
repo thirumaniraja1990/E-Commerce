@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import "../../styles/product-card.css";
 import { Col } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../../redux/slices/cartSlice";
 import { toast } from "react-toastify";
 import { InputGroup, InputGroupAddon, Input, Button } from "reactstrap";
@@ -18,17 +18,23 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase.config";
 import useGetData from "../../custom-hooks/useGetData";
-
+import {
+  addDocument,
+  getDocuments,
+  updateDocument,
+} from "../../custom-hooks/crud";
 const ProductCard = ({ item }) => {
   const dispatch = useDispatch();
+  const isAuthenticated = !!JSON.parse(localStorage.getItem("user"))?.uid;
   const addToCart = async () => {
-    if (JSON.parse(localStorage.getItem("user"))?.uid) {
+    if (isAuthenticated) {
       try {
         const docRef = await collection(db, "cart");
 
         await addDoc(docRef, {
-          userID: JSON.parse(localStorage.getItem("user")).uid,
+          userId: JSON.parse(localStorage.getItem("user")).uid,
           productID: item.id,
+          quantity: 1,
         });
 
         toast.success("Product added to the Cart");
@@ -48,31 +54,66 @@ const ProductCard = ({ item }) => {
     }
   };
   const { data: cart, loading: isLoad } = useGetData("cart");
+  // const getCartItems = async () => {
+  //   const response = await getDocuments("cart");
+  //   setCart(response);
+  // };
+  // useEffect(() => {
+  //   getCartItems();
+  // }, []);
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
+  const { cartItems: reduxCartItems } = useSelector((state) => state.cart);
   const navigateToCart = () => {
     navigate("/cart");
   };
   useEffect(() => {
-    if (JSON.parse(localStorage.getItem("user"))?.uid) {
-      const cartItems = cart.filter(
-        (e) => e.userID === JSON.parse(localStorage.getItem("user"))?.uid
+    if (isAuthenticated) {
+      console.log("cart", cart);
+      const cartProducts = cart.filter(
+        (e) => e.userId === JSON.parse(localStorage.getItem("user"))?.uid
       );
-
-      setCartItems([...cartItems]);
+      setCartItems([...cartProducts]);
+    } else {
+      setCartItems([...reduxCartItems]);
     }
-  }, [cart]);
+    console.log("reduxCartItems", reduxCartItems);
+  }, [cart, reduxCartItems]);
   const handleQuantityChange = (newQuantity, item) => {
     if (newQuantity >= 1) {
-      dispatch(
-        cartActions.addQuantity({
-          id: item.id,
-          quantity: newQuantity,
-        })
-      );
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user?.uid) {
+        updateCartInFirebase(user.uid, item.id, newQuantity);
+      } else {
+        dispatch(
+          cartActions.addQuantity({ id: item.id, quantity: newQuantity })
+        );
+      }
     }
   };
-
+  const updateCartInFirebase = async (userId, itemId, newQuantity) => {
+    const cartItems = await getDocuments("cart");
+    const cartItem = cartItems.find(
+      (item) => item.userId === userId && item.productID === itemId
+    );
+    if (cartItem) {
+      const updatedCartData = { ...cartItem, quantity: newQuantity };
+      const updated = await updateDocument(
+        "cart",
+        cartItem.id,
+        updatedCartData
+      );
+      return updated; // Return a boolean indicating success or failure
+    } else {
+      const newCartItem = {
+        userId: userId,
+        productID: itemId,
+        quantity: 1,
+      };
+      const inserted = await addDocument("cart", newCartItem);
+      return inserted;
+    }
+  };
   const handleBlur = (e, item) => {
     const newQuantity =
       parseInt(e.target.value) ||
@@ -80,11 +121,13 @@ const ProductCard = ({ item }) => {
 
     handleQuantityChange(newQuantity, item);
   };
+
   const handleDelete = async (id) => {
     try {
       const cartQuery = query(
         collection(db, "cart"),
-        where("productID", "==", id)
+        where("productID", "==", id),
+        where("userId", "==", JSON.parse(localStorage.getItem("user"))?.uid)
       );
       const querySnapshot = await getDocs(cartQuery);
 
@@ -103,7 +146,13 @@ const ProductCard = ({ item }) => {
     <Col lg="3" md="4" xs="6" className="mb-2">
       <div
         className={`product__item product-card ${
-          cartItems.some((e) => e.productID === item.id) ? "withBackdrop" : ""
+          (
+            isAuthenticated
+              ? cartItems.some((e) => e.productID === item.id)
+              : cartItems.some((e) => e.id === item.id)
+          )
+            ? "withBackdrop"
+            : ""
         }`}
       >
         <div className="product__img">
@@ -126,8 +175,15 @@ const ProductCard = ({ item }) => {
         </div>
         <div className="product__card-bottom d-flex align-items-center justify-content-between">
           <span className="price">{item.price}</span>
-          {!cartItems.some((e) => e.productID === item.id) ? (
-            <motion.span whileHover={{ scale: 1.2 }} onClick={addToCart}>
+          {(
+            isAuthenticated
+              ? !cartItems.some((e) => e.productID === item.id)
+              : !cartItems.some((e) => e.id === item.id)
+          ) ? (
+            <motion.span
+              whileHover={{ scale: 1.2 }}
+              onClick={() => addToCart()}
+            >
               <i className="ri-add-line"></i>
             </motion.span>
           ) : (
@@ -146,13 +202,17 @@ const ProductCard = ({ item }) => {
               >
                 <i class="ri-close-circle-fill"></i>
               </motion.span>
-              {/* <div className="quantity-control text-center">
+              <div className="quantity-control text-center">
                 <Button
                   color="danger"
                   className="quantity-button"
                   onClick={() =>
                     handleQuantityChange(
-                      cartItems.find((e) => e.id === item.id).quantity - 1
+                      isAuthenticated
+                        ? cartItems.find((e) => e.productID === item.id)
+                            ?.quantity - 1
+                        : cartItems.find((e) => e.id === item.id)?.quantity - 1,
+                      item
                     )
                   }
                 >
@@ -160,8 +220,14 @@ const ProductCard = ({ item }) => {
                 </Button>
                 <InputGroup className="quantity-input">
                   <Input
-                    type="number"
-                    value={cartItems.find((e) => e.id === item.id)?.quantity}
+                    type="text"
+                    disabled
+                    value={
+                      isAuthenticated
+                        ? cartItems.find((e) => e.productID == item.id)
+                            ?.quantity
+                        : cartItems.find((e) => e.id === item.id)?.quantity
+                    }
                     onChange={(e) =>
                       handleQuantityChange(parseInt(e.target.value))
                     }
@@ -173,13 +239,17 @@ const ProductCard = ({ item }) => {
                   className="quantity-button"
                   onClick={() =>
                     handleQuantityChange(
-                      cartItems.find((e) => e.id === item.id)?.quantity + 1
+                      isAuthenticated
+                        ? cartItems.find((e) => e.productID === item.id)
+                            ?.quantity + 1
+                        : cartItems.find((e) => e.id === item.id)?.quantity + 1,
+                      item
                     )
                   }
                 >
                   <i class="ri-add-line"></i>
                 </Button>
-              </div> */}
+              </div>
             </>
           )}
         </div>
