@@ -1,37 +1,114 @@
-.table tr td img
-{
-    width: 80px !important;
-    height: 80px !important;
-    object-fit: cover;
+.table tr td img {
+  width: 80px !important;
+  height: 80px !important;
+  object-fit: cover;
 }
 td i {
-    cursor: pointer;
+  cursor: pointer;
 }
-td,th {
-    color: var(--primary-color);
+td,
+th {
+  color: var(--primary-color);
 }
 
 .pagination {
-    display: flex;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  background-color: #eaeaea;
+  border: none;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #004aab;
+  color: #fff;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.msmCartSectionInner {
+  display: flex;
+  justify-content: space-between;
+}
+.msmCartProductDetails {
+  display: flex;
+  width: 70%;
+}
+.msmCartProductImage img,
+.msmCartButtonDetailSec {
+  width: 100px;
+}
+.msmCartButtonSec {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+.msmCartProductNameSec {
+  padding-left: 0.5em;
+}
+.msmCartCloseSec {
+  position: absolute;
+  top: -10px;
+  right: -5px;
+}
+.msmCartProductName {
+  color: #000;
+  font-size: 16px;
+  font-weight: 600;
+}
+.msmCartProductPrice {
+  color: #923537;
+  font-size: 14px;
+  font-weight: 600;
+}
+.msmCartButton input{
+  text-align: center;
+}
+@media (max-width: 475px) {
+  .msmCartButton .input-group {
+    position: unset;
+    height: 25px;
+  }
+  .msmCartProductName,
+  .msmCartProductPrice {
+    font-size: 12px;
+  }
+  .msmCartProductImage img {
+    width: 65px;
+  }
+  .msmCartButtonSec {
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+  .msmCartButton button {
+    padding: 0.2em 0.4em;
+    width: 25px;
     justify-content: center;
-    margin-top: 20px;
+    height: 25px;
+    display: flex;
+    align-items: center;
   }
-  
-  .pagination button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    background-color: #eaeaea;
-    border: none;
-    cursor: pointer;
+  .msmCartButton input {
+    width: 25px;
+    justify-content: center;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    min-height: 25px;
   }
-  
-  .pagination button.active {
-    background-color: #004aab;
-    color: #fff;
-  }
-  
-  .pagination button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

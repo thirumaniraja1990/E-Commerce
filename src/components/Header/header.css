@@ -167,8 +167,8 @@ position: relative;
     }
     .logo img
     {
-        width: 1rem;
-        height: 1rem;
+        width: 4.5rem;
+        height: 50px;
     }
     .fav__icon i, .cart__icon i {
         font-size: 1.2rem !important;

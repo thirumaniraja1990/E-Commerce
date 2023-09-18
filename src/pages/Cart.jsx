@@ -87,28 +87,17 @@ const Cart = () => {
               {cartItems?.length === 0 ? (
                 <h2 className="fs-4 text-center">No item added to the cart!</h2>
               ) : (
-                <table className="table bordered">
-                  <thead>
-                    <tr>
-                      <th>Image</th>
-                      <th>Title</th>
-                      <th>Price</th>
-                      <th>Quantity</th>
-                      <th>Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cartItems?.map((item, index) => (
-                      <Tr
-                        item={item}
-                        index={index}
-                        setCartItems={setCartItems}
-                        cartItems={cartItems}
-                        cartItems2={cartItems2}
-                      />
-                    ))}
-                  </tbody>
-                </table>
+                <div className="msmCart">
+                  {cartItems?.map((item, index) => (
+                    <Tr
+                      item={item}
+                      index={index}
+                      setCartItems={setCartItems}
+                      cartItems={cartItems}
+                      cartItems2={cartItems2}
+                    />
+                  ))}
+                </div>
               )}
             </Col>
             <Col lg="3">
@@ -206,17 +195,52 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
       return inserted;
     }
   };
-
+const backgroundImageURL = item.imgUrl;
   return (
     <>
-      <tr>
-        <td>
-          <img src={item.imgUrl} alt="" />
-        </td>
-        <td>{item.productName}</td>
-        <td>${item.price}</td>
-        <td>
-          <InputGroup style={{ width: "36%" }}>
+      <div
+        className="msmCartSection"
+        style={{padding: "0px", margin: "16px 0px", border: "1px solid rgb(229, 229, 229)", borderRadius: "12px"}}>
+        <div className="msmCartSectionInner" style={{padding: "8px"}}>
+          <div className="msmCartProductDetails">
+            <div className="msmCartProductImagesec">
+            <a
+              href="/"
+              style={{textDecoration: "none"}}
+              alt=""
+            >
+              <div
+                className="msmCartProductImage"
+                title={item.productName}
+               
+              >
+                <img src={backgroundImageURL} alt={item.productName}/>
+                </div>
+
+            </a></div>
+              <div className="msmCartProductNameSec">
+                <a
+                  href="/"
+                  style={{textDecoration: "none"}}
+                >
+                  <p className="msmCartProductName">
+                    {item.productName}
+                  </p>
+                </a>
+                <div className="msmCartProductPriceSec">
+                  <p className="msmCartProductPrice">
+                    <span>${item.price}</span>
+                  </p>
+                </div>
+              </div>
+           
+                
+          </div>
+          <div className="msmCartButtonDetailSec">
+            <div className="msmCartButtonSec" style={{paddingTop: "4px"}}>
+              
+              <div className="msmCartButton">
+              <InputGroup>
             <Button
               color="danger"
               onClick={() =>
@@ -255,15 +279,21 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
               +
             </Button>
           </InputGroup>
-        </td>
-        <td>
-          <motion.i
+              </div>
+              <div className="msmCartCloseSec">
+                <p className="msmCartCloseIcon">
+                <motion.i
             whileHover={{ scale: 1.2 }}
             onClick={deleteProduct}
-            className="ri-delete-bin-line"
+            className="ri-close-line"
           ></motion.i>
-        </td>
-      </tr>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
     </>
   );
 };

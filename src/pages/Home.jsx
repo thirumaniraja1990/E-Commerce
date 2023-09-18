@@ -11,6 +11,14 @@ import { useEffect, useState } from "react";
 import Footer from "../components/Footer/Footer";
 import useGetData from "../custom-hooks/useGetData";
 import { where } from "firebase/firestore";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+import banner1 from "../assets/images/Banner_1.webp";
+import banner2 from "../assets/images/Banner_2.webp";
+import banner3 from "../assets/images/Banner_3.jpg";
 
 const Home = () => {
   const whereCondition = where("status", "==", 1);
@@ -29,9 +37,17 @@ const Home = () => {
       <section className="hero__section">
         <Container>
           <Row>
-            <Col lg="6" md="6">
+          <Col lg="12" >
+            <div className="hero__content">
+            <Swiper navigation={true} modules={[Navigation]} className="mySwiper" >
+      <SwiperSlide><img src={banner2} alt="" /></SwiperSlide>
+      {/* <SwiperSlide><img src={banner2} alt="" /></SwiperSlide> */}
+      <SwiperSlide><img src={banner2} alt="" /></SwiperSlide>
+    </Swiper>
+            </div>
+            </Col>
+            {/* <Col lg="6" md="6">
               <div className="hero__content">
-                {/* <p className="heo__subtitle">Trending product</p> */}
                 <h2>Make your occasion so special</h2>
                 <p>
                   MSM Sweets, Savouries & Food Products started to bring
@@ -51,7 +67,7 @@ const Home = () => {
               <div className="heo__img">
                 <img src={heroImg} alt="" />
               </div>
-            </Col>
+            </Col> */}
           </Row>
         </Container>
       </section>

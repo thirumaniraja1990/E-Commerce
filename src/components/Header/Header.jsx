@@ -38,7 +38,7 @@ const Header = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const profileActionRef = useRef(null);
-  const isAdmin = JSON.parse(localStorage.getItem('user'))?.isAdmin
+  const isAdmin = JSON.parse(localStorage.getItem("user"))?.isAdmin;
   // const stickyHeaderFunc = () => {
   //   window.addEventListener("scroll", () => {
   //     if (
@@ -53,14 +53,16 @@ const Header = () => {
   // };
 
   const logout = () => {
-    signOut(auth).then(()=>{
-      localStorage.clear()
-      toast.success("Logged out")
-      navigate('/home')
-    }).catch(err=>{
-toast.error(err.message)
-    })
-  }
+    signOut(auth)
+      .then(() => {
+        localStorage.clear();
+        toast.success("Logged out");
+        navigate("/home");
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
 
   // useEffect(() => {
   //   stickyHeaderFunc();
@@ -68,32 +70,39 @@ toast.error(err.message)
   // });
 
   const menuToggle = () => {
-    if (menuRef.current.className == 'active__menu') {
-      menuRef.current.className = profileActionRef?.current?.className.replace(" active__menu", "");
+    if (menuRef.current.classList.contains("active__menu")) {
+      menuRef.current.className = menuRef?.current?.className.replace(
+        " active__menu",
+        ""
+      );
     } else {
       menuRef.current.className += " active__menu";
     }
-  }
+  };
 
   const navigateToCart = () => {
     navigate("/cart");
   };
 
   const toggleProfileActions = () => {
-    if (profileActionRef.current.className.includes('show__profileActions')) {
-      profileActionRef.current.className = profileActionRef?.current?.className.replace(" show__profileActions", "");
+    if (profileActionRef.current.classList.contains("show__profileActions")) {
+      profileActionRef.current.className =
+        profileActionRef?.current?.className.replace(
+          " show__profileActions",
+          ""
+        );
     } else {
       profileActionRef.current.className += " show__profileActions";
     }
-  }
-  
+  };
+
   return (
     <header className="header sticky__header" ref={headerRef}>
       <Container>
         <Row>
           <div className="nav__wrapper">
             <div className="logo">
-              <img src={logo} alt="logo" />
+            <a href="/home"><img src={logo} alt="logo" /></a>
               <div>
                 <h1>MSM Angadi </h1>
               </div>
@@ -126,8 +135,6 @@ toast.error(err.message)
             </div>
 
             <div className="nav__icons">
-             
-
               <span className="cart__icon" onClick={navigateToCart}>
                 <i className="ri-shopping-bag-line"></i>
                 {/* <span className="badge">{totalQuantity}</span> */}
@@ -139,24 +146,26 @@ toast.error(err.message)
                   src={currentUser ? currentUser.photoURL : userIcon}
                   onClick={toggleProfileActions}
                 />
-                <div
-                  className="profile__actions"
-                  ref={profileActionRef}
-                >
+                <div className="profile__actions" ref={profileActionRef}>
                   {currentUser ? (
                     <>
-                    <div style={{display: 'grid'}}>
-                    {isAdmin &&  <span><Link to="/dashboard">Dashboard</Link></span>}
-                    <span><Link to="/profile">Profile</Link></span>
-                    <span onClick={logout}>Logout</span>
-                    </div>
-                    
+                      <div style={{ display: "grid" }}>
+                        {isAdmin && (
+                          <span>
+                            <Link to="/dashboard">Dashboard</Link>
+                          </span>
+                        )}
+                        <span>
+                          <Link to="/profile">Profile</Link>
+                        </span>
+                        <span onClick={logout}>Logout</span>
+                      </div>
                     </>
                   ) : (
                     <div className=" d-flex align-items-center justify-content-center flex-column">
                       <Link to="/signup">Signup</Link>
                       <Link to="/login">Login</Link>
-                      {isAdmin &&    <Link to="/dashboard">Dashboard</Link>}
+                      {isAdmin && <Link to="/dashboard">Dashboard</Link>}
                     </div>
                   )}
                 </div>

@@ -1,6 +1,7 @@
 .hero__section
 {
-    background: var(--hero-bg);
+    /* background: var(--hero-bg); */
+    padding: 0px 0px;
 }
 .hero__content h2
 {
@@ -42,7 +43,11 @@
 padding-top: 45px;
 }
 
-
+@media only screen and (min-width:1023px) {
+    swiper-horizontal.mySwiper{
+        height: 400px;
+    }
+}
 @media only screen and (max-width:992px) 
 {
     .hero__content h2 
