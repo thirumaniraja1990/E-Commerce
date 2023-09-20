@@ -34,6 +34,10 @@ const admin__nav = [
     display: "Users",
     path: "/dashboard/users",
   },
+  {
+    display: "Add Banner",
+    path: "/dashboard/add-banner",
+  },
 ];
 
 const AdminNav = () => {
@@ -53,7 +57,9 @@ const AdminNav = () => {
       });
   };
   const toggleProfileActions = () => {
-    if (profileActionRef?.current?.className?.includes("show__profileActions")) {
+    if (
+      profileActionRef?.current?.className?.includes("show__profileActions")
+    ) {
       profileActionRef.current.className =
         profileActionRef?.current?.className?.replace(
           " show__profileActions",

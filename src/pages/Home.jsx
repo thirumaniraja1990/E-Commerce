@@ -11,14 +11,15 @@ import { useEffect, useState } from "react";
 import Footer from "../components/Footer/Footer";
 import useGetData from "../custom-hooks/useGetData";
 import { where } from "firebase/firestore";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
 
 import banner1 from "../assets/images/Banner_1.webp";
 import banner2 from "../assets/images/Banner_2.webp";
 import banner3 from "../assets/images/Banner_3.jpg";
+import { getDocuments } from "../utils/crud";
 
 const Home = () => {
   const whereCondition = where("status", "==", 1);
@@ -30,21 +31,36 @@ const Home = () => {
     const filteredProducts = products.filter((item) => item.category);
     setData(filteredProducts);
   }, [products]);
+  const [bannerImg, setBannerImg] = useState([]);
 
+  const getBannerImg = async () => {
+    const response = await getDocuments("banner");
+    setBannerImg(response);
+  };
+  useEffect(() => {
+    getBannerImg();
+  }, []);
   return (
     <>
       <Helmet title={"Home"}></Helmet>
       <section className="hero__section">
         <Container>
           <Row>
-          <Col lg="12" >
-            <div className="hero__content">
-            <Swiper navigation={true} modules={[Navigation]} className="mySwiper" >
-      <SwiperSlide><img src={banner2} alt="" /></SwiperSlide>
-      {/* <SwiperSlide><img src={banner2} alt="" /></SwiperSlide> */}
-      <SwiperSlide><img src={banner2} alt="" /></SwiperSlide>
-    </Swiper>
-            </div>
+            <Col lg="12">
+              <div className="hero__content">
+                <Swiper
+                  navigation={true}
+                  modules={[Navigation]}
+                  className="mySwiper"
+                >
+                  {bannerImg.map((e) => (
+                    <SwiperSlide>
+                      <img src={e.bannerImg} alt="" />
+                    </SwiperSlide>
+                  ))}
+                  {/* <SwiperSlide><img src={banner2} alt="" /></SwiperSlide> */}
+                </Swiper>
+              </div>
             </Col>
             {/* <Col lg="6" md="6">
               <div className="hero__content">

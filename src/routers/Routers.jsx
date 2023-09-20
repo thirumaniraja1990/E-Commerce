@@ -18,7 +18,7 @@ import Reviews from "../pages/Reviews";
 import AddCategory from "../admin/AddCategory";
 import Order from "../pages/Orders";
 import AllOrder from "../admin/AllOrders";
-
+import AddBanner from "../admin/AddBanner";
 
 const Routers = () => {
   return (
@@ -32,13 +32,14 @@ const Routers = () => {
       <Route path="cart" element={<Cart />} />
       <Route path="order" element={<Order />} />
       <Route path="/*" element={<ProductedRoute />}>
-      <Route path="checkout" element={<Checkout />} /> 
-      <Route path="dashboard" element={<Dashboard />} /> 
-      <Route path="dashboard/all-products" element={<AllProducts />} /> 
-      <Route path="dashboard/add-product" element={<AddProducts />} /> 
-      <Route path="dashboard/add-category" element={<AddCategory />} /> 
-      <Route path="dashboard/users" element={<Users />} /> 
-      <Route path="dashboard/orders" element={<AllOrder />} /> 
+        <Route path="checkout" element={<Checkout />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="dashboard/all-products" element={<AllProducts />} />
+        <Route path="dashboard/add-product" element={<AddProducts />} />
+        <Route path="dashboard/add-category" element={<AddCategory />} />
+        <Route path="dashboard/users" element={<Users />} />
+        <Route path="dashboard/orders" element={<AllOrder />} />
+        <Route path="dashboard/add-banner" element={<AddBanner />} />
       </Route>
 
       <Route path="login" element={<Login />} />
