@@ -12,6 +12,7 @@ import "../styles/dashboard.css";
 import useGetData from "../custom-hooks/useGetData";
 import { DatePicker } from "reactstrap-date-picker";
 import { generateCSV } from "../custom-hooks/utils";
+import DynamicPdfGenerator from "./PdfGenerate";
 
 const Dashboard = () => {
   const { data: products } = useGetData("products");
@@ -156,6 +157,11 @@ const Dashboard = () => {
                 Download CSV
               </Button>{" "}
             </Col>
+          </Row>
+          <Row>
+            <DynamicPdfGenerator
+              jsonData={{ products, checkout, fromDate, toDate }}
+            />
           </Row>
         </Container>
       </section>

@@ -11,16 +11,13 @@ import {
   Table,
 } from "reactstrap";
 import { toast } from "react-toastify";
-import { db, storage } from "../firebase.config";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { db } from "../firebase.config";
 import { collection, addDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import useGetData from "../custom-hooks/useGetData";
 import { getDocuments, updateDocument } from "../utils/crud";
 function AddCategory(props) {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { data: category, loading: isLoad } = useGetData("category");
+  const { data: category } = useGetData("category");
 
   const [payload, setPayload] = useState({
     category: "",
