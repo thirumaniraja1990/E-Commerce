@@ -58,9 +58,9 @@ font-weight: 500;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Adjust the backdrop color as needed */
+    /* background-color: rgba(0, 0, 0, 0.5);  */
     z-index: 0;
-    opacity: 0.7;
+    /* opacity: 0.7; */
   }
 @media only screen and (max-width:992px) 
 {
@@ -107,33 +107,42 @@ font-weight: 500;
     background-color: #000;
     color: #fff;
 }
-
+.plus {
+  position: relative;
+  bottom: 5%;
+  right: 2%;
+}
 .quantity-control {
     display: flex;
     align-items: center;
     position: absolute;
-    bottom: 0%;
-    right: 0%
+    bottom: 5%;
+    right: 2%;
+    border: #000 1px solid;
+    border-radius: 20px;
   }
+
   
   .quantity-button {
-    background-color: transparent; 
+    /* background-color: white;  */
+    margin-top: 5px;
     border: none;
-    &:hover {
-      background-color: black;
-    }
+    color: #000;
+    /* &:hover { */
+      /* background-color: black; */
+    /* } */
   }
   
   .quantity-input {
-    margin-left: 20px;
+    margin-left: 10px;
     flex: 1;
-    height: 20px;
+    height: 10px;
   }
   .quantity-input input {
     height: 100%;
     border: none;
     background: transparent !important;
-    color:#fff;
+    color:#000;
     border-radius: 0;
     padding: 0;
     max-width: 30px;
