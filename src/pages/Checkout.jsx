@@ -154,7 +154,7 @@ const Checkout = () => {
 
       await addDoc(docRef, {
         products: localStorage.getItem("products"),
-        uid: JSON.parse(localStorage.getItem("user")).uid,
+        uid: JSON.parse(localStorage.getItem("user"))?.uid ?? "guest",
         name: payload.name,
         email: payload.email,
         phNo: payload.phNo,
@@ -172,6 +172,7 @@ const Checkout = () => {
         navigate("/order");
       });
     } catch (error) {
+      console.log(error);
       toast.error("error");
     }
   };
