@@ -154,7 +154,7 @@ const Checkout = () => {
 
       await addDoc(docRef, {
         products: localStorage.getItem("products"),
-        uid: JSON.parse(localStorage.getItem("user")).uid,
+        uid: JSON.parse(localStorage.getItem("user"))?.uid ?? "guest",
         name: payload.name,
         email: payload.email,
         phNo: payload.phNo,
@@ -172,64 +172,66 @@ const Checkout = () => {
         navigate("/order");
       });
     } catch (error) {
+      console.log(error);
       toast.error("error");
     }
   };
   return (
     <>
-      <Helmet title='Checkout'></Helmet>
-      <CommonSection title='Checkout' />
-      <Form className='billing__form' onSubmit={checkout}>
+      <Helmet title="Checkout"></Helmet>
+      <CommonSection title="Checkout" />
+      <Form className="billing__form" onSubmit={checkout}>
         <section>
           <Container>
             <Row>
-              <Col lg='8'>
-                <h6 className='mb-4 fw-bold'>Billing Information</h6>
-                <FormGroup className='form__group'>
+              <Col lg="8">
+                <h6 className="mb-4 fw-bold">Billing Information</h6>
+                <FormGroup className="form__group">
                   <Input
                     required
-                    type='text'
-                    bsSize='sm'
+                    type="text"
+                    bsSize="sm"
                     value={payload.name}
-                    placeholder='Enter your name'
+                    placeholder="Enter your name"
                     onChange={(e) =>
                       setPayload({ ...payload, name: e.target.value })
                     }
                   />
                 </FormGroup>
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     required
-                    type='text'
-                    bsSize='sm'
+                    type="text"
+                    bsSize="sm"
                     value={payload.email}
-                    placeholder='Enter your email'
+                    placeholder="Enter your email"
                     onChange={(e) =>
                       setPayload({ ...payload, email: e.target.value })
                     }
                   />
                 </FormGroup>
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     required
-                    type='number'
-                    bsSize='sm'
+                    type="number"
+                    bsSize="sm"
                     value={payload.phNo}
-                    placeholder='Enter your Phone Number'
+                    placeholder="Enter your Phone Number"
                     onChange={(e) =>
                       setPayload({ ...payload, phNo: e.target.value })
                     }
                   />
                 </FormGroup>
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     // className='mb-3'
-                    type='select'
+                    type="select"
                     value={payload.pickupLocation}
-                    placeholder='Select pickup location'
+                    placeholder="Select pickup location"
                     onChange={(e) =>
                       setPayload({ ...payload, pickupLocation: e.target.value })
-                    }>
+                    }
+                  >
                     <option>Select pickup location</option>
                     <option>Franklin, Ohio</option>
                     <option>Dayton, Ohio</option>
@@ -245,63 +247,64 @@ const Checkout = () => {
                       fontSize: "16px",
                       paddingLeft: "20px",
                       marginBottom: "1em",
-                    }}>
+                    }}
+                  >
                     MSM team will reach you to arrange your shipping as you
                     choose the pickup location not listed in the list.
                   </p>
                 )}
 
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     required
-                    type='text'
-                    bsSize='sm'
+                    type="text"
+                    bsSize="sm"
                     value={payload.address}
-                    placeholder='Enter your address'
+                    placeholder="Enter your address"
                     onChange={(e) =>
                       setPayload({ ...payload, address: e.target.value })
                     }
                   />
                 </FormGroup>
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     required
-                    type='text'
-                    bsSize='sm'
+                    type="text"
+                    bsSize="sm"
                     value={payload.city}
-                    placeholder='Enter your city'
+                    placeholder="Enter your city"
                     onChange={(e) =>
                       setPayload({ ...payload, city: e.target.value })
                     }
                   />
                 </FormGroup>
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     required
-                    type='text'
-                    bsSize='sm'
+                    type="text"
+                    bsSize="sm"
                     value={payload.postalCode}
-                    placeholder='Enter your Postal Code'
+                    placeholder="Enter your Postal Code"
                     onChange={(e) =>
                       setPayload({ ...payload, postalCode: e.target.value })
                     }
                   />
                 </FormGroup>
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     required
-                    type='text'
-                    bsSize='sm'
+                    type="text"
+                    bsSize="sm"
                     value={payload.country}
-                    placeholder='Enter your country'
+                    placeholder="Enter your country"
                     onChange={(e) =>
                       setPayload({ ...payload, country: e.target.value })
                     }
                   />
                 </FormGroup>
               </Col>
-              <Col lg='4'>
-                <div className='checkout__cart'>
+              <Col lg="4">
+                <div className="checkout__cart">
                   <h6>
                     Total Quantity :{" "}
                     <span>
@@ -344,7 +347,7 @@ const Checkout = () => {
                           .toFixed(2)}
                     </span>
                   </h4>
-                  <button type='submit' className='buy__btn auth__btn w-100'>
+                  <button type="submit" className="buy__btn auth__btn w-100">
                     Place an order
                   </button>
                 </div>

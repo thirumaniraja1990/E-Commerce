@@ -112,16 +112,17 @@ font-weight: 500;
     display: flex;
     align-items: center;
     position: absolute;
-    bottom: 0%;
-    right: 0%
+    top: 40%;
+    left: 30%
   }
   
   .quantity-button {
     background-color: transparent; 
     border: none;
-    &:hover {
-      background-color: black;
-    }
+    
+  }
+  .quantity-button:hover {
+    background-color: black;
   }
   
   .quantity-input {
