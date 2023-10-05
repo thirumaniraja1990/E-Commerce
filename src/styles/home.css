@@ -86,3 +86,29 @@ padding-top: 45px;
         margin-bottom: 40px;
     }
 }
+
+.horizontal-scroll-container {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .horizontal-scroll-container > * {
+    display: inline-block;
+    margin-right: 10px; /* Adjust the margin as needed for spacing between products */
+  }
+  
+  /* Hide the scrollbar */
+.horizontal-scroll-container::-webkit-scrollbar {
+    width: 0;
+  }
+  
+  /* Hide scrollbar track */
+  .horizontal-scroll-container::-webkit-scrollbar-track {
+    display: none;
+  }
+  
+  /* Hide scrollbar thumb */
+  .horizontal-scroll-container::-webkit-scrollbar-thumb {
+    display: none;
+  }
+  
