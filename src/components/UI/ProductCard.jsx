@@ -92,6 +92,8 @@ const ProductCard = ({ item }) => {
           cartActions.addQuantity({ id: item.id, quantity: newQuantity })
         );
       }
+    } else {
+      handleDelete(item.id);
     }
   };
   const updateCartInFirebase = async (userId, itemId, newQuantity) => {
@@ -164,7 +166,7 @@ const ProductCard = ({ item }) => {
               whileHover={{ scale: 0.9 }}
               src={item.imgUrl}
               alt=''
-              height={"250px"}
+              height={"220px"}
             />
           </Link>
         </div>
@@ -188,6 +190,7 @@ const ProductCard = ({ item }) => {
               : !cartItems.some((e) => e.id === item.id)
           ) ? (
             <motion.span
+              className='plus'
               whileHover={{ scale: 1.2 }}
               onClick={() => addToCart()}>
               <i className='ri-add-line'></i>
@@ -200,16 +203,16 @@ const ProductCard = ({ item }) => {
                 onClick={navigateToCart}>
                 <MdOutlineShoppingCartCheckout />
               </motion.span> */}
-              <motion.span
+              {/* <motion.span
                 whileHover={{ scale: 1.2 }}
                 className='delete-icon'
                 onClick={() => handleDelete(item.id)}>
                 <AiOutlineClose />
-              </motion.span>
+              </motion.span> */}
               <div className='quantity-control text-center'>
-                <Button
-                  color='danger'
-                  // className='quantity-button'
+                <div
+                  // color='danger'
+                  className='quantity-button'
                   onClick={() =>
                     handleQuantityChange(
                       isAuthenticated
@@ -220,7 +223,7 @@ const ProductCard = ({ item }) => {
                     )
                   }>
                   <i class='ri-subtract-line'></i>
-                </Button>
+                </div>
                 <InputGroup className='quantity-input'>
                   <Input
                     type='text'
@@ -237,8 +240,8 @@ const ProductCard = ({ item }) => {
                     onBlur={(e) => handleBlur(e, item)}
                   />
                 </InputGroup>
-                <Button
-                  color='success'
+                <div
+                  // color='success'
                   className='quantity-button'
                   onClick={() =>
                     handleQuantityChange(
@@ -250,7 +253,7 @@ const ProductCard = ({ item }) => {
                     )
                   }>
                   <i class='ri-add-line'></i>
-                </Button>
+                </div>
               </div>
             </>
           )}
