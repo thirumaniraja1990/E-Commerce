@@ -184,7 +184,9 @@ const Checkout = () => {
           <Container>
             <Row>
               <Col lg='8'>
-                <h6 className='mb-4 fw-bold'>Billing Information</h6>
+                <h6 className='mb-4 fw-bold'>
+                  Contact Information & Pickup location
+                </h6>
                 <FormGroup className='form__group'>
                   <Input
                     required
