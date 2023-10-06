@@ -79,7 +79,7 @@ const Cart = () => {
   return (
     <>
       <Helmet title="Cart"></Helmet>
-      <CommonSection title="Shopping Cart" />
+      {/* <CommonSection title="Shopping Cart" /> */}
       <section>
         <Container>
           <Row>

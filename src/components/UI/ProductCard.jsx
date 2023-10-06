@@ -173,11 +173,14 @@ const ProductCard = ({ item }) => {
                 : item.productName} */}
               {item.productName}
             </Link>
+            
           </h3>
-          <span>{item.category}</span>
+          {/* <span>{item.category}</span> */}
+          <p className="mt-1"> Weight : {item.shortDesc}</p>
+          
         </div>
         <div className="product__card-bottom d-flex align-items-center justify-content-between">
-          <span className="price">{item.price}</span>
+          <span className="price">${item.price}</span>
           {(
             isAuthenticated
               ? !cartItems.some((e) => e.productID === item.id)
@@ -188,6 +191,7 @@ const ProductCard = ({ item }) => {
               onClick={() => addToCart()}
             >
               <i className="ri-add-line"></i>
+              {/* <button style={{ borderRadius: '5px', width:'50px' , }}>Add</button> */}
             </motion.span>
           ) : (
             <>

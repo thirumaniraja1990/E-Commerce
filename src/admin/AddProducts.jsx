@@ -18,12 +18,17 @@ const AddProducts = () => {
   const { data: productsData } = useGetData("products");
   const [isEdit, setIsEdit] = useState(false);
 
+  
+
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get("id");
   useEffect(() => {
     // Access query parameters
 
+
+    
     // Do something with the query parameter value
     if (id != null) {
       setIsEdit(true);
@@ -99,6 +104,7 @@ const AddProducts = () => {
     <section>
       <Container>
         <Row>
+         
           <Col lg="12">
             {loading ? (
               <h4 className="py-5">Loading.......</h4>

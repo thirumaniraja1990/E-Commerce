@@ -27,6 +27,9 @@ const Home = () => {
   const { data: products, loading } = useGetData("products", whereCondition);
   const [data, setData] = useState(products);
 
+
+
+
   useEffect(() => {
     const filteredProducts = products.filter((item) => item.category);
     setData(filteredProducts);
@@ -43,9 +46,13 @@ const Home = () => {
   return (
     <>
       <Helmet title={"Home"}></Helmet>
+
       <section className="hero__section">
         <Container>
+          
           <Row>
+            
+
             <Col lg="12">
               <div className="hero__content">
                 <Swiper

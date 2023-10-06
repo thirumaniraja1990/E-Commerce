@@ -14,6 +14,10 @@ function AllProducts() {
   const { data: productsData, loading } = useGetData("products");
   const navigate = useNavigate();
   const label = { inputProps: { "aria-label": "Switch demo" } };
+
+
+
+  
   /* const [currentPage, setCurrentPage] = useState(1);
 const itemsPerPage = 5; */
 
@@ -56,7 +60,9 @@ const itemsPerPage = 5; */
     <section>
       <Container>
         <Row>
+
           <h4 className="mb-5">All Products</h4>
+      
           <Col lg="12">
             <table className="table">
               <thead>

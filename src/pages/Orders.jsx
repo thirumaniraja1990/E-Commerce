@@ -225,7 +225,7 @@ const Order = () => {
   return (
     <>
       <Helmet title="Cart"></Helmet>
-      <CommonSection title="My Orders" />
+      {/* <CommonSection title="My Orders" /> */}
       <section>
         <Container>
           <Row>

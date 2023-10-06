@@ -22,6 +22,14 @@ const nav__links = [
     display: "Shop",
   },
   {
+    path: "tnspl",
+    display: "TN Special",
+  },
+  {
+    path: "andhraspl",
+    display: "Andhra Special",
+  },
+  {
     path: "cart",
     display: "Cart",
   },
