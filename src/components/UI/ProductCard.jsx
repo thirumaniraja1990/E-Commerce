@@ -147,7 +147,7 @@ const ProductCard = ({ item }) => {
     }
   };
   return (
-    <Col lg="3" md="4" xs="6" className="mb-2">
+    <Col className="mb-2">
       <div
         className={`product__item product-card ${
           (
@@ -166,6 +166,7 @@ const ProductCard = ({ item }) => {
               whileHover={{ scale: 0.9 }}
               src={item.imgUrl}
               alt=""
+              width={"100%"}
               height={"220px"}
             />
           </Link>

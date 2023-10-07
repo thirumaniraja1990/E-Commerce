@@ -88,40 +88,41 @@ const Home = () => {
         </Container>
       </section>
       <Services />
-      {/* <section className="trending__products">
+
+      <section className='hero__section'>
         <Container>
           <Row>
-            <Col lg="12" className="text-center">
-              <h2 className="section__title"> Trending Products</h2>
-            </Col>
-            {loading ? (
-              <h5 className="fw-bold">Loading.....</h5>
-            ) : (
-              <Productslist data={data} />
-            )}
-          </Row>
-        </Container>
-      </section> */}
-      <section className='pt-0'>
-        <Container>
-          {category.map((category, index) => {
-            const productsInCategory = data.filter(
-              (item) => item.category === category.categoryName
-            );
-
-            return (
-              <div key={index} style={{ marginBottom: "2em" }}>
-                <h3 style={{ marginBottom: "1em" }}>{category.categoryName}</h3>
-                {productsInCategory.length === 0 ? (
-                  <p className='text-center fs-4'>No products are found!</p>
-                ) : (
-                  <div className='horizontal-scroll-container'>
-                    <Productslist data={productsInCategory} />
+            <Col lg='12'>
+              <div className='hero__content'>
+                {category.map((categoryItem, index) => (
+                  <div key={index} style={{ marginBottom: "2em" }}>
+                    <h3 style={{ marginBottom: "1em" }}>
+                      {categoryItem.categoryName}
+                    </h3>
+                    <div>
+                      <Swiper
+                        navigation={true}
+                        modules={[Navigation]}
+                        className='categorySwiper'
+                        slidesPerView={4}
+                        spaceBetween={2}>
+                        {data.map((product, productIndex) => {
+                          if (product.category === categoryItem.categoryName) {
+                            return (
+                              <SwiperSlide key={productIndex}>
+                                <Productslist data={[product]} />
+                              </SwiperSlide>
+                            );
+                          }
+                          return null;
+                        })}
+                      </Swiper>
+                    </div>
                   </div>
-                )}
+                ))}
               </div>
-            );
-          })}
+            </Col>
+          </Row>
         </Container>
       </section>
     </>
