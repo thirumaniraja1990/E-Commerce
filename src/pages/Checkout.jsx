@@ -5,6 +5,8 @@ import CommonSection from "../components/UI/CommonSection";
 import "../styles/checkout.css";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/bootstrap.css";
 import {
   collection,
   addDoc,
@@ -31,6 +33,7 @@ const Checkout = () => {
     postalCode: "",
     country: "",
   });
+
   const sendEmail = (payload) => {
     return new Promise((resolve, reject) => {
       // Your email service configuration
@@ -213,6 +216,20 @@ const Checkout = () => {
                   />
                 </FormGroup>
                 <FormGroup className='form__group'>
+                  <PhoneInput
+                    country={"none"}
+                    enableSearch={true}
+                    value={payload.phNo}
+                    inputProps={{
+                      placeholder: "Enter your Phone Number",
+                    }}
+                    onChange={(e) => {
+                      setPayload({ ...payload, phNo: e });
+                    }}
+                    inputStyle={{ width: "735px", height: "50px" }}
+                  />
+                </FormGroup>
+                {/* <FormGroup className='form__group'>
                   <Input
                     required
                     type='number'
@@ -223,7 +240,7 @@ const Checkout = () => {
                       setPayload({ ...payload, phNo: e.target.value })
                     }
                   />
-                </FormGroup>
+                </FormGroup> */}
                 <FormGroup className='form__group'>
                   <Input
                     // className='mb-3'
