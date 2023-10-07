@@ -80,7 +80,6 @@ const ProductCard = ({ item }) => {
     } else {
       setCartItems([...reduxCartItems]);
     }
-    console.log("reduxCartItems", reduxCartItems);
   }, [cart, reduxCartItems]);
   const handleQuantityChange = (newQuantity, item) => {
     if (newQuantity >= 1) {
@@ -148,7 +147,7 @@ const ProductCard = ({ item }) => {
     }
   };
   return (
-    <Col lg='3' md='4' xs='6' className='mb-2'>
+    <Col lg="3" md="4" xs="6" className="mb-2">
       <div
         className={`product__item product-card ${
           (
@@ -158,20 +157,21 @@ const ProductCard = ({ item }) => {
           )
             ? "withBackdrop"
             : ""
-        }`}>
-        <div className='product__img'>
+        }`}
+      >
+        <div className="product__img">
           <Link to={`/shop/${item.id}`}>
             {" "}
             <motion.img
               whileHover={{ scale: 0.9 }}
               src={item.imgUrl}
-              alt=''
+              alt=""
               height={"220px"}
             />
           </Link>
         </div>
-        <div className='p-2 product__info'>
-          <h3 className='product__name'>
+        <div className="p-2 product__info">
+          <h3 className="product__name">
             {" "}
             <Link to={`/shop/${item.id}`}>
               {item.productName.length > 13
@@ -181,19 +181,22 @@ const ProductCard = ({ item }) => {
             </Link>
           </h3>
           <span>{item.category}</span>
+          <br />
+          <span>{item.shortDesc}</span>
         </div>
-        <div className='product__card-bottom d-flex align-items-center justify-content-between'>
-          <span className='price'>{item.price}</span>
+        <div className="product__card-bottom d-flex align-items-center justify-content-between">
+          <span className="price">{item.price}</span>
           {(
             isAuthenticated
               ? !cartItems.some((e) => e.productID === item.id)
               : !cartItems.some((e) => e.id === item.id)
           ) ? (
             <motion.span
-              className='plus'
+              className="plus"
               whileHover={{ scale: 1.2 }}
-              onClick={() => addToCart()}>
-              <i className='ri-add-line'></i>
+              onClick={() => addToCart()}
+            >
+              <i className="ri-add-line"></i>
             </motion.span>
           ) : (
             <>
@@ -209,10 +212,10 @@ const ProductCard = ({ item }) => {
                 onClick={() => handleDelete(item.id)}>
                 <AiOutlineClose />
               </motion.span> */}
-              <div className='quantity-control text-center'>
+              <div className="quantity-control text-center">
                 <div
                   // color='danger'
-                  className='quantity-button'
+                  className="quantity-button"
                   onClick={() =>
                     handleQuantityChange(
                       isAuthenticated
@@ -221,12 +224,13 @@ const ProductCard = ({ item }) => {
                         : cartItems.find((e) => e.id === item.id)?.quantity - 1,
                       item
                     )
-                  }>
-                  <i class='ri-subtract-line'></i>
+                  }
+                >
+                  <i class="ri-subtract-line"></i>
                 </div>
-                <InputGroup className='quantity-input'>
+                <InputGroup className="quantity-input">
                   <Input
-                    type='text'
+                    type="text"
                     disabled
                     value={
                       isAuthenticated
@@ -242,7 +246,7 @@ const ProductCard = ({ item }) => {
                 </InputGroup>
                 <div
                   // color='success'
-                  className='quantity-button'
+                  className="quantity-button"
                   onClick={() =>
                     handleQuantityChange(
                       isAuthenticated
@@ -251,8 +255,9 @@ const ProductCard = ({ item }) => {
                         : cartItems.find((e) => e.id === item.id)?.quantity + 1,
                       item
                     )
-                  }>
-                  <i class='ri-add-line'></i>
+                  }
+                >
+                  <i class="ri-add-line"></i>
                 </div>
               </div>
             </>
