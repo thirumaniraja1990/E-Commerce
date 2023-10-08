@@ -7,6 +7,7 @@ import products from "../assets/data/products";
 import Productslist from "../components/UI/Productslist";
 import ProductDetails from "./ProductDetails";
 import useGetData from "../custom-hooks/useGetData";
+import ProductslistShop from "../components/UI/ProdctListShop";
 
 const Shop = () => {
   //const [productsData, setProductsData] = useState(products);
@@ -20,7 +21,6 @@ const Shop = () => {
       (item) => item.category === e.target.value
     );
     setData(filteredProducts);
-    
   };
 
   const defaultCategory = "Tamilnadu Special";
@@ -34,26 +34,26 @@ const Shop = () => {
   };
 
   useEffect(() => {
+    console.log("products", products);
     const filteredProducts = products.filter(
-      (item) => item.category === defaultCategory
-    //   category[0].categoryName
+      (item) => item.category.includes(defaultCategory)
+      //   category[0].categoryName
     );
     setData(filteredProducts);
-  }, [category])
-
+  }, [category]);
 
   return (
     <>
       <Helmet title={"Shop"}></Helmet>
       {/* <CommonSection title="Shop"/> */}
-    
+
       <section className="pt-0">
         <Container>
           <Row className="mt-5">
             {data.length === 0 ? (
               <h1 className="text-center fs-4">No products are found!</h1>
             ) : (
-              <Productslist data={data} />
+              <ProductslistShop data={data} />
             )}
           </Row>
         </Container>

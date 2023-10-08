@@ -35,8 +35,8 @@ const DynamicPdfGenerator = ({ jsonData }) => {
 
   console.log("orderedData", orderedData);
   const data = {};
-  orderedData.forEach((order) => {
-    order.products.forEach((product) => {
+  orderedData?.forEach((order) => {
+    order.products?.forEach((product) => {
       const itemId = product.id;
 
       if (!data[itemId]) {
@@ -106,7 +106,7 @@ const DynamicPdfGenerator = ({ jsonData }) => {
       }
 
       // Create a table for products
-      const tableData = order.products.map((product) => [
+      const tableData = order.products?.map((product) => [
         product.productName,
         product.description,
         product.shortDesc,
@@ -115,12 +115,12 @@ const DynamicPdfGenerator = ({ jsonData }) => {
       ]);
 
       // Calculate the total price
-      const totalPrice = order.products.reduce((total, product) => {
+      const totalPrice = order.products?.reduce((total, product) => {
         return total + parseFloat(product.price) * product.quantity;
       }, 0);
 
       // Add the "Total Price" row with colspan
-      tableData.push(["Total Price", "", "", totalPrice.toFixed(2), ""]);
+      tableData?.push(["Total Price", "", "", totalPrice?.toFixed(2), ""]);
       doc.text("", 10, 120);
 
       doc.autoTable({
@@ -148,8 +148,8 @@ const DynamicPdfGenerator = ({ jsonData }) => {
     const imgX = doc.internal.pageSize.width - imgWidth - 10; // 10 is the margin from the right
     const imgY = 10; // 10 is the margin from the top
     doc.addImage(logo, "jpeg", imgX, imgY, imgWidth, imgHeight);
-    orderedData.forEach((order) => {
-      order.products.forEach((product) => {
+    orderedData?.forEach((order) => {
+      order.products?.forEach((product) => {
         const itemId = product.id;
 
         if (!itemData[itemId]) {
@@ -167,8 +167,8 @@ const DynamicPdfGenerator = ({ jsonData }) => {
     const tableData = Object.values(itemData).map((item) => [
       item.itemName,
       item.quantity,
-      item.price.toFixed(2),
-      (item.quantity * item.price).toFixed(2),
+      item.price?.toFixed(2),
+      (item.quantity * item.price)?.toFixed(2),
     ]);
 
     const totalPrice = tableData.reduce((total, item) => {
@@ -177,7 +177,7 @@ const DynamicPdfGenerator = ({ jsonData }) => {
     const totalQuantity = tableData.reduce((total, item) => {
       return total + item[1];
     }, 0);
-    tableData.push(["Total Price", totalQuantity, "", totalPrice.toFixed(2)]); // Add total row
+    tableData?.push(["Total Price", totalQuantity, "", totalPrice.toFixed(2)]); // Add total row
 
     doc.text(
       `Item Report from ${new Date(
@@ -211,8 +211,13 @@ const DynamicPdfGenerator = ({ jsonData }) => {
     setViewTable(!viewtable);
   };
   const calculateTotalPrice = (products) => {
-    return products.reduce((total, product) => {
+    return products?.reduce((total, product) => {
       return total + parseFloat(product.price) * product.quantity;
+    }, 0);
+  };
+  const calculateTotalQuant = (products) => {
+    return products?.reduce((total, product) => {
+      return total + Number(product.quantity);
     }, 0);
   };
   const [activeTab, setActiveTab] = useState("1");
@@ -260,14 +265,18 @@ const DynamicPdfGenerator = ({ jsonData }) => {
                     <table className="order-table">
                       <thead>
                         <tr>
-                          <th colSpan="5">Name: {order.name}</th>
+                          <th colSpan="2">Name: {order?.name}</th>
+                          <th colSpan="3">
+                            Mobile: {order.phNo}, Email: {order.email}
+                          </th>
                         </tr>
                         <tr>
-                          <th colSpan="5">Address: {order.address}</th>
+                          <th colSpan="5">
+                            Address: {order.address}, {order.city},{" "}
+                            {order.country}, {order.postalCode}
+                          </th>
                         </tr>
-                        <tr>
-                          <th colSpan="5">Address: {order.address}</th>
-                        </tr>
+
                         <tr>
                           <th>Product Name</th>
                           <th>Description</th>
@@ -277,21 +286,21 @@ const DynamicPdfGenerator = ({ jsonData }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {order.products.map((product, productIndex) => (
+                        {order?.products?.map((product, productIndex) => (
                           <tr key={productIndex}>
                             <td>{product.productName}</td>
                             <td>{product.description}</td>
                             <td>{product.shortDesc}</td>
-                            <td>{product.price}</td>
+                            <td>$ {product.price}</td>
                             <td>{product.quantity}</td>
                           </tr>
                         ))}
                         <tr className="total-row">
-                          <td colSpan="3"></td>
-                          <td>Total Price:</td>
+                          <td colSpan="3">Total</td>
                           <td>
-                            {calculateTotalPrice(order.products).toFixed(2)}
+                            $ {calculateTotalPrice(order?.products)?.toFixed(2)}
                           </td>
+                          <td>{calculateTotalQuant(order?.products)}</td>
                         </tr>
                       </tbody>
                     </table>
