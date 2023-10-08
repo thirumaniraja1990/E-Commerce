@@ -9,6 +9,7 @@ import ProductDetails from "./ProductDetails";
 import useGetData from "../custom-hooks/useGetData";
 import ProductslistShop from "../components/UI/ProdctListShop";
 import Select from "react-select"; // Import react-select
+import { useHistory, useLocation } from "react-router-dom";
 
 const Shop = () => {
   //const [productsData, setProductsData] = useState(products);
@@ -16,30 +17,15 @@ const Shop = () => {
   const [data, setData] = useState(products);
   const { data: category, loading: isLoad } = useGetData("category");
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const location = useLocation();
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
 
-  // const handleFilter = (e) => {
-  //   const filterValue = e.target.value;
-  //   const filteredProducts = products.filter(
-  //     (item) => item.category === e.target.value
-  //   );
-  //   setData(filteredProducts);
-
-  // };
-
-  // const handleSearch = (e) => {
-  //   const searchTerm = e.target.value;
-  //   const searchedProducts = products.filter((item) =>
-  //     item.productName.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  //   setData(searchedProducts);
-  // };
-
-  // useEffect(() => {
-  //   const filteredProducts = products.filter(
-  //     (item) => item.category === category[0].categoryName
-  //   );
-  //   setData(filteredProducts);
-  // }, [category])
+    if (queryParams.has("category")) {
+      const category = queryParams.get("category");
+      setSelectedCategories([category]);
+    }
+  }, [location.search]);
   const handleSearch = (e) => {
     const searchTerm = e.target.value;
     const searchedProducts = products.filter((item) =>

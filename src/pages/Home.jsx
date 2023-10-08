@@ -75,12 +75,22 @@ const Home = () => {
               <div className="hero__content">
                 {category.map((categoryItem, index) => (
                   <div key={index} style={{ marginBottom: "2em" }}>
-                    <div className='category-header'>
+                    <div className="category-header">
                       <h3 style={{ marginBottom: "1em" }}>
                         {categoryItem.categoryName}
                       </h3>
-                      <div className='view-all-button'>
-                        <Link to='/shop'>View All</Link>
+                      <div className="view-all-button">
+                        <Link
+                          to={{
+                            pathname: "/shop",
+                            search: `?${new URLSearchParams({
+                              category: categoryItem.categoryName,
+                            }).toString()}`,
+                          }}
+                        >
+                          {" "}
+                          View All
+                        </Link>
                       </div>
                     </div>
                     <div>
@@ -89,7 +99,7 @@ const Home = () => {
                         modules={[Navigation]}
                         className="categorySwiper"
                         slidesPerView={4}
-                        spaceBetween={2}
+                        spaceBetween={20}
                       >
                         {data.map((product, productIndex) => {
                           if (

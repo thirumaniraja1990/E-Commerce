@@ -11,6 +11,9 @@ import { Link } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase.config";
 import { toast } from "react-toastify";
+import Badge, { BadgeProps } from "@mui/material/Badge";
+import { styled } from "@mui/material/styles";
+import useGetData from "../../custom-hooks/useGetData";
 
 const nav__links = [
   {
@@ -42,24 +45,11 @@ const nav__links = [
 const Header = () => {
   const headerRef = useRef(null);
   const menuRef = useRef(null);
-  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const profileActionRef = useRef(null);
   const isAdmin = JSON.parse(localStorage.getItem("user"))?.isAdmin;
-  // const stickyHeaderFunc = () => {
-  //   window.addEventListener("scroll", () => {
-  //     if (
-  //       (document.body.scrollTop > 80 ||
-  //       document.documentElement.scrollTop > 80)
-  //     ) {
-  //         headerRef.current.className += " sticky__header";
-  //     } else {
-  //         // headerRef.current.className = headerRef?.current?.className.replace(" sticky__header", "");
-  //     }
-  //   });
-  // };
-
   const logout = () => {
     signOut(auth)
       .then(() => {
@@ -71,11 +61,6 @@ const Header = () => {
         toast.error(err.message);
       });
   };
-
-  // useEffect(() => {
-  //   stickyHeaderFunc();
-  //   return () => window.removeEventListener("scroll", stickyHeaderFunc);
-  // });
 
   const menuToggle = () => {
     if (menuRef.current.classList.contains("active__menu")) {
@@ -103,14 +88,37 @@ const Header = () => {
       profileActionRef.current.className += " show__profileActions";
     }
   };
-
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    "& .MuiBadge-badge": {
+      right: 0,
+      top: 22,
+      border: `2px solid ${theme.palette.background.paper}`,
+      padding: "0 4px",
+    },
+  }));
+  const { data: cart, loading: isLoad } = useGetData("cart");
+  console.log(cartItems);
+  const MaterialBadge = ({ totalQuantity }) => (
+    <StyledBadge
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      color="secondary"
+      badgeContent={cart.length}
+    >
+      <i className="ri-shopping-bag-line"></i>
+    </StyledBadge>
+  );
   return (
     <header className="header sticky__header" ref={headerRef}>
       <Container>
         <Row>
           <div className="nav__wrapper">
             <div className="logo">
-            <a href="/home"><img src={logo} alt="logo" /></a>
+              <a href="/home">
+                <img src={logo} alt="logo" />
+              </a>
               <div>
                 <h1>MSM Angadi </h1>
               </div>
@@ -144,8 +152,7 @@ const Header = () => {
 
             <div className="nav__icons">
               <span className="cart__icon" onClick={navigateToCart}>
-                <i className="ri-shopping-bag-line"></i>
-                {/* <span className="badge">{totalQuantity}</span> */}
+                <MaterialBadge />
               </span>
 
               <div className="profile">

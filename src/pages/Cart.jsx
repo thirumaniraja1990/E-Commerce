@@ -212,7 +212,12 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
             <div className="msmCartProductImagesec">
               <a href="/" style={{ textDecoration: "none" }} alt="">
                 <div className="msmCartProductImage" title={item.productName}>
-                  <img src={backgroundImageURL} alt={item.productName} />
+                  <img
+                    src={backgroundImageURL}
+                    height={"75px"}
+                    width={"75px"}
+                    alt={item.productName}
+                  />
                 </div>
               </a>
             </div>
