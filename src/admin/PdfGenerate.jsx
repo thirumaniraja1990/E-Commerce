@@ -324,17 +324,15 @@ const DynamicPdfGenerator = ({ jsonData }) => {
                       <tr key={index}>
                         <td>{item[0]}</td>
                         <td>{item[1]}</td>
-                        <td>{item[2]}</td>
-                        <td>{item[3]}</td>
+                        <td>$ {item[2]}</td>
+                        <td>$ {item[3]}</td>
                       </tr>
                     ))}
                     <tr>
-                      <td colSpan="3">Total Quantity:</td>
+                      <td>Total</td>
                       <td>{viewTotalQuantity}</td>
-                    </tr>
-                    <tr>
-                      <td colSpan="3">Total Price:</td>
-                      <td>{viewTotalPrice.toFixed(2)}</td>
+                      <td></td>
+                      <td>$ {viewTotalPrice.toFixed(2)}</td>
                     </tr>
                   </tbody>
                 </table>

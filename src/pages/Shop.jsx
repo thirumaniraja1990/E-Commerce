@@ -40,20 +40,25 @@ const Shop = () => {
   //   );
   //   setData(filteredProducts);
   // }, [category])
-
-  const handleFilter = (selectedOptions) => {
-    const selectedCategoryValues = selectedOptions.map(
-      (option) => option.value
-    );
-    setSelectedCategories(selectedCategoryValues);
-  };
-
   const handleSearch = (e) => {
     const searchTerm = e.target.value;
     const searchedProducts = products.filter((item) =>
       item.productName.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setData(searchedProducts);
+  };
+
+  const handleFilter = (selectedOptions) => {
+    const selectedCategoryValues = selectedOptions.map(
+      (option) => option.value
+    );
+
+    // Check if "All" is selected
+    if (selectedCategoryValues.includes("All")) {
+      setSelectedCategories(category.map((item) => item.categoryName)); // Set all categories
+    } else {
+      setSelectedCategories(selectedCategoryValues); // Set selected categories
+    }
   };
 
   useEffect(() => {
@@ -69,11 +74,13 @@ const Shop = () => {
     }
   }, [selectedCategories, products]);
 
-  const categoryOptions = category.map((item) => ({
-    value: item.categoryName,
-    label: item.categoryName,
-  }));
-
+  const categoryOptions = [
+    ...category.map((item) => ({
+      value: item.categoryName,
+      label: item.categoryName,
+    })),
+    { label: "All", value: "All" }, // Add "All" option
+  ];
   return (
     <>
       <Helmet title={"Shop"}></Helmet>
@@ -81,9 +88,9 @@ const Shop = () => {
       <section>
         <Container>
           <Row>
+            <p>Filter by Category</p>
             <Col lg="6" md="6">
               <div className="filter__widget">
-                <h5>Filter by Category:</h5>
                 <Select
                   isMulti // Enable multi-select
                   options={categoryOptions} // Pass category options
@@ -94,33 +101,7 @@ const Shop = () => {
                 />
               </div>
             </Col>
-            {/* <Col lg="3" md="6" className="text-end"> */}
-            {/* <div className="filter__widget">
-                <select>
-                  <option>Sort by</option>
-                  <option value="ascending">Ascending</option>
-                  <option value="descending">Descending</option>
-                </select>
-              </div> */}
 
-            {/* <Col lg="3" md="6">
-            <div className="filter__widget">
-              <h5>Filter by Category:</h5>
-              {category.map((item) => (
-                <div key={item.categoryName}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      value={item.categoryName}
-                      checked={selectedCategories.includes(item.categoryName)}
-                      onChange={handleFilter}
-                    />
-                    {item.categoryName}
-                  </label>
-                </div>
-              ))}
-            </div>
-            </Col> */}
             <Col lg="6" md="12">
               <div className="search__box">
                 <input
