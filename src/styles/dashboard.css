@@ -35,3 +35,52 @@
     font-weight: 600;
     font-size: 2rem;
 }
+/* For the first table */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .data-table th, .data-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .data-table th {
+    background-color: #f2f2f2;
+  }
+  
+  /* For the second table */
+  .order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .order-table th, .order-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .order-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .order .total-row {
+    background-color: #f2f2f2;
+  }
+
+  /* Apply styles to the last two cells in the table */
+.data-table tbody tr td:nth-last-child(-n+2) {
+    font-weight: bold; /* Make text bold for the last row */
+    background-color: #f2f2f2; /* Background color for the last row */
+  }
+  
+  /* Align the "Total Quantity" text to the right */
+  .data-table tbody tr td:nth-last-child(-n+1) {
+    text-align: right;
+  }
+  
+  

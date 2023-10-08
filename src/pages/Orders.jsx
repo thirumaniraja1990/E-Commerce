@@ -9,14 +9,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import useGetData from "../custom-hooks/useGetData";
 import Address from "../components/UI/CommonAddress";
-import { Divider, formControlClasses } from "@mui/material";
-import { firestore } from "firebase/firestore";
+import { Divider, FormGroup, formControlClasses } from "@mui/material";
+import { firestore, where } from "firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import logo from "../assets/images/Logo-Latest.jpeg";
 import CommonProduct from "../components/UI/CommonProduct";
+import useAuth from "../custom-hooks/useAuth";
+
 const Order = () => {
   const [myOrders, setMyOrder] = useState([]);
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
+  const [loggedOutOrders, setLoggedOutOrders] = useState([]);
+
   const { data: checkoutProducts, loading } = useGetData("checkout");
   useEffect(() => {
     setMyOrder(
@@ -217,110 +222,279 @@ const Order = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  const lordersPerPage = 5;
+
+  // State to keep track of the current page
+  const [lcurrentPage, setlCurrentPage] = useState(1);
+
+  // Calculate the total number of pages
+  const ltotalPages = Math.ceil(loggedOutOrders.length / lordersPerPage);
+
+  // Get the orders for the current page
+  const lcurrentOrders = loggedOutOrders.slice(
+    (lcurrentPage - 1) * lordersPerPage,
+    lcurrentPage * lordersPerPage
+  );
+  const lsortedOrders = lcurrentOrders.slice().sort((a, b) => {
+    const dateA = new Date(a.orderedDate);
+    const dateB = new Date(b.orderedDate);
+    return dateB - dateA;
+  });
+  // Function to handle page navigation
+  const lhandlePageChange = (page) => {
+    setlCurrentPage(page);
+  };
+
   const handleCheckout = () => {
     localStorage.setItem("products", JSON.stringify(myOrders));
     navigate("/checkout", true);
   };
+  const [payload, setPayload] = useState({
+    phNo: "",
+  });
+  const whereCondition = where("phNo", "==", payload.phNo);
 
+  const { data: checkout } = useGetData("checkout", whereCondition);
+  const handleTrackOrder = () => {
+    setLoggedOutOrders(
+      checkout.map((el) => {
+        const orderedDate = Timestamp.fromDate(
+          new Date(el.orderedDate?.seconds * 1000)
+        ).toDate();
+        const formattedDate = orderedDate.toLocaleString(); // Adjust the date formatting as per your requirements
+        return {
+          ...el,
+          products: JSON.parse(el.products),
+          orderedDate: formattedDate,
+        };
+      })
+    );
+  };
   return (
     <>
       <Helmet title="Cart"></Helmet>
-      <CommonSection title="My Orders" />
+      {/* <CommonSection title="My Orders" /> */}
       <section>
         <Container>
           <Row>
-            <Col lg="12">
-              {myOrders?.length === 0 ? (
-                <h2 className="fs-4 text-center">No item added to the cart!</h2>
-              ) : (
-                <table className="table bordered">
-                  <thead>
-                    <tr>
-                      <th>S.No</th>
-                      <th>Address</th>
-                      <th>View Products</th>
-                      <th>Total Amount</th>
-                      <th>Ordered Date</th>
-                      <th>Actions</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sortedOrders?.map((item, index) => {
-                      const productCount = item.products?.length + 1;
-                      const totalAmount =
-                        item?.products?.reduce(
-                          (total, product) =>
-                            total + product.quantity * product.price,
-                          0
-                        ) || 0;
+            {currentUser ? (
+              <Col lg="12">
+                {myOrders?.length === 0 ? (
+                  <h2 className="fs-4 text-center">
+                    No item added to the cart!
+                  </h2>
+                ) : (
+                  <table className="table bordered">
+                    <thead>
+                      <tr>
+                        <th>S.No</th>
+                        <th>Address</th>
+                        <th>View Products</th>
+                        <th>Total Amount</th>
+                        <th>Ordered Date</th>
+                        <th>Actions</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sortedOrders?.map((item, index) => {
+                        const productCount = item.products?.length + 1;
+                        const totalAmount =
+                          item?.products?.reduce(
+                            (total, product) =>
+                              total + product.quantity * product.price,
+                            0
+                          ) || 0;
 
-                      return (
-                        <React.Fragment key={index}>
-                          <tr>
-                            <td>{index + 1}</td>
+                        return (
+                          <React.Fragment key={index}>
+                            <tr>
+                              <td>{index + 1}</td>
 
-                            <td>
-                              <Address
-                                details={{
-                                  name: item.name,
-                                  phNo: item.phNo,
-                                  email: item.email,
-                                  address: item.address,
-                                  city: item.city,
-                                }}
-                              />
-                            </td>
-                            <td>
-                              <CommonProduct product={item.products} />
-                            </td>
-                            <td>${totalAmount.toFixed(2)}</td>
-                            <td>
-                              {item.orderedDate === "Invalid Date"
-                                ? "-"
-                                : item.orderedDate}
-                            </td>
-                            <td>
-                              {/* <PrintIcon/> */}
-                              <div onClick={() => handlePrint(item)}>
-                                <i class="ri-printer-fill"></i>
-                              </div>
-                            </td>
-                            <td>{item.status ?? "Ordered"}</td>
-                          </tr>
-                        </React.Fragment>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              )}
-              <div className="pagination">
-                <button
-                  disabled={currentPage === 1}
-                  onClick={() => handlePageChange(currentPage - 1)}
-                >
-                  Prev
-                </button>
-                {Array.from(
-                  { length: totalPages },
-                  (_, index) => index + 1
-                ).map((page) => (
+                              <td>
+                                <Address
+                                  details={{
+                                    name: item.name,
+                                    phNo: item.phNo,
+                                    email: item.email,
+                                    address: item.address,
+                                    city: item.city,
+                                  }}
+                                />
+                              </td>
+                              <td>
+                                <CommonProduct product={item.products} />
+                              </td>
+                              <td>${totalAmount.toFixed(2)}</td>
+                              <td>
+                                {item.orderedDate === "Invalid Date"
+                                  ? "-"
+                                  : item.orderedDate}
+                              </td>
+                              <td>
+                                {/* <PrintIcon/> */}
+                                <div onClick={() => handlePrint(item)}>
+                                  <i class="ri-printer-fill"></i>
+                                </div>
+                              </td>
+                              <td>{item.status ?? "Ordered"}</td>
+                            </tr>
+                          </React.Fragment>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                )}
+                <div className="pagination">
                   <button
-                    key={page}
-                    onClick={() => handlePageChange(page)}
-                    className={currentPage === page ? "active" : ""}
+                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(currentPage - 1)}
                   >
-                    {page}
+                    Prev
                   </button>
-                ))}
-                <button
-                  disabled={currentPage === totalPages}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                >
-                  Next
-                </button>
+                  {Array.from(
+                    { length: totalPages },
+                    (_, index) => index + 1
+                  ).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={currentPage === page ? "active" : ""}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                  <button
+                    disabled={currentPage === totalPages}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
+              </Col>
+            ) : (
+              <div>
+                <Row>
+                  {" "}
+                  <Col>
+                    <FormGroup className="form__group">
+                      <Input
+                        required
+                        type="number"
+                        bsSize="sm"
+                        value={payload.phNo}
+                        placeholder="Enter your Phone Number"
+                        onChange={(e) =>
+                          setPayload({ ...payload, phNo: e.target.value })
+                        }
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <Button className="mx-2" onClick={handleTrackOrder}>
+                      Track Order
+                    </Button>
+                  </Col>
+                </Row>
+                <Col lg="12">
+                  {loggedOutOrders?.length === 0 ? (
+                    <h2 className="fs-4 text-center">
+                      No item added to the cart!
+                    </h2>
+                  ) : (
+                    <>
+                      <table className="table bordered">
+                        <thead>
+                          <tr>
+                            <th>S.No</th>
+                            <th>Address</th>
+                            <th>View Products</th>
+                            <th>Total Amount</th>
+                            <th>Ordered Date</th>
+                            <th>Actions</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {lsortedOrders?.map((item, index) => {
+                            const productCount = item.products?.length + 1;
+                            const totalAmount =
+                              item?.products?.reduce(
+                                (total, product) =>
+                                  total + product.quantity * product.price,
+                                0
+                              ) || 0;
+
+                            return (
+                              <React.Fragment key={index}>
+                                <tr>
+                                  <td>{index + 1}</td>
+
+                                  <td>
+                                    <Address
+                                      details={{
+                                        name: item.name,
+                                        phNo: item.phNo,
+                                        email: item.email,
+                                        address: item.address,
+                                        city: item.city,
+                                      }}
+                                    />
+                                  </td>
+                                  <td>
+                                    <CommonProduct product={item.products} />
+                                  </td>
+                                  <td>${totalAmount.toFixed(2)}</td>
+                                  <td>
+                                    {item.orderedDate === "Invalid Date"
+                                      ? "-"
+                                      : item.orderedDate}
+                                  </td>
+                                  <td>
+                                    {/* <PrintIcon/> */}
+                                    <div onClick={() => handlePrint(item)}>
+                                      <i class="ri-printer-fill"></i>
+                                    </div>
+                                  </td>
+                                  <td>{item.status ?? "Ordered"}</td>
+                                </tr>
+                              </React.Fragment>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                      <div className="pagination">
+                        <button
+                          disabled={lcurrentPage === 1}
+                          onClick={() => lhandlePageChange(lcurrentPage - 1)}
+                        >
+                          Prev
+                        </button>
+                        {Array.from(
+                          { length: ltotalPages },
+                          (_, index) => index + 1
+                        ).map((page) => (
+                          <button
+                            key={page}
+                            onClick={() => lhandlePageChange(page)}
+                            className={lcurrentPage === page ? "active" : ""}
+                          >
+                            {page}
+                          </button>
+                        ))}
+                        <button
+                          disabled={lcurrentPage === ltotalPages}
+                          onClick={() => lhandlePageChange(lcurrentPage + 1)}
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </Col>
               </div>
-            </Col>
+            )}
           </Row>
         </Container>
       </section>

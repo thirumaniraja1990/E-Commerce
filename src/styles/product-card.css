@@ -10,6 +10,12 @@
     cursor: pointer;
 }
 
+/* .product__img
+{
+  height: 100px;
+  width: 100%;
+} */
+
 .product__info a:hover
 {
     color: inherit;

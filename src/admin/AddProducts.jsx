@@ -6,17 +6,21 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 import { useLocation, useNavigate } from "react-router-dom";
 import useGetData from "../custom-hooks/useGetData";
+import Select from "react-select";
 
 const AddProducts = () => {
   const [enterTitle, setEnterTitle] = useState("");
   const [enterShortDesc, setEnterShortDesc] = useState("");
   const [enterDescription, setEnterDescription] = useState("");
-  const [enterCategory, setEnterCategory] = useState("");
+  const [enterCategory, setEnterCategory] = useState([]);
   const [enterPrice, setEnterPrice] = useState("");
   const [enterProductImg, setEnterProductImg] = useState(null);
   const { data: category, loading: isLoad } = useGetData("category");
   const { data: productsData } = useGetData("products");
   const [isEdit, setIsEdit] = useState(false);
+
+  
+
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -24,17 +28,32 @@ const AddProducts = () => {
   useEffect(() => {
     // Access query parameters
 
+
+    
     // Do something with the query parameter value
     if (id != null) {
       setIsEdit(true);
       setEnterTitle(productsData.find((e) => e.id == id)?.productName);
       setEnterShortDesc(productsData.find((e) => e.id == id)?.shortDesc);
       setEnterDescription(productsData.find((e) => e.id == id)?.description);
-      setEnterCategory(productsData.find((e) => e.id == id)?.category);
+      setEnterCategory(
+        productsData
+          .find((e) => e.id == id)
+          ?.category.split(",")
+          .map((e) => {
+            return {
+              label: e.trim(),
+              value: e.trim(),
+            };
+          })
+      );
       setEnterPrice(productsData.find((e) => e.id == id)?.price);
       setEnterProductImg(productsData.find((e) => e.id == id)?.imgUrl);
     }
   }, [productsData]);
+  useEffect(() => {
+    console.log("enterCategory", enterCategory);
+  }, [enterCategory]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleCancel = () => {
@@ -49,7 +68,7 @@ const AddProducts = () => {
         productName: enterTitle,
         shortDesc: enterShortDesc,
         description: enterDescription,
-        category: enterCategory,
+        category: enterCategory.map((e) => e.value).join(", "),
         price: enterPrice,
         imgUrl: enterProductImg,
         status: 1,
@@ -78,7 +97,7 @@ const AddProducts = () => {
               productName: enterTitle,
               shortDesc: enterShortDesc,
               description: enterDescription,
-              category: enterCategory,
+              category: enterCategory.map((e) => e.value).join(", "),
               price: enterPrice,
               imgUrl: downloadURL,
               status: 1,
@@ -99,6 +118,7 @@ const AddProducts = () => {
     <section>
       <Container>
         <Row>
+         
           <Col lg="12">
             {loading ? (
               <h4 className="py-5">Loading.......</h4>
@@ -106,29 +126,28 @@ const AddProducts = () => {
               <>
                 <h4 className="mb-5">{isEdit ? "Edit" : "Add"} Products</h4>
                 <Form onSubmit={addProduct}>
-
-                <div className="d-flex align-items-center justify-content-between gap-5">
+                  <div className="d-flex align-items-center justify-content-between gap-5">
                     <FormGroup className="form__group w-50">
-                    <span>Product title</span>
-                    <input
-                      type="text"
-                      placeholder="Enter Product Title"
-                      value={enterTitle}
-                      onChange={(e) => setEnterTitle(e.target.value)}
-                      required
-                    />
-                  </FormGroup>
+                      <span>Product title</span>
+                      <input
+                        type="text"
+                        placeholder="Enter Product Title"
+                        value={enterTitle}
+                        onChange={(e) => setEnterTitle(e.target.value)}
+                        required
+                      />
+                    </FormGroup>
 
-                  <FormGroup className="form__group w-50">
-                    <span>Short Description</span>
-                    <input
-                      type="text"
-                      placeholder="Enter Short Description"
-                      value={enterShortDesc}
-                      onChange={(e) => setEnterShortDesc(e.target.value)}
-                      required
-                    />
-                  </FormGroup>
+                    <FormGroup className="form__group w-50">
+                      <span>Short Description</span>
+                      <input
+                        type="text"
+                        placeholder="Enter Short Description"
+                        value={enterShortDesc}
+                        onChange={(e) => setEnterShortDesc(e.target.value)}
+                        required
+                      />
+                    </FormGroup>
                   </div>
                   <FormGroup className="form__group">
                     <span>Description</span>
@@ -152,23 +171,22 @@ const AddProducts = () => {
                         required
                       />
                     </FormGroup>
-                    <FormGroup className="form__group w-50">
-                      <span>Category</span>
-                      <select
-                        className="w-100 p-2"
-                        value={enterCategory}
-                        onChange={(e) => setEnterCategory(e.target.value)}
-                        required
-                      >
-                        <option disabled>Select Category</option>
-
-                        {category.map((item, index) => (
-                          <option value={item.categoryName}>
-                            {item.categoryName}
-                          </option>
-                        ))}
-                      </select>
-                    </FormGroup>
+                    <Select
+                      value={enterCategory}
+                      isMulti
+                      name="colors"
+                      options={category.map((e) => {
+                        return {
+                          label: e.categoryName,
+                          value: e.categoryName,
+                        };
+                      })}
+                      onChange={(e) => {
+                        setEnterCategory(e);
+                      }}
+                      className="basic-multi-select mt-4 form__group w-50"
+                      classNamePrefix="select"
+                    />
                   </div>
                   <div>
                     <FormGroup className="form__group">

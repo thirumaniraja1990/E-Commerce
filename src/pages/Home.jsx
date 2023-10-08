@@ -44,56 +44,35 @@ const Home = () => {
   return (
     <>
       <Helmet title={"Home"}></Helmet>
-      <section className='hero__section'>
+      <section className="hero__section">
         <Container>
           <Row>
-            <Col lg='12'>
-              <div className='hero__content'>
+            <Col lg="12">
+              <div className="hero__content">
                 <Swiper
                   navigation={true}
                   modules={[Navigation]}
-                  className='mySwiper'>
+                  className="mySwiper"
+                >
                   {bannerImg.map((e) => (
                     <SwiperSlide>
-                      <img src={e.bannerImg} alt='' />
+                      <img src={e.bannerImg} alt="" />
                     </SwiperSlide>
                   ))}
                   {/* <SwiperSlide><img src={banner2} alt="" /></SwiperSlide> */}
                 </Swiper>
               </div>
             </Col>
-            {/* <Col lg="6" md="6">
-              <div className="hero__content">
-                <h2>Make your occasion so special</h2>
-                <p>
-                  MSM Sweets, Savouries & Food Products started to bring
-                  authentic & native special items around Tamilnadu to USA
-                  residents.
-                  <br />
-                  We started with group of friends in the year 2020.
-                  <br />
-                  All the products are with no preservatives.
-                </p>
-                <motion.button whileTap={{ scale: 1.2 }} className="buy__btn">
-                  <Link to="/shop"> SHOP NOW</Link>
-                </motion.button>
-              </div>
-            </Col>
-            <Col lg="6" md="6">
-              <div className="heo__img">
-                <img src={heroImg} alt="" />
-              </div>
-            </Col> */}
           </Row>
         </Container>
       </section>
       <Services />
 
-      <section className='hero__section'>
+      <section className="hero__section">
         <Container>
           <Row>
-            <Col lg='12'>
-              <div className='hero__content'>
+            <Col lg="12">
+              <div className="hero__content">
                 {category.map((categoryItem, index) => (
                   <div key={index} style={{ marginBottom: "2em" }}>
                     <div className='category-header'>
@@ -108,11 +87,14 @@ const Home = () => {
                       <Swiper
                         navigation={true}
                         modules={[Navigation]}
-                        className='categorySwiper'
+                        className="categorySwiper"
                         slidesPerView={4}
-                        spaceBetween={2}>
+                        spaceBetween={2}
+                      >
                         {data.map((product, productIndex) => {
-                          if (product.category === categoryItem.categoryName) {
+                          if (
+                            product.category.includes(categoryItem.categoryName)
+                          ) {
                             return (
                               <SwiperSlide key={productIndex}>
                                 <Productslist data={[product]} />
