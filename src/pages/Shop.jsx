@@ -8,19 +8,44 @@ import Productslist from "../components/UI/Productslist";
 import ProductDetails from "./ProductDetails";
 import useGetData from "../custom-hooks/useGetData";
 import ProductslistShop from "../components/UI/ProdctListShop";
+import Select from "react-select"; // Import react-select
 
 const Shop = () => {
   //const [productsData, setProductsData] = useState(products);
   const { data: products, loading } = useGetData("products");
   const [data, setData] = useState(products);
   const { data: category, loading: isLoad } = useGetData("category");
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const handleFilter = (e) => {
-    const filterValue = e.target.value;
-    const filteredProducts = products.filter((item) =>
-      item.category.includes(e.target.value)
+  // const handleFilter = (e) => {
+  //   const filterValue = e.target.value;
+  //   const filteredProducts = products.filter(
+  //     (item) => item.category === e.target.value
+  //   );
+  //   setData(filteredProducts);
+
+  // };
+
+  // const handleSearch = (e) => {
+  //   const searchTerm = e.target.value;
+  //   const searchedProducts = products.filter((item) =>
+  //     item.productName.toLowerCase().includes(searchTerm.toLowerCase())
+  //   );
+  //   setData(searchedProducts);
+  // };
+
+  // useEffect(() => {
+  //   const filteredProducts = products.filter(
+  //     (item) => item.category === category[0].categoryName
+  //   );
+  //   setData(filteredProducts);
+  // }, [category])
+
+  const handleFilter = (selectedOptions) => {
+    const selectedCategoryValues = selectedOptions.map(
+      (option) => option.value
     );
-    setData(filteredProducts);
+    setSelectedCategories(selectedCategoryValues);
   };
 
   const handleSearch = (e) => {
@@ -32,11 +57,22 @@ const Shop = () => {
   };
 
   useEffect(() => {
-    const filteredProducts = products.filter((item) =>
-      item.category.includes(category[0].categoryName)
-    );
-    setData(filteredProducts);
-  }, [category]);
+    if (selectedCategories.length === 0) {
+      // If no categories selected, show all products
+      setData(products);
+    } else {
+      // Filter products based on selected categories
+      const filteredProducts = products.filter((item) =>
+        selectedCategories.includes(item.category)
+      );
+      setData(filteredProducts);
+    }
+  }, [selectedCategories, products]);
+
+  const categoryOptions = category.map((item) => ({
+    value: item.categoryName,
+    label: item.categoryName,
+  }));
 
   return (
     <>
@@ -45,28 +81,46 @@ const Shop = () => {
       <section>
         <Container>
           <Row>
-            <Col lg="3" md="6">
+            <Col lg="6" md="6">
               <div className="filter__widget">
-                <select onChange={handleFilter}>
-                  <option disabled>Filter by Category</option>
-                  <option disabled>Select Category</option>
-                  {category.map((item, index) => (
-                    <option value={item.categoryName}>
-                      {item.categoryName}
-                    </option>
-                  ))}
-                </select>
+                <h5>Filter by Category:</h5>
+                <Select
+                  isMulti // Enable multi-select
+                  options={categoryOptions} // Pass category options
+                  value={categoryOptions.filter((option) =>
+                    selectedCategories.includes(option.value)
+                  )} // Set selected values
+                  onChange={handleFilter} // Handle selection changes
+                />
               </div>
             </Col>
-            <Col lg="3" md="6" className="text-end">
-              {/* <div className="filter__widget">
+            {/* <Col lg="3" md="6" className="text-end"> */}
+            {/* <div className="filter__widget">
                 <select>
                   <option>Sort by</option>
                   <option value="ascending">Ascending</option>
                   <option value="descending">Descending</option>
                 </select>
               </div> */}
-            </Col>
+
+            {/* <Col lg="3" md="6">
+            <div className="filter__widget">
+              <h5>Filter by Category:</h5>
+              {category.map((item) => (
+                <div key={item.categoryName}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      value={item.categoryName}
+                      checked={selectedCategories.includes(item.categoryName)}
+                      onChange={handleFilter}
+                    />
+                    {item.categoryName}
+                  </label>
+                </div>
+              ))}
+            </div>
+            </Col> */}
             <Col lg="6" md="12">
               <div className="search__box">
                 <input
