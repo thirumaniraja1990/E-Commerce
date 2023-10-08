@@ -7,6 +7,7 @@ import products from "../assets/data/products";
 import Productslist from "../components/UI/Productslist";
 import ProductDetails from "./ProductDetails";
 import useGetData from "../custom-hooks/useGetData";
+import ProductslistShop from "../components/UI/ProdctListShop";
 
 const Shop = () => {
   //const [productsData, setProductsData] = useState(products);
@@ -16,11 +17,10 @@ const Shop = () => {
 
   const handleFilter = (e) => {
     const filterValue = e.target.value;
-    const filteredProducts = products.filter(
-      (item) => item.category === e.target.value
+    const filteredProducts = products.filter((item) =>
+      item.category.includes(e.target.value)
     );
     setData(filteredProducts);
-    
   };
 
   const handleSearch = (e) => {
@@ -32,17 +32,16 @@ const Shop = () => {
   };
 
   useEffect(() => {
-    const filteredProducts = products.filter(
-      (item) => item.category === category[0].categoryName
+    const filteredProducts = products.filter((item) =>
+      item.category.includes(category[0].categoryName)
     );
     setData(filteredProducts);
-  }, [category])
-
+  }, [category]);
 
   return (
     <>
       <Helmet title={"Shop"}></Helmet>
-      <CommonSection title="Shop"/>
+      <CommonSection title="Shop" />
       <section>
         <Container>
           <Row>
@@ -51,9 +50,11 @@ const Shop = () => {
                 <select onChange={handleFilter}>
                   <option disabled>Filter by Category</option>
                   <option disabled>Select Category</option>
-                    {category.map((item,index) => (
-                           <option value={item.categoryName}>{item.categoryName}</option>
-                     ))}
+                  {category.map((item, index) => (
+                    <option value={item.categoryName}>
+                      {item.categoryName}
+                    </option>
+                  ))}
                 </select>
               </div>
             </Col>
@@ -88,7 +89,7 @@ const Shop = () => {
             {data.length === 0 ? (
               <h1 className="text-center fs-4">No products are found!</h1>
             ) : (
-              <Productslist data={data} />
+              <ProductslistShop data={data} />
             )}
           </Row>
         </Container>

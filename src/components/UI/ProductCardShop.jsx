@@ -26,7 +26,7 @@ import {
 import { AiOutlineClose } from "react-icons/ai";
 import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 
-const ProductCard = ({ item }) => {
+const ProductCardShop = ({ item }) => {
   const dispatch = useDispatch();
   const isAuthenticated = !!JSON.parse(localStorage.getItem("user"))?.uid;
   const addToCart = async () => {
@@ -147,7 +147,8 @@ const ProductCard = ({ item }) => {
     }
   };
   return (
-    <Col className="mb-2">
+    <Col lg="3" md="4" xs="6" className="mb-2">
+      {" "}
       <div
         className={`product__item product-card ${
           (
@@ -255,4 +256,4 @@ const ProductCard = ({ item }) => {
   );
 };
 
-export default ProductCard;
+export default ProductCardShop;
