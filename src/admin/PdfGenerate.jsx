@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { Button } from "reactstrap";
+import {
+  Button,
+  Col,
+  Nav,
+  NavItem,
+  NavLink,
+  Row,
+  TabContent,
+  TabPane,
+} from "reactstrap";
 import logo from "../assets/images/Logo-Latest.jpeg";
 
 const DynamicPdfGenerator = ({ jsonData }) => {
@@ -25,6 +34,36 @@ const DynamicPdfGenerator = ({ jsonData }) => {
     });
 
   console.log("orderedData", orderedData);
+  const data = {};
+  orderedData.forEach((order) => {
+    order.products.forEach((product) => {
+      const itemId = product.id;
+
+      if (!data[itemId]) {
+        data[itemId] = {
+          itemName: product.productName,
+          quantity: product.quantity,
+          price: parseFloat(product.price),
+        };
+      } else {
+        data[itemId].quantity += product.quantity;
+      }
+    });
+  });
+
+  const viewTableData = Object.values(data).map((item) => [
+    item.itemName,
+    item.quantity,
+    item.price.toFixed(2),
+    (item.quantity * item.price).toFixed(2),
+  ]);
+  console.log("viewTableData", viewTableData);
+  const viewTotalPrice = viewTableData.reduce((total, item) => {
+    return total + parseFloat(item[3]);
+  }, 0);
+  const viewTotalQuantity = viewTableData.reduce((total, item) => {
+    return total + item[1];
+  }, 0);
   const generateAndDownloadPDF = () => {
     const doc = new jsPDF();
     const imgWidth = 15; // Adjust as needed
@@ -166,13 +205,135 @@ const DynamicPdfGenerator = ({ jsonData }) => {
       ).toLocaleDateString()} .pdf`
     );
   };
+  const [viewtable, setViewTable] = useState(false);
 
+  const handleSubmit = () => {
+    setViewTable(!viewtable);
+  };
+  const calculateTotalPrice = (products) => {
+    return products.reduce((total, product) => {
+      return total + parseFloat(product.price) * product.quantity;
+    }, 0);
+  };
+  const [activeTab, setActiveTab] = useState("1");
+
+  const toggleTab = (tab) => {
+    if (activeTab !== tab) {
+      setActiveTab(tab);
+    }
+  };
   return (
     <div>
+      <Button className="mx-2 my-2" onClick={() => handleSubmit()}>
+        {!viewtable ? "View" : "Hide"}
+      </Button>
       <Button onClick={generateAndDownloadPDF}>Download Sale Report</Button>
-      <Button style={{ marginLeft: "10px" }} onClick={generateItemReport}>
+      <Button className="mx-2 my-2" onClick={generateItemReport}>
         Download Item Report
       </Button>
+      {viewtable && (
+        <>
+          {" "}
+          <Nav fill pills tabs children="my-2">
+            <NavItem>
+              <NavLink
+                className={activeTab === "1" ? "active" : ""}
+                onClick={() => toggleTab("1")}
+              >
+                Sale wise
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={activeTab === "2" ? "active" : ""}
+                onClick={() => toggleTab("2")}
+              >
+                Item wise
+              </NavLink>
+            </NavItem>
+          </Nav>
+          <TabContent activeTab={activeTab}>
+            <TabPane tabId="1">
+              <Row>
+                {orderedData.map((order, index) => (
+                  <div key={index} className="order">
+                    <table className="order-table">
+                      <thead>
+                        <tr>
+                          <th colSpan="5">Name: {order.name}</th>
+                        </tr>
+                        <tr>
+                          <th colSpan="5">Address: {order.address}</th>
+                        </tr>
+                        <tr>
+                          <th colSpan="5">Address: {order.address}</th>
+                        </tr>
+                        <tr>
+                          <th>Product Name</th>
+                          <th>Description</th>
+                          <th>Short Desc</th>
+                          <th>Price</th>
+                          <th>Quantity</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {order.products.map((product, productIndex) => (
+                          <tr key={productIndex}>
+                            <td>{product.productName}</td>
+                            <td>{product.description}</td>
+                            <td>{product.shortDesc}</td>
+                            <td>{product.price}</td>
+                            <td>{product.quantity}</td>
+                          </tr>
+                        ))}
+                        <tr className="total-row">
+                          <td colSpan="3"></td>
+                          <td>Total Price:</td>
+                          <td>
+                            {calculateTotalPrice(order.products).toFixed(2)}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                ))}
+              </Row>
+            </TabPane>
+            <TabPane tabId="2">
+              <Row>
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Item Name</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {viewTableData.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item[0]}</td>
+                        <td>{item[1]}</td>
+                        <td>{item[2]}</td>
+                        <td>{item[3]}</td>
+                      </tr>
+                    ))}
+                    <tr>
+                      <td colSpan="3">Total Quantity:</td>
+                      <td>{viewTotalQuantity}</td>
+                    </tr>
+                    <tr>
+                      <td colSpan="3">Total Price:</td>
+                      <td>{viewTotalPrice.toFixed(2)}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </Row>
+            </TabPane>
+          </TabContent>
+        </>
+      )}
     </div>
   );
 };

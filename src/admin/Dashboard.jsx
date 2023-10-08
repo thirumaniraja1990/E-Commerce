@@ -47,25 +47,6 @@ const Dashboard = () => {
       }, 0);
   }, [checkout]);
 
-  const handleDownloadCSV = () => {
-    const csvData = generateCSV(fromDate, toDate, products, checkout, users);
-    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `dashboard_data ${new Date(fromDate)
-        .toLocaleDateString()
-        .replace(/\//g, "-")} - ${new Date(toDate)
-        .toLocaleDateString()
-        .replace(/\//g, "-")}.csv`
-    );
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
   const [fromDate, setFromDate] = useState(new Date().toISOString());
   const [toDate, setToDate] = useState(new Date().toISOString());
 
@@ -152,11 +133,7 @@ const Dashboard = () => {
                 />
               </FormGroup>
             </Col>
-            <Col className="lg-3">
-              <Button className="mt-4" onClick={() => handleDownloadCSV()}>
-                Download CSV
-              </Button>{" "}
-            </Col>
+            <Col className="lg-3"></Col>
           </Row>
           <Row>
             <DynamicPdfGenerator

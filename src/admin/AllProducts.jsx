@@ -25,6 +25,7 @@ const itemsPerPage = 5; */
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = productsData.slice(indexOfFirstItem, indexOfLastItem);
  */
+  console.log(productsData);
   const deleteProduct = async (id) => {
     await deleteDoc(doc(db, "products", id));
     toast.success("Product deleted!");
@@ -85,7 +86,11 @@ const itemsPerPage = 5; */
                         <img src={item.imgUrl} alt="" />
                       </td>
                       <td>{item.productName}</td>
-                      <td>{item.category}</td>
+                      <td>
+                        {Array.isArray(item.category)
+                          ? item.category.join(", ")
+                          : item.category}
+                      </td>
                       <td>${item.price}</td>
 
                       <td>
