@@ -73,7 +73,7 @@ const Cart = () => {
 
   const handleCheckout = () => {
     localStorage.setItem("products", JSON.stringify(cartItems));
-    navigate("/checkout", true);
+    navigate("/checkout");
   };
 
   return (
@@ -195,105 +195,101 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
       return inserted;
     }
   };
-const backgroundImageURL = item.imgUrl;
+  const backgroundImageURL = item.imgUrl;
   return (
     <>
       <div
         className="msmCartSection"
-        style={{padding: "0px", margin: "16px 0px", border: "1px solid rgb(229, 229, 229)", borderRadius: "12px"}}>
-        <div className="msmCartSectionInner" style={{padding: "8px"}}>
+        style={{
+          padding: "0px",
+          margin: "16px 0px",
+          border: "1px solid rgb(229, 229, 229)",
+          borderRadius: "12px",
+        }}
+      >
+        <div className="msmCartSectionInner" style={{ padding: "8px" }}>
           <div className="msmCartProductDetails">
             <div className="msmCartProductImagesec">
-            <a
-              href="/"
-              style={{textDecoration: "none"}}
-              alt=""
-            >
-              <div
-                className="msmCartProductImage"
-                title={item.productName}
-               
-              >
-                <img src={backgroundImageURL} alt={item.productName}/>
+              <a href="/" style={{ textDecoration: "none" }} alt="">
+                <div className="msmCartProductImage" title={item.productName}>
+                  <img src={backgroundImageURL} alt={item.productName} />
                 </div>
-
-            </a></div>
-              <div className="msmCartProductNameSec">
-                <a
-                  href="/"
-                  style={{textDecoration: "none"}}
-                >
-                  <p className="msmCartProductName">
-                    {item.productName}
-                  </p>
-                </a>
-                <div className="msmCartProductPriceSec">
-                  <p className="msmCartProductPrice">
-                    <span>${item.price}</span>
-                  </p>
-                </div>
+              </a>
+            </div>
+            <div className="msmCartProductNameSec">
+              <a href="/" style={{ textDecoration: "none" }}>
+                <p className="msmCartProductName">{item.productName}</p>
+              </a>
+              <div className="msmCartProductPriceSec">
+                <p className="msmCartProductPrice">
+                  <span>${item.price}</span>
+                </p>
               </div>
-           
-                
+            </div>
           </div>
           <div className="msmCartButtonDetailSec">
-            <div className="msmCartButtonSec" style={{paddingTop: "4px"}}>
-              
+            <div className="msmCartButtonSec" style={{ paddingTop: "4px" }}>
               <div className="msmCartButton">
-              <InputGroup>
-            <Button
-              color="danger"
-              onClick={() =>
-                handleQuantityChange(
-                  isAuthenticated
-                    ? cartItems.find((e) => e.id === item.id)?.quantity - 1
-                    : cartItems2.find((e) => e.id === item.id)?.quantity - 1,
-                  item
-                )
-              }
-            >
-              -
-            </Button>
-            <Input
-              type="number"
-              bsSize="sm"
-              onChange={(e) => {
-                if (/^[0-9]+$/.test(e.target.value) || e.target.value === "") {
-                  handleQuantityChange(parseInt(e.target.value), item);
-                }
-              }}
-              value={item.quantity}
-              placeholder="Quantity"
-            />
-            <Button
-              color="success"
-              onClick={() =>
-                handleQuantityChange(
-                  isAuthenticated
-                    ? cartItems.find((e) => e.id === item.id)?.quantity + 1
-                    : cartItems2.find((e) => e.id === item.id)?.quantity + 1,
-                  item
-                )
-              }
-            >
-              +
-            </Button>
-          </InputGroup>
+                <InputGroup>
+                  <Button
+                    color="danger"
+                    onClick={() =>
+                      handleQuantityChange(
+                        isAuthenticated
+                          ? cartItems.find((e) => e.id === item.id)?.quantity -
+                              1
+                          : cartItems2.find((e) => e.id === item.id)?.quantity -
+                              1,
+                        item
+                      )
+                    }
+                  >
+                    -
+                  </Button>
+                  <Input
+                    type="number"
+                    bsSize="sm"
+                    onChange={(e) => {
+                      if (
+                        /^[0-9]+$/.test(e.target.value) ||
+                        e.target.value === ""
+                      ) {
+                        handleQuantityChange(parseInt(e.target.value), item);
+                      }
+                    }}
+                    value={item.quantity}
+                    placeholder="Quantity"
+                  />
+                  <Button
+                    color="success"
+                    onClick={() =>
+                      handleQuantityChange(
+                        isAuthenticated
+                          ? cartItems.find((e) => e.id === item.id)?.quantity +
+                              1
+                          : cartItems2.find((e) => e.id === item.id)?.quantity +
+                              1,
+                        item
+                      )
+                    }
+                  >
+                    +
+                  </Button>
+                </InputGroup>
               </div>
               <div className="msmCartCloseSec">
                 <p className="msmCartCloseIcon">
-                <motion.i
-            whileHover={{ scale: 1.2 }}
-            onClick={deleteProduct}
-            className="ri-close-line"
-          ></motion.i>
+                  <motion.i
+                    whileHover={{ scale: 1.2 }}
+                    onClick={deleteProduct}
+                    className="ri-close-line"
+                  ></motion.i>
                 </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-    
     </>
   );
 };

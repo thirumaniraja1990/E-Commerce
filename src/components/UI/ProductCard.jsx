@@ -92,6 +92,8 @@ const ProductCard = ({ item }) => {
           cartActions.addQuantity({ id: item.id, quantity: newQuantity })
         );
       }
+    } else {
+      handleDelete(item.id);
     }
   };
   const updateCartInFirebase = async (userId, itemId, newQuantity) => {
@@ -146,7 +148,7 @@ const ProductCard = ({ item }) => {
     }
   };
   return (
-    <Col lg="3" md="4" xs="6" className="mb-2">
+    <Col lg='3' md='4' xs='6' className='mb-2'>
       <div
         className={`product__item product-card ${
           (
@@ -156,63 +158,61 @@ const ProductCard = ({ item }) => {
           )
             ? "withBackdrop"
             : ""
-        }`}
-      >
-        <div className="product__img">
+        }`}>
+        <div className='product__img'>
           <Link to={`/shop/${item.id}`}>
             {" "}
-            <motion.img whileHover={{ scale: 0.9 }} src={item.imgUrl} alt="" />
+            <motion.img
+              whileHover={{ scale: 0.9 }}
+              src={item.imgUrl}
+              alt=''
+              height={"220px"}
+            />
           </Link>
         </div>
-        <div className="p-2 product__info">
-          <h3 className="product__name">
+        <div className='p-2 product__info'>
+          <h3 className='product__name'>
             {" "}
             <Link to={`/shop/${item.id}`}>
-              {/* {item.productName.length > 13
+              {item.productName.length > 13
                 ? `${item.productName.substring(0, 13)}...`
-                : item.productName} */}
-              {item.productName}
+                : item.productName}
+              {/* {item.productName} */}
             </Link>
-            
           </h3>
-          {/* <span>{item.category}</span> */}
-          <p className="mt-1"> Weight : {item.shortDesc}</p>
-          
+          <span>{item.category}</span>
         </div>
-        <div className="product__card-bottom d-flex align-items-center justify-content-between">
-          <span className="price">${item.price}</span>
+        <div className='product__card-bottom d-flex align-items-center justify-content-between'>
+          <span className='price'>{item.price}</span>
           {(
             isAuthenticated
               ? !cartItems.some((e) => e.productID === item.id)
               : !cartItems.some((e) => e.id === item.id)
           ) ? (
             <motion.span
+              className='plus'
               whileHover={{ scale: 1.2 }}
-              onClick={() => addToCart()}
-            >
-              <i className="ri-add-line"></i>
-              {/* <button style={{ borderRadius: '5px', width:'50px' , }}>Add</button> */}
+              onClick={() => addToCart()}>
+              <i className='ri-add-line'></i>
             </motion.span>
           ) : (
             <>
-              <motion.span
+              {/* <motion.span
                 whileHover={{ scale: 1.2 }}
-                className="shop-icon"
-                onClick={navigateToCart}
-              >
+                className='shop-icon'
+                onClick={navigateToCart}>
                 <MdOutlineShoppingCartCheckout />
-              </motion.span>
-              <motion.span
+              </motion.span> */}
+              {/* <motion.span
                 whileHover={{ scale: 1.2 }}
-                className="delete-icon"
-                onClick={() => handleDelete(item.id)}
-              >
+                className='delete-icon'
+                onClick={() => handleDelete(item.id)}>
                 <AiOutlineClose />
-              </motion.span>
-              <div className="quantity-control text-center">
-                <Button
-                  color="danger"
-                  className="quantity-button"
+              </motion.span> */}
+              <div className='quantity-control text-center'>
+                <div
+                  // color='danger'
+                  className='quantity-button'
                   onClick={() =>
                     handleQuantityChange(
                       isAuthenticated
@@ -221,13 +221,12 @@ const ProductCard = ({ item }) => {
                         : cartItems.find((e) => e.id === item.id)?.quantity - 1,
                       item
                     )
-                  }
-                >
-                  <i class="ri-subtract-line"></i>
-                </Button>
-                <InputGroup className="quantity-input">
+                  }>
+                  <i class='ri-subtract-line'></i>
+                </div>
+                <InputGroup className='quantity-input'>
                   <Input
-                    type="text"
+                    type='text'
                     disabled
                     value={
                       isAuthenticated
@@ -241,9 +240,9 @@ const ProductCard = ({ item }) => {
                     onBlur={(e) => handleBlur(e, item)}
                   />
                 </InputGroup>
-                <Button
-                  color="success"
-                  className="quantity-button"
+                <div
+                  // color='success'
+                  className='quantity-button'
                   onClick={() =>
                     handleQuantityChange(
                       isAuthenticated
@@ -252,10 +251,9 @@ const ProductCard = ({ item }) => {
                         : cartItems.find((e) => e.id === item.id)?.quantity + 1,
                       item
                     )
-                  }
-                >
-                  <i class="ri-add-line"></i>
-                </Button>
+                  }>
+                  <i class='ri-add-line'></i>
+                </div>
               </div>
             </>
           )}

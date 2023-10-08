@@ -27,9 +27,7 @@ const Home = () => {
   const { data: products, loading } = useGetData("products", whereCondition);
   const [data, setData] = useState(products);
 
-
-
-
+  const { data: category, loading: isLoad } = useGetData("category");
   useEffect(() => {
     const filteredProducts = products.filter((item) => item.category);
     setData(filteredProducts);
@@ -46,23 +44,18 @@ const Home = () => {
   return (
     <>
       <Helmet title={"Home"}></Helmet>
-
-      <section className="hero__section">
+      <section className='hero__section'>
         <Container>
-          
           <Row>
-            
-
-            <Col lg="12">
-              <div className="hero__content">
+            <Col lg='12'>
+              <div className='hero__content'>
                 <Swiper
                   navigation={true}
                   modules={[Navigation]}
-                  className="mySwiper"
-                >
+                  className='mySwiper'>
                   {bannerImg.map((e) => (
                     <SwiperSlide>
-                      <img src={e.bannerImg} alt="" />
+                      <img src={e.bannerImg} alt='' />
                     </SwiperSlide>
                   ))}
                   {/* <SwiperSlide><img src={banner2} alt="" /></SwiperSlide> */}
@@ -95,7 +88,7 @@ const Home = () => {
         </Container>
       </section>
       <Services />
-      <section className="trending__products">
+      {/* <section className="trending__products">
         <Container>
           <Row>
             <Col lg="12" className="text-center">
@@ -107,6 +100,28 @@ const Home = () => {
               <Productslist data={data} />
             )}
           </Row>
+        </Container>
+      </section> */}
+      <section className='pt-0'>
+        <Container>
+          {category.map((category, index) => {
+            const productsInCategory = data.filter(
+              (item) => item.category === category.categoryName
+            );
+
+            return (
+              <div key={index} style={{ marginBottom: "2em" }}>
+                <h3 style={{ marginBottom: "1em" }}>{category.categoryName}</h3>
+                {productsInCategory.length === 0 ? (
+                  <p className='text-center fs-4'>No products are found!</p>
+                ) : (
+                  <div className='horizontal-scroll-container'>
+                    <Productslist data={productsInCategory} />
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </Container>
       </section>
     </>
