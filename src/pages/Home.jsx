@@ -96,9 +96,14 @@ const Home = () => {
               <div className='hero__content'>
                 {category.map((categoryItem, index) => (
                   <div key={index} style={{ marginBottom: "2em" }}>
-                    <h3 style={{ marginBottom: "1em" }}>
-                      {categoryItem.categoryName}
-                    </h3>
+                    <div className='category-header'>
+                      <h3 style={{ marginBottom: "1em" }}>
+                        {categoryItem.categoryName}
+                      </h3>
+                      <div className='view-all-button'>
+                        <Link to='/shop'>View All</Link>
+                      </div>
+                    </div>
                     <div>
                       <Swiper
                         navigation={true}

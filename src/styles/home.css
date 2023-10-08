@@ -112,3 +112,35 @@ padding-top: 45px;
     display: none;
   }
   
+  /* Add this CSS to your stylesheet */
+
+/* Style for the category header container */
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+  }
+  
+  /* Style for the category name */
+  .category-header h3 {
+    margin: 0;
+    /* You can add additional styling here */
+  }
+  
+  /* Style for the "View All" button */
+  .view-all-button a {
+    text-decoration: none;
+    background-color: #007bff; /* Choose your desired button background color */
+    color: #fff; /* Choose your desired button text color */
+    padding: 8px 16px; /* Adjust padding as needed */
+    border-radius: 4px; /* Add rounded corners if desired */
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  /* Hover effect for the "View All" button */
+  .view-all-button a:hover {
+    background-color: #00b345; /* Choose a slightly different color on hover */
+  }
+  
