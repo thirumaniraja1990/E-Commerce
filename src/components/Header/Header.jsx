@@ -97,7 +97,6 @@ const Header = () => {
     },
   }));
   const { data: cart, loading: isLoad } = useGetData("cart");
-  console.log(cartItems);
   const MaterialBadge = ({ totalQuantity }) => (
     <StyledBadge
       anchorOrigin={{

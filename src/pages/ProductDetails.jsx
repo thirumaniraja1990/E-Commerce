@@ -33,7 +33,6 @@ const ProductDetails = () => {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setProduct(docSnap.data());
-        console.log(docSnap);
       } else {
       }
     };
@@ -57,7 +56,6 @@ const ProductDetails = () => {
 
   const isAuthenticated = !!JSON.parse(localStorage.getItem("user"))?.uid;
   const addToCart = async () => {
-    console.log(product);
     if (isAuthenticated) {
       try {
         const docRef = await collection(db, "cart");

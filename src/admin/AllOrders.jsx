@@ -218,7 +218,6 @@ const AllOrder = () => {
     return totalPrice;
   };
   const sendEmail = (status, item) => {
-    console.log(item);
     return new Promise((resolve, reject) => {
       // Your email service configuration
       const serviceId = "service_jtcn1v8";
@@ -342,7 +341,6 @@ const AllOrder = () => {
     });
   };
   const sendEmailOrderCompleted = (status, item) => {
-    console.log(item);
     return new Promise((resolve, reject) => {
       // Your email service configuration
       const serviceId = "service_jtcn1v8";

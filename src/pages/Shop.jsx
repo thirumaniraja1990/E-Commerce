@@ -50,12 +50,10 @@ const Shop = () => {
   useEffect(() => {
     if (selectedCategories.length === 0) {
       // If no categories selected, show all products
-      console.log(products);
 
       setData(products);
     } else {
       // Filter products based on selected categories
-      console.log(products);
       const filteredProducts = products.filter((item) =>
         item.category.includes(selectedCategories)
       );

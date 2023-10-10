@@ -33,7 +33,6 @@ const DynamicPdfGenerator = ({ jsonData }) => {
       );
     });
 
-  console.log("orderedData", orderedData);
   const data = {};
   orderedData?.forEach((order) => {
     order.products?.forEach((product) => {
@@ -57,7 +56,6 @@ const DynamicPdfGenerator = ({ jsonData }) => {
     item.price.toFixed(2),
     (item.quantity * item.price).toFixed(2),
   ]);
-  console.log("viewTableData", viewTableData);
   const viewTotalPrice = viewTableData.reduce((total, item) => {
     return total + parseFloat(item[3]);
   }, 0);

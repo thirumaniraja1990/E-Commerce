@@ -34,7 +34,6 @@ const Shop = () => {
   };
 
   useEffect(() => {
-    console.log("products", products);
     const filteredProducts = products.filter(
       (item) => item.category.includes(defaultCategory)
       //   category[0].categoryName

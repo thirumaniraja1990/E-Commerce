@@ -50,14 +50,12 @@ const Cart = () => {
       .filter((product) => product !== null);
   }
   useEffect(() => {
-    console.log("cart", cart);
     if (JSON.parse(localStorage.getItem("user"))?.uid) {
       const cartItems1 = cart.filter(
         (e) => e.userId === JSON.parse(localStorage.getItem("user"))?.uid
       );
 
       const updatedProducts = updateProductsWithQuantity(products, cartItems1);
-      console.log(updatedProducts);
       setCartItems([...updatedProducts]);
     } else {
       setCartItems([
@@ -162,7 +160,6 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
   const handleQuantityChange = (newQuantity, item) => {
     if (newQuantity >= 1) {
       const user = JSON.parse(localStorage.getItem("user"));
-      console.log("hi");
       if (user?.uid) {
         updateCartInFirebase(user.uid, item.id, newQuantity);
       } else {

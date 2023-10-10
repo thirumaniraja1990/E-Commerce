@@ -25,49 +25,39 @@ const Signup = () => {
   const signUp = async (e) => {
     e.preventDefault();
     setLoading(true);
-    try { 
+    try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
-      //console.log("Log1");
       const user = userCredential.user;
-      //console.log("Log2");
       const storageRef = ref(storage, `images/${Date.now() + username}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
-      //console.log("Log3");
       uploadTask.on(
-        (error)=>
-        {
+        (error) => {
           toast.error(error.message);
         },
-        ()=>
-        {
-            getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL)=> 
-          {
-            await updateProfile
-            (user, 
-            {
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            await updateProfile(user, {
               displayName: username,
               photoURL: downloadURL,
             });
-            await setDoc(doc(db, "users", user.uid), 
-            {
+            await setDoc(doc(db, "users", user.uid), {
               uid: user.uid,
               displayName: username,
               email,
               photoURL: downloadURL,
-              isAdmin: false
+              isAdmin: false,
             });
           });
         }
       );
-      // const user = userCredential.user;
-      //console.log(user);
+
       setLoading(false);
       toast.success("Account created");
-       navigate("/login");
+      navigate("/login");
     } catch (error) {
       setLoading(false);
       toast.error("something went wrong");
@@ -81,12 +71,11 @@ const Signup = () => {
       <section>
         <Container>
           <Row>
-            {
-            loading? (
+            {loading ? (
               <Col lg="12" className="text-center">
                 <h5 className="fw-bold">Loding.....</h5>
               </Col>
-            ): (
+            ) : (
               <Col lg="6" className="m-auto text-center">
                 <h3 className="fw-bold mb-4">Signup </h3>
                 <Form className="auth__form" onSubmit={signUp}>

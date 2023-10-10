@@ -43,7 +43,6 @@ const Order = () => {
 
   const handlePrint = (item) => {
     const products = item.products;
-    console.log(item);
     const totalPages = Math.ceil(products.length / 20);
 
     let html = `

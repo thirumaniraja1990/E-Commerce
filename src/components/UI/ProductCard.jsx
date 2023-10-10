@@ -72,7 +72,6 @@ const ProductCard = ({ item }) => {
   };
   useEffect(() => {
     if (isAuthenticated) {
-      console.log("cart", cart);
       const cartProducts = cart.filter(
         (e) => e.userId === JSON.parse(localStorage.getItem("user"))?.uid
       );
