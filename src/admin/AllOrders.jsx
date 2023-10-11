@@ -523,17 +523,17 @@ const AllOrder = () => {
   };
   return (
     <>
-      <Helmet title="Cart"></Helmet>
+      <Helmet title='Cart'></Helmet>
       {/* <CommonSection title="All Orders" /> */}
       <section>
         <Container>
           <Row>
-            <h4 className="mb-5">All Orders</h4>
-            <Col lg="12">
+            <h4 className='mb-5'>All Orders</h4>
+            <Col lg='12'>
               {myOrders?.length === 0 ? (
-                <h2 className="fs-4 text-center">No item added to the cart!</h2>
+                <h2 className='fs-4 text-center'>No item added to the cart!</h2>
               ) : (
-                <table className="table bordered">
+                <table className='table bordered'>
                   <thead>
                     <tr>
                       <th>S.No</th>
@@ -569,6 +569,8 @@ const AllOrder = () => {
                                   email: item.email,
                                   address: item.address,
                                   city: item.city,
+                                  pickuplocation: item.pickupLocation,
+                                  otherAddress: item.otherAddress,
                                 }}
                               />
                             </td>
@@ -584,13 +586,13 @@ const AllOrder = () => {
                             <td>
                               {/* <PrintIcon/> */}
                               <div onClick={() => handlePrint(item)}>
-                                <i class="ri-printer-fill"></i>
+                                <i class='ri-printer-fill'></i>
                               </div>
                             </td>
                             <td>
-                              <FormGroup className="form__group w-50">
+                              <FormGroup className='form__group w-50'>
                                 <select
-                                  className="p-2"
+                                  className='p-2'
                                   value={item.status}
                                   onChange={(e) =>
                                     updateOrderStatus(
@@ -599,14 +601,13 @@ const AllOrder = () => {
                                       item
                                     )
                                   }
-                                  required
-                                >
+                                  required>
                                   <option>Select Status</option>
 
-                                  <option value="Hold">Hold</option>
-                                  <option value="Shipped">Shipped</option>
-                                  <option value="Completed">Completed</option>
-                                  <option value="Rejected">Rejected</option>
+                                  <option value='Hold'>Hold</option>
+                                  <option value='Shipped'>Shipped</option>
+                                  <option value='Completed'>Completed</option>
+                                  <option value='Rejected'>Rejected</option>
                                 </select>
                               </FormGroup>
                             </td>
@@ -621,11 +622,10 @@ const AllOrder = () => {
                   </tbody>
                 </table>
               )}
-              <div className="pagination">
+              <div className='pagination'>
                 <button
                   disabled={currentPage === 1}
-                  onClick={() => handlePageChange(currentPage - 1)}
-                >
+                  onClick={() => handlePageChange(currentPage - 1)}>
                   Prev
                 </button>
                 {Array.from(
@@ -635,15 +635,13 @@ const AllOrder = () => {
                   <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={currentPage === page ? "active" : ""}
-                  >
+                    className={currentPage === page ? "active" : ""}>
                     {page}
                   </button>
                 ))}
                 <button
                   disabled={currentPage === totalPages}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                >
+                  onClick={() => handlePageChange(currentPage + 1)}>
                   Next
                 </button>
               </div>
@@ -662,7 +660,7 @@ const Tr = ({ item, index, myOrders, setMyOrder }) => {
     <>
       <tr>
         <td>
-          <img src={item.imgUrl} alt="" />
+          <img src={item.imgUrl} alt='' />
         </td>
         <td>{item.productName}</td>
         <td>${item.price}</td>
