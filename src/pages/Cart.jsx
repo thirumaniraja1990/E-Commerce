@@ -138,18 +138,20 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
   const isAuthenticated = !!JSON.parse(localStorage.getItem("user"))?.uid;
   const deleteProduct = async () => {
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const cartQuery = query(
-        collection(db, "cart"),
-        where("productID", "==", item.id),
-        where("userId", "==", user.uid)
-      );
-      const querySnapshot = await getDocs(cartQuery);
+      if (isAuthenticated) {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const cartQuery = query(
+          collection(db, "cart"),
+          where("productID", "==", item.id),
+          where("userId", "==", user?.uid)
+        );
+        const querySnapshot = await getDocs(cartQuery);
 
-      querySnapshot.forEach(async (queryDoc) => {
-        const docRef = doc(db, "cart", queryDoc.id);
-        await deleteDoc(docRef);
-      });
+        querySnapshot.forEach(async (queryDoc) => {
+          const docRef = doc(db, "cart", queryDoc.id);
+          await deleteDoc(docRef);
+        });
+      }
 
       dispatch(cartActions.deleteItem(item.productID));
       toast.error("Product removed from the Cart");

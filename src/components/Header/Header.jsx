@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import "./header.css";
 import { Container, Row } from "reactstrap";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -45,7 +45,6 @@ const nav__links = [
 const Header = () => {
   const headerRef = useRef(null);
   const menuRef = useRef(null);
-  const cartItems = useSelector((state) => state.cart.cartItems);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const profileActionRef = useRef(null);
@@ -96,7 +95,21 @@ const Header = () => {
       padding: "0 4px",
     },
   }));
+  const isAuthenticated = !!JSON.parse(localStorage.getItem("user"))?.uid;
+  const [cartItems, setCartItems] = useState([]);
+
   const { data: cart, loading: isLoad } = useGetData("cart");
+  const { cartItems: reduxCartItems } = useSelector((state) => state.cart);
+  useEffect(() => {
+    if (isAuthenticated) {
+      const cartProducts = cart.filter(
+        (e) => e.userId === JSON.parse(localStorage.getItem("user"))?.uid
+      );
+      setCartItems([...cartProducts]);
+    } else {
+      setCartItems([...reduxCartItems]);
+    }
+  }, [cart, reduxCartItems]);
   const MaterialBadge = ({ totalQuantity }) => (
     <StyledBadge
       anchorOrigin={{
@@ -104,7 +117,7 @@ const Header = () => {
         horizontal: "right",
       }}
       color="secondary"
-      badgeContent={cart.length}
+      badgeContent={cartItems.length}
     >
       <i className="ri-shopping-bag-line"></i>
     </StyledBadge>
