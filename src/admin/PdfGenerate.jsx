@@ -14,6 +14,7 @@ import {
 import logo from "../assets/images/Logo-Latest.jpeg";
 
 const DynamicPdfGenerator = ({ jsonData }) => {
+  console.log(jsonData.checkout);
   const orderedData = jsonData.checkout
     .map((e) => {
       return {
@@ -95,6 +96,15 @@ const DynamicPdfGenerator = ({ jsonData }) => {
       doc.text(`Address: ${order.address}`, 10, 25);
       doc.text(`City: ${order.city}`, 10, 30); // Adjust the Y position for City
       doc.text(`Pincode: ${order.postalCode}`, 10, 35); // Adjust the Y position for Pincode
+      doc.text(
+        `Pickup Location: ${
+          order.pickupLocation === "Others"
+            ? "Others:" + order.otherAddress
+            : order.pickupLocation
+        }`,
+        10,
+        40
+      );
       doc.text(`Country: ${order.country}`, 150, 20); // Adjust the Y position for Country
       doc.text(`Email: ${order.email}`, 150, 25); // Adjust the Y position for Email
       doc.text(`Mobile Number: ${order.phNo}`, 150, 30); // Adjust the Y position for Mobile Number
@@ -126,7 +136,7 @@ const DynamicPdfGenerator = ({ jsonData }) => {
           ["Product Name", "Description", "Short Desc", "Price", "Quantity"],
         ],
         body: tableData,
-        startY: 40, // Adjust the Y position to avoid overlapping with the name
+        startY: 45, // Adjust the Y position to avoid overlapping with the name
       });
     });
 
@@ -227,51 +237,57 @@ const DynamicPdfGenerator = ({ jsonData }) => {
   };
   return (
     <div>
-      <Button className="mx-2 my-2" onClick={() => handleSubmit()}>
+      <Button className='mx-2 my-2' onClick={() => handleSubmit()}>
         {!viewtable ? "View" : "Hide"}
       </Button>
       <Button onClick={generateAndDownloadPDF}>Download Sale Report</Button>
-      <Button className="mx-2 my-2" onClick={generateItemReport}>
+      <Button className='mx-2 my-2' onClick={generateItemReport}>
         Download Item Report
       </Button>
       {viewtable && (
         <>
           {" "}
-          <Nav fill pills tabs children="my-2">
+          <Nav fill pills tabs children='my-2'>
             <NavItem>
               <NavLink
                 className={activeTab === "1" ? "active" : ""}
-                onClick={() => toggleTab("1")}
-              >
+                onClick={() => toggleTab("1")}>
                 Sale wise
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink
                 className={activeTab === "2" ? "active" : ""}
-                onClick={() => toggleTab("2")}
-              >
+                onClick={() => toggleTab("2")}>
                 Item wise
               </NavLink>
             </NavItem>
           </Nav>
           <TabContent activeTab={activeTab}>
-            <TabPane tabId="1">
+            <TabPane tabId='1'>
               <Row>
                 {orderedData.map((order, index) => (
-                  <div key={index} className="order">
-                    <table className="order-table">
+                  <div key={index} className='order'>
+                    <table className='order-table'>
                       <thead>
                         <tr>
-                          <th colSpan="2">Name: {order?.name}</th>
-                          <th colSpan="3">
+                          <th colSpan='2'>Name: {order?.name}</th>
+                          <th colSpan='3'>
                             Mobile: {order.phNo}, Email: {order.email}
                           </th>
                         </tr>
                         <tr>
-                          <th colSpan="5">
+                          <th colSpan='3'>
                             Address: {order.address}, {order.city},{" "}
                             {order.country}, {order.postalCode}
+                          </th>
+                          <th colSpan='2'>
+                            Pick up location:{" "}
+                            {order?.pickupLocation === ""
+                              ? "-"
+                              : order?.pickupLocation}{" "}
+                            {order?.pickupLocation === "Others" &&
+                              `(${order.otherAddress ?? "-"})`}
                           </th>
                         </tr>
 
@@ -293,8 +309,8 @@ const DynamicPdfGenerator = ({ jsonData }) => {
                             <td>{product.quantity}</td>
                           </tr>
                         ))}
-                        <tr className="total-row">
-                          <td colSpan="3">Total</td>
+                        <tr className='total-row'>
+                          <td colSpan='3'>Total</td>
                           <td>
                             $ {calculateTotalPrice(order?.products)?.toFixed(2)}
                           </td>
@@ -306,9 +322,9 @@ const DynamicPdfGenerator = ({ jsonData }) => {
                 ))}
               </Row>
             </TabPane>
-            <TabPane tabId="2">
+            <TabPane tabId='2'>
               <Row>
-                <table className="data-table">
+                <table className='data-table'>
                   <thead>
                     <tr>
                       <th>Item Name</th>

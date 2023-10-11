@@ -28,6 +28,7 @@ const Checkout = () => {
     email: "",
     phNo: "",
     pickupLocation: "",
+    otherAddress: "",
     address: "",
     city: "",
     postalCode: "",
@@ -162,6 +163,7 @@ const Checkout = () => {
         email: payload.email,
         phNo: payload.phNo,
         pickupLocation: payload.pickupLocation,
+        otherAddress: payload.otherAddress,
         address: payload.address,
         city: payload.city,
         postalCode: payload.postalCode,
@@ -217,10 +219,12 @@ const Checkout = () => {
                 </FormGroup>
                 <FormGroup className='form__group'>
                   <PhoneInput
-                    country={"none"}
-                    enableSearch={true}
+                    country={"us"}
+                    // enableSearch={true}
                     value={payload.phNo}
+                    onlyCountries={["us", "in"]}
                     inputProps={{
+                      required: true,
                       placeholder: "Enter your Phone Number",
                     }}
                     onChange={(e) => {
@@ -244,6 +248,7 @@ const Checkout = () => {
                 <FormGroup className='form__group'>
                   <Input
                     // className='mb-3'
+                    required
                     type='select'
                     value={payload.pickupLocation}
                     placeholder='Select pickup location'
@@ -257,18 +262,36 @@ const Checkout = () => {
                     <option>Others</option>
                   </Input>
                 </FormGroup>
+
                 {payload.pickupLocation === "Others" && (
-                  <p
-                    style={{
-                      color: "red",
-                      fontFamily: "initial",
-                      fontSize: "16px",
-                      paddingLeft: "20px",
-                      marginBottom: "1em",
-                    }}>
-                    MSM team will reach you to arrange your shipping as you
-                    choose the pickup location not listed in the list.
-                  </p>
+                  <div>
+                    <p
+                      style={{
+                        color: "red",
+                        fontFamily: "initial",
+                        fontSize: "16px",
+                        paddingLeft: "20px",
+                        marginBottom: "1em",
+                      }}>
+                      MSM team will reach you to arrange your shipping as you
+                      choose the pickup location not listed in the list.
+                    </p>
+                    <FormGroup className='form__group'>
+                      <Input
+                        required
+                        type='text'
+                        bsSize='sm'
+                        value={payload.otherAddress}
+                        placeholder='Enter Other Location'
+                        onChange={(e) =>
+                          setPayload({
+                            ...payload,
+                            otherAddress: e.target.value,
+                          })
+                        }
+                      />
+                    </FormGroup>
+                  </div>
                 )}
 
                 <FormGroup className='form__group'>
@@ -285,7 +308,6 @@ const Checkout = () => {
                 </FormGroup>
                 <FormGroup className='form__group'>
                   <Input
-                    required
                     type='text'
                     bsSize='sm'
                     value={payload.city}
@@ -297,7 +319,6 @@ const Checkout = () => {
                 </FormGroup>
                 <FormGroup className='form__group'>
                   <Input
-                    required
                     type='text'
                     bsSize='sm'
                     value={payload.postalCode}
@@ -309,7 +330,6 @@ const Checkout = () => {
                 </FormGroup>
                 <FormGroup className='form__group'>
                   <Input
-                    required
                     type='text'
                     bsSize='sm'
                     value={payload.country}
