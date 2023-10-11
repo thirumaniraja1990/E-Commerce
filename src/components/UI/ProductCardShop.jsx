@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import "../../styles/product-card.css";
-import { Col } from "reactstrap";
+import { Col, Tooltip } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../../redux/slices/cartSlice";
@@ -25,6 +25,7 @@ import {
 } from "../../custom-hooks/crud";
 import { AiOutlineClose } from "react-icons/ai";
 import { MdOutlineShoppingCartCheckout } from "react-icons/md";
+// import Tooltip from "@mui/material/Tooltip";
 
 const ProductCardShop = ({ item }) => {
   const dispatch = useDispatch();
@@ -145,8 +146,11 @@ const ProductCardShop = ({ item }) => {
       console.log("Error deleting product:", error);
     }
   };
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  const toggle = () => setTooltipOpen(!tooltipOpen);
   return (
-    <Col lg="3" md="4" xs="6" className="mb-2">
+    <Col lg='3' md='4' xs='6' className='mb-2'>
       {" "}
       <div
         className={`product__item product-card ${
@@ -157,52 +161,58 @@ const ProductCardShop = ({ item }) => {
           )
             ? "withBackdrop"
             : ""
-        }`}
-      >
-        <div className="product__img">
+        }`}>
+        <div className='product__img'>
           <Link to={`/shop/${item.id}`}>
             {" "}
             <motion.img
               whileHover={{ scale: 0.9 }}
               src={item.imgUrl}
-              alt=""
+              alt=''
               width={"100%"}
               height={"220px"}
             />
           </Link>
         </div>
-        <div className="p-2 product__info">
-          <h3 className="product__name">
+        <div className='p-2 product__info'>
+          <h3 className='product__name'>
             {" "}
             <Link to={`/shop/${item.id}`}>
-              {item.productName.length > 13
-                ? `${item.productName.substring(0, 13)}...`
-                : item.productName}
-              {/* {item.productName} */}
+              <span id={"Tooltip-" + item.id}>
+                {item.productName.length > 28
+                  ? `${item.productName.substring(0, 28)}...`
+                  : item.productName}
+              </span>
+              <Tooltip
+                placement={"top"}
+                isOpen={tooltipOpen}
+                target={"Tooltip-" + item.id}
+                toggle={toggle}>
+                {item.productName}
+              </Tooltip>
             </Link>
           </h3>
           <span>{item.shortDesc}</span>
         </div>
-        <div className="product__card-bottom d-flex align-items-center justify-content-between">
-          <span className="price">{item.price}</span>
+        <div className='product__card-bottom d-flex align-items-center justify-content-between'>
+          <span className='price'>{item.price}</span>
           {(
             isAuthenticated
               ? !cartItems.some((e) => e.productID === item.id)
               : !cartItems.some((e) => e.id === item.id)
           ) ? (
             <motion.span
-              className="plus"
+              className='plus'
               whileHover={{ scale: 1.2 }}
-              onClick={() => addToCart()}
-            >
-              <i className="ri-add-line"></i>
+              onClick={() => addToCart()}>
+              <i className='ri-add-line'></i>
             </motion.span>
           ) : (
             <>
-              <div className="quantity-control text-center">
+              <div className='quantity-control text-center'>
                 <div
                   // color='danger'
-                  className="quantity-button"
+                  className='quantity-button'
                   onClick={() =>
                     handleQuantityChange(
                       isAuthenticated
@@ -211,13 +221,12 @@ const ProductCardShop = ({ item }) => {
                         : cartItems.find((e) => e.id === item.id)?.quantity - 1,
                       item
                     )
-                  }
-                >
-                  <i class="ri-subtract-line"></i>
+                  }>
+                  <i class='ri-subtract-line'></i>
                 </div>
-                <InputGroup className="quantity-input">
+                <InputGroup className='quantity-input'>
                   <Input
-                    type="text"
+                    type='text'
                     disabled
                     value={
                       isAuthenticated
@@ -233,7 +242,7 @@ const ProductCardShop = ({ item }) => {
                 </InputGroup>
                 <div
                   // color='success'
-                  className="quantity-button"
+                  className='quantity-button'
                   onClick={() =>
                     handleQuantityChange(
                       isAuthenticated
@@ -242,9 +251,8 @@ const ProductCardShop = ({ item }) => {
                         : cartItems.find((e) => e.id === item.id)?.quantity + 1,
                       item
                     )
-                  }
-                >
-                  <i class="ri-add-line"></i>
+                  }>
+                  <i class='ri-add-line'></i>
                 </div>
               </div>
             </>

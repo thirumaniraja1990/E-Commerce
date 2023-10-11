@@ -75,16 +75,16 @@ const Cart = () => {
 
   return (
     <>
-      <Helmet title="Cart"></Helmet>
+      <Helmet title='Cart'></Helmet>
       {/* <CommonSection title="Shopping Cart" /> */}
       <section>
         <Container>
           <Row>
-            <Col lg="9">
+            <Col lg='9'>
               {cartItems?.length === 0 ? (
-                <h2 className="fs-4 text-center">No item added to the cart!</h2>
+                <h2 className='fs-4 text-center'>No item added to the cart!</h2>
               ) : (
-                <div className="msmCart">
+                <div className='msmCart'>
                   {cartItems?.map((item, index) => (
                     <Tr
                       item={item}
@@ -97,11 +97,11 @@ const Cart = () => {
                 </div>
               )}
             </Col>
-            <Col lg="3">
+            <Col lg='3'>
               <div>
-                <h6 className="d-flex align-items-center justify-content-between">
+                <h6 className='d-flex align-items-center justify-content-between'>
                   Subtotal
-                  <span className="fs-4 fw-bold">
+                  <span className='fs-4 fw-bold'>
                     $
                     {cartItems
                       .reduce(
@@ -113,15 +113,15 @@ const Cart = () => {
                   </span>
                 </h6>
               </div>
-              <p className="fs-6 mt-2">
+              <p className='fs-6 mt-2'>
                 taxes and shipping will calculate in checkout
               </p>
               <div>
-                <button className="buy__btn w-100 " onClick={handleCheckout}>
+                <button className='buy__btn w-100 ' onClick={handleCheckout}>
                   Checkout
                 </button>
-                <button className="buy__btn w-100 mt-4">
-                  <Link to="/shop">Continue Shopping</Link>
+                <button className='buy__btn w-100 mt-4'>
+                  <Link to='/shop'>Continue Shopping</Link>
                 </button>
               </div>
             </Col>
@@ -152,7 +152,7 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
         });
       }
 
-      dispatch(cartActions.deleteItem(item.productID));
+      dispatch(cartActions.deleteItem(item.id));
       toast.error("Product removed from the Cart");
     } catch (error) {
       console.log("Error deleting product:", error);
@@ -197,19 +197,18 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
   return (
     <>
       <div
-        className="msmCartSection"
+        className='msmCartSection'
         style={{
           padding: "0px",
           margin: "16px 0px",
           border: "1px solid rgb(229, 229, 229)",
           borderRadius: "12px",
-        }}
-      >
-        <div className="msmCartSectionInner" style={{ padding: "8px" }}>
-          <div className="msmCartProductDetails">
-            <div className="msmCartProductImagesec">
-              <a href="/" style={{ textDecoration: "none" }} alt="">
-                <div className="msmCartProductImage" title={item.productName}>
+        }}>
+        <div className='msmCartSectionInner' style={{ padding: "8px" }}>
+          <div className='msmCartProductDetails'>
+            <div className='msmCartProductImagesec'>
+              <a href='/' style={{ textDecoration: "none" }} alt=''>
+                <div className='msmCartProductImage' title={item.productName}>
                   <img
                     src={backgroundImageURL}
                     height={"75px"}
@@ -219,23 +218,23 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
                 </div>
               </a>
             </div>
-            <div className="msmCartProductNameSec">
-              <a href="/" style={{ textDecoration: "none" }}>
-                <p className="msmCartProductName">{item.productName}</p>
+            <div className='msmCartProductNameSec'>
+              <a href='/' style={{ textDecoration: "none" }}>
+                <p className='msmCartProductName'>{item.productName}</p>
               </a>
-              <div className="msmCartProductPriceSec">
-                <p className="msmCartProductPrice">
+              <div className='msmCartProductPriceSec'>
+                <p className='msmCartProductPrice'>
                   <span>${item.price}</span>
                 </p>
               </div>
             </div>
           </div>
-          <div className="msmCartButtonDetailSec">
-            <div className="msmCartButtonSec" style={{ paddingTop: "4px" }}>
-              <div className="msmCartButton">
+          <div className='msmCartButtonDetailSec'>
+            <div className='msmCartButtonSec' style={{ paddingTop: "4px" }}>
+              <div className='msmCartButton'>
                 <InputGroup>
                   <Button
-                    color="danger"
+                    color='danger'
                     onClick={() =>
                       handleQuantityChange(
                         isAuthenticated
@@ -245,13 +244,12 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
                               1,
                         item
                       )
-                    }
-                  >
+                    }>
                     -
                   </Button>
                   <Input
-                    type="number"
-                    bsSize="sm"
+                    type='number'
+                    bsSize='sm'
                     onChange={(e) => {
                       if (
                         /^[0-9]+$/.test(e.target.value) ||
@@ -261,10 +259,10 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
                       }
                     }}
                     value={item.quantity}
-                    placeholder="Quantity"
+                    placeholder='Quantity'
                   />
                   <Button
-                    color="success"
+                    color='success'
                     onClick={() =>
                       handleQuantityChange(
                         isAuthenticated
@@ -274,19 +272,17 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
                               1,
                         item
                       )
-                    }
-                  >
+                    }>
                     +
                   </Button>
                 </InputGroup>
               </div>
-              <div className="msmCartCloseSec">
-                <p className="msmCartCloseIcon">
+              <div className='msmCartCloseSec'>
+                <p className='msmCartCloseIcon'>
                   <motion.i
                     whileHover={{ scale: 1.2 }}
                     onClick={deleteProduct}
-                    className="ri-close-line"
-                  ></motion.i>
+                    className='ri-close-line'></motion.i>
                 </p>
               </div>
             </div>
