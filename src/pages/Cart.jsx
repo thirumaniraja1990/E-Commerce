@@ -54,7 +54,6 @@ const Cart = () => {
       const cartItems1 = cart.filter(
         (e) => e.userId === JSON.parse(localStorage.getItem("user"))?.uid
       );
-
       const updatedProducts = updateProductsWithQuantity(products, cartItems1);
       setCartItems([...updatedProducts]);
     } else {

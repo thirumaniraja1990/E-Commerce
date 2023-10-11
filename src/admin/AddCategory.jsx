@@ -12,7 +12,16 @@ import {
 } from "reactstrap";
 import { toast } from "react-toastify";
 import { db } from "../firebase.config";
-import { collection, addDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+  writeBatch,
+} from "firebase/firestore";
 import useGetData from "../custom-hooks/useGetData";
 import { getDocuments, updateDocument } from "../utils/crud";
 function AddCategory(props) {
@@ -97,6 +106,22 @@ function AddCategory(props) {
       console.error("Error updating products:", error);
       return false; // Failed to update products
     }
+  };
+  const deleteCategory = async (id, category) => {
+    const productsQuerySnapshot = await getDocs(
+      query(collection(db, "products"), where("category", "==", category))
+    );
+    console.log("productsQuerySnapshot", productsQuerySnapshot);
+    const batch = writeBatch(db);
+
+    productsQuerySnapshot.forEach((doc) => {
+      const productRef = doc.ref;
+      batch.delete(productRef);
+    });
+    await batch.commit();
+
+    await deleteDoc(doc(db, "category", id));
+    toast.success("Product deleted!");
   };
   const handleCancel = () => {
     setIsEdit(false);
@@ -197,7 +222,7 @@ function AddCategory(props) {
                     </button>
                     <button
                       onClick={() => {
-                        // deleteProduct(item.id);
+                        deleteCategory(item.id, item.categoryName);
                       }}
                       className="btn btn-danger"
                     >
