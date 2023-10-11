@@ -38,7 +38,7 @@ const nav__links = [
   },
   {
     path: "order",
-    display: "Order",
+    display: "Track Order",
   },
 ];
 

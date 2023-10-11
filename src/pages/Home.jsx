@@ -2,6 +2,7 @@ import React from "react";
 import Helmet from "../components/Helmet/Helmet";
 import { Container, Row, Col } from "reactstrap";
 import heroImg from "../assets/images/Banner2.png";
+import service from "../assets/images/service.jpeg";
 import "../styles/home.css";
 import { Link } from "react-router-dom";
 import { filterProps, motion } from "framer-motion";
@@ -66,7 +67,16 @@ const Home = () => {
           </Row>
         </Container>
       </section>
-      <Services />
+      {/* <Services /> */}
+      <section className="image__section">
+        <Container>
+          <Row>
+            <Col lg="12">
+            <img src={service} alt="" />
+            </Col>
+            </Row>
+            </Container>
+            </section>
 
       <section className="hero__section">
         <Container>

@@ -366,7 +366,7 @@ const Checkout = () => {
                   <h6>
                     <span>
                       Shipping : <br />
-                      Free Shipping
+                      {/* Free Shipping */}
                     </span>
                     <span>$0</span>
                   </h6>
@@ -387,6 +387,18 @@ const Checkout = () => {
                   <button type='submit' className='buy__btn auth__btn w-100'>
                     Place an order
                   </button>
+                </div>
+                <div className="mt-3">
+                <p
+                    style={{
+                      color: "red",
+                      fontFamily: "initial",
+                      fontSize: "16px",
+                      paddingLeft: "20px",
+                      marginBottom: "1em",
+                    }}>
+                    All Order amount will be collected at the time of delivery.
+                  </p>
                 </div>
               </Col>
             </Row>
