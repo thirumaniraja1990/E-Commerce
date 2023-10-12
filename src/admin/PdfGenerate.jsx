@@ -15,7 +15,6 @@ import {
 import logo from "../assets/images/Logo-Latest.jpeg";
 
 const DynamicPdfGenerator = ({ jsonData }) => {
-  console.log(jsonData);
   const orderedData = jsonData.checkout
     .map((e) => {
       return {

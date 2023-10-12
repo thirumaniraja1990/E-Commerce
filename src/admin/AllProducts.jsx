@@ -15,9 +15,6 @@ function AllProducts() {
   const navigate = useNavigate();
   const label = { inputProps: { "aria-label": "Switch demo" } };
 
-
-
-  
   /* const [currentPage, setCurrentPage] = useState(1);
 const itemsPerPage = 5; */
 
@@ -25,7 +22,6 @@ const itemsPerPage = 5; */
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = productsData.slice(indexOfFirstItem, indexOfLastItem);
  */
-  console.log(productsData);
   const deleteProduct = async (id) => {
     await deleteDoc(doc(db, "products", id));
     toast.success("Product deleted!");
@@ -61,9 +57,8 @@ const itemsPerPage = 5; */
     <section>
       <Container>
         <Row>
-
           <h4 className="mb-5">All Products</h4>
-      
+
           <Col lg="12">
             <table className="table">
               <thead>
