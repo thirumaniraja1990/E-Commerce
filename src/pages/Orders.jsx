@@ -252,22 +252,31 @@ const Order = () => {
   const [payload, setPayload] = useState({
     phNo: "",
   });
-  const whereCondition = where("phNo", "==", payload.phNo);
 
-  const { data: checkout } = useGetData("checkout", whereCondition);
+  const { data: checkout } = useGetData("checkout");
   const handleTrackOrder = () => {
     setLoggedOutOrders(
-      checkout.map((el) => {
-        const orderedDate = Timestamp.fromDate(
-          new Date(el.orderedDate?.seconds * 1000)
-        ).toDate();
-        const formattedDate = orderedDate.toLocaleString(); // Adjust the date formatting as per your requirements
-        return {
-          ...el,
-          products: JSON.parse(el.products),
-          orderedDate: formattedDate,
-        };
-      })
+      checkout
+        .map((el) => {
+          const orderedDate = Timestamp.fromDate(
+            new Date(el.orderedDate?.seconds * 1000)
+          ).toDate();
+          const formattedDate = orderedDate.toLocaleString(); // Adjust the date formatting as per your requirements
+          return {
+            ...el,
+            products: JSON.parse(el.products),
+            orderedDate: formattedDate,
+          };
+        })
+        .filter((el) => {
+          const phoneNumber = el.phNo.toLowerCase();
+          const normalizedPhoneNumber = phoneNumber.startsWith("+1")
+            ? phoneNumber.slice(2)
+            : phoneNumber.startsWith("+91")
+            ? phoneNumber.slice(3)
+            : phoneNumber;
+          return normalizedPhoneNumber.slice(-10).includes(payload.phNo);
+        })
     );
   };
   return (
