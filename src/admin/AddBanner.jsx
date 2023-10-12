@@ -75,7 +75,6 @@ function AddBanner(props) {
   }, []);
   const submitData = async (e) => {
     e.preventDefault();
-    console.log(payload);
     if (payload.bannerImg === "") {
       return;
     }

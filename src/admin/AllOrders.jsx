@@ -474,7 +474,6 @@ const AllOrder = () => {
     try {
       const docRef = doc(db, "checkout", id);
       await updateDoc(docRef, { status: status });
-      console.log(status);
       if (status === "Shipped") {
         sendEmail(status, item).then(() => {
           toast.success("Status changed and Email sent!");

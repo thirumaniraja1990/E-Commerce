@@ -111,7 +111,6 @@ function AddCategory(props) {
     const productsQuerySnapshot = await getDocs(
       query(collection(db, "products"), where("category", "==", category))
     );
-    console.log("productsQuerySnapshot", productsQuerySnapshot);
     const batch = writeBatch(db);
 
     productsQuerySnapshot.forEach((doc) => {
