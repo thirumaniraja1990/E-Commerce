@@ -170,7 +170,7 @@ const Header = () => {
               <div className="profile">
                 <motion.img
                   whileTap={{ scale: 1.2 }}
-                  src={currentUser ? currentUser.photoURL : userIcon}
+                  src={userIcon}
                   onClick={toggleProfileActions}
                 />
                 <div className="profile__actions" ref={profileActionRef}>
@@ -182,9 +182,9 @@ const Header = () => {
                             <Link to="/dashboard">Dashboard</Link>
                           </span>
                         )}
-                        <span>
+                        {/* <span>
                           <Link to="/profile">Profile</Link>
-                        </span>
+                        </span> */}
                         <span onClick={logout}>Logout</span>
                       </div>
                     </>

@@ -281,19 +281,19 @@ const Order = () => {
   };
   return (
     <>
-      <Helmet title="Cart"></Helmet>
+      <Helmet title='Cart'></Helmet>
       {/* <CommonSection title="My Orders" /> */}
       <section>
         <Container>
           <Row>
             {currentUser ? (
-              <Col lg="12">
+              <Col lg='12'>
                 {myOrders?.length === 0 ? (
-                  <h2 className="fs-4 text-center">
-                    No item added to the cart!
+                  <h2 className='fs-4 text-center'>
+                    {/* No item added to the cart! */}
                   </h2>
                 ) : (
-                  <table className="table bordered">
+                  <table className='table bordered'>
                     <thead>
                       <tr>
                         <th>S.No</th>
@@ -328,6 +328,8 @@ const Order = () => {
                                     email: item.email,
                                     address: item.address,
                                     city: item.city,
+                                    pickuplocation: item.pickupLocation,
+                                    otherAddress: item.otherAddress,
                                   }}
                                 />
                               </td>
@@ -343,7 +345,7 @@ const Order = () => {
                               <td>
                                 {/* <PrintIcon/> */}
                                 <div onClick={() => handlePrint(item)}>
-                                  <i class="ri-printer-fill"></i>
+                                  <i class='ri-printer-fill'></i>
                                 </div>
                               </td>
                               <td>{item.status ?? "Ordered"}</td>
@@ -354,11 +356,10 @@ const Order = () => {
                     </tbody>
                   </table>
                 )}
-                <div className="pagination">
+                <div className='pagination'>
                   <button
                     disabled={currentPage === 1}
-                    onClick={() => handlePageChange(currentPage - 1)}
-                  >
+                    onClick={() => handlePageChange(currentPage - 1)}>
                     Prev
                   </button>
                   {Array.from(
@@ -368,15 +369,13 @@ const Order = () => {
                     <button
                       key={page}
                       onClick={() => handlePageChange(page)}
-                      className={currentPage === page ? "active" : ""}
-                    >
+                      className={currentPage === page ? "active" : ""}>
                       {page}
                     </button>
                   ))}
                   <button
                     disabled={currentPage === totalPages}
-                    onClick={() => handlePageChange(currentPage + 1)}
-                  >
+                    onClick={() => handlePageChange(currentPage + 1)}>
                     Next
                   </button>
                 </div>
@@ -386,13 +385,13 @@ const Order = () => {
                 <Row>
                   {" "}
                   <Col>
-                    <FormGroup className="form__group">
+                    <FormGroup className='form__group'>
                       <Input
                         required
-                        type="number"
-                        bsSize="sm"
+                        type='number'
+                        bsSize='sm'
                         value={payload.phNo}
-                        placeholder="Enter your Phone Number"
+                        placeholder='Enter your Phone Number'
                         onChange={(e) =>
                           setPayload({ ...payload, phNo: e.target.value })
                         }
@@ -400,19 +399,19 @@ const Order = () => {
                     </FormGroup>
                   </Col>
                   <Col>
-                    <Button className="mx-2" onClick={handleTrackOrder}>
+                    <Button className='mx-2' onClick={handleTrackOrder}>
                       Track Order
                     </Button>
                   </Col>
                 </Row>
-                <Col lg="12">
+                <Col lg='12'>
                   {loggedOutOrders?.length === 0 ? (
-                    <h2 className="fs-4 text-center">
-                      No item added to the cart!
+                    <h2 className='fs-4 text-center'>
+                      {/* No item added to the cart! */}
                     </h2>
                   ) : (
                     <>
-                      <table className="table bordered">
+                      <table className='table bordered'>
                         <thead>
                           <tr>
                             <th>S.No</th>
@@ -462,7 +461,7 @@ const Order = () => {
                                   <td>
                                     {/* <PrintIcon/> */}
                                     <div onClick={() => handlePrint(item)}>
-                                      <i class="ri-printer-fill"></i>
+                                      <i class='ri-printer-fill'></i>
                                     </div>
                                   </td>
                                   <td>{item.status ?? "Ordered"}</td>
@@ -472,11 +471,10 @@ const Order = () => {
                           })}
                         </tbody>
                       </table>
-                      <div className="pagination">
+                      <div className='pagination'>
                         <button
                           disabled={lcurrentPage === 1}
-                          onClick={() => lhandlePageChange(lcurrentPage - 1)}
-                        >
+                          onClick={() => lhandlePageChange(lcurrentPage - 1)}>
                           Prev
                         </button>
                         {Array.from(
@@ -486,15 +484,13 @@ const Order = () => {
                           <button
                             key={page}
                             onClick={() => lhandlePageChange(page)}
-                            className={lcurrentPage === page ? "active" : ""}
-                          >
+                            className={lcurrentPage === page ? "active" : ""}>
                             {page}
                           </button>
                         ))}
                         <button
                           disabled={lcurrentPage === ltotalPages}
-                          onClick={() => lhandlePageChange(lcurrentPage + 1)}
-                        >
+                          onClick={() => lhandlePageChange(lcurrentPage + 1)}>
                           Next
                         </button>
                       </div>
@@ -517,7 +513,7 @@ const Tr = ({ item, index, myOrders, setMyOrder }) => {
     <>
       <tr>
         <td>
-          <img src={item.imgUrl} alt="" />
+          <img src={item.imgUrl} alt='' />
         </td>
         <td>{item.productName}</td>
         <td>${item.price}</td>

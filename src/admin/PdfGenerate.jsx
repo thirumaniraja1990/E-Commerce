@@ -4,6 +4,7 @@ import autoTable from "jspdf-autotable";
 import {
   Button,
   Col,
+  Input,
   Nav,
   NavItem,
   NavLink,
@@ -212,6 +213,82 @@ const DynamicPdfGenerator = ({ jsonData }) => {
       ).toLocaleDateString()} .pdf`
     );
   };
+  const generatePickupLocationReport = () => {
+    const doc = new jsPDF();
+    const imgWidth = 15; // Adjust as needed
+    const imgHeight = 15; // Adjust as needed
+    const imgX = doc.internal.pageSize.width - imgWidth - 10; // 10 is the margin from the right
+    const imgY = 10; // 10 is the margin from the top
+    doc.addImage(logo, "jpeg", imgX, imgY, imgWidth, imgHeight);
+    // const selectedLocationData = orderedData.filter((order) => {
+    //   return order.pickupLocation === jsonData.pickupLocation;
+    // });
+    console.log(jsonData.pickupLocation);
+    orderedData
+      .filter((order) => {
+        return order.pickupLocation === jsonData.pickupLocation;
+      })
+      .forEach((order, index) => {
+        if (index > 0) {
+          doc.addPage();
+        }
+        doc.setFontSize(6); // Reduce the font size for Name
+        doc.text(
+          `Pickup Location Report from ${new Date(
+            jsonData.fromDate
+          ).toLocaleDateString()} to ${new Date(
+            jsonData.toDate
+          ).toLocaleDateString()}`,
+          10,
+          10
+        );
+
+        doc.text(
+          `Pickup Location: ${
+            order.pickupLocation === "Others"
+              ? "Others:" + order.otherAddress
+              : order.pickupLocation
+          }`,
+          10,
+          20
+        );
+        doc.setFontSize(8); // Reduce the font size for Name
+        doc.setFont("helvetica", "bold");
+        doc.text(`Name: ${order.name}`, 10, 37); // Name on the left
+
+        // Create a table for products
+        const tableData = order.products?.map((product) => [
+          product.productName,
+
+          product.price,
+          product.quantity,
+        ]);
+
+        // Calculate the total price
+        // const totalPrice = order.products?.reduce((total, product) => {
+        //   return total + parseFloat(product.price) * product.quantity;
+        // }, 0);
+
+        // Add the "Total Price" row with colspan
+        // tableData?.push(["Total Price", "", "", totalPrice?.toFixed(2), ""]);
+        // doc.text("", 10, 120);
+
+        doc.autoTable({
+          head: [["Product Name", "Price", "Quantity"]],
+          body: tableData,
+          startY: 45, // Adjust the Y position to avoid overlapping with the name
+        });
+      });
+
+    doc.save(
+      `Pickup_location_Report_${new Date(
+        jsonData.fromDate
+      ).toLocaleDateString()}_${new Date(
+        jsonData.toDate
+      ).toLocaleDateString()} .pdf`
+    );
+  };
+
   const [viewtable, setViewTable] = useState(false);
 
   const handleSubmit = () => {
@@ -236,53 +313,56 @@ const DynamicPdfGenerator = ({ jsonData }) => {
   };
   return (
     <div>
-      <Button className="mx-2 my-2" onClick={() => handleSubmit()}>
+      <Button className='mx-2 my-2' onClick={() => handleSubmit()}>
         {!viewtable ? "View" : "Hide"}
       </Button>
       <Button onClick={generateAndDownloadPDF}>Download Sale Report</Button>
-      <Button className="mx-2 my-2" onClick={generateItemReport}>
+      <Button className='mx-2 my-2' onClick={generateItemReport}>
         Download Item Report
       </Button>
+
+      <Button className='mx-2 my-2' onClick={generatePickupLocationReport}>
+        Download Pickup Location Report
+      </Button>
+
       {viewtable && (
         <>
           {" "}
-          <Nav fill pills tabs children="my-2">
+          <Nav fill pills tabs children='my-2'>
             <NavItem>
               <NavLink
                 className={activeTab === "1" ? "active" : ""}
-                onClick={() => toggleTab("1")}
-              >
+                onClick={() => toggleTab("1")}>
                 Sale wise
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink
                 className={activeTab === "2" ? "active" : ""}
-                onClick={() => toggleTab("2")}
-              >
+                onClick={() => toggleTab("2")}>
                 Item wise
               </NavLink>
             </NavItem>
           </Nav>
           <TabContent activeTab={activeTab}>
-            <TabPane tabId="1">
+            <TabPane tabId='1'>
               <Row>
                 {orderedData.map((order, index) => (
-                  <div key={index} className="order">
-                    <table className="order-table">
+                  <div key={index} className='order'>
+                    <table className='order-table'>
                       <thead>
                         <tr>
-                          <th colSpan="2">Name: {order?.name}</th>
-                          <th colSpan="3">
+                          <th colSpan='2'>Name: {order?.name}</th>
+                          <th colSpan='3'>
                             Mobile: {order.phNo}, Email: {order.email}
                           </th>
                         </tr>
                         <tr>
-                          <th colSpan="3">
+                          <th colSpan='3'>
                             Address: {order.address}, {order.city},{" "}
                             {order.country}, {order.postalCode}
                           </th>
-                          <th colSpan="2">
+                          <th colSpan='2'>
                             Pick up location:{" "}
                             {order?.pickupLocation === ""
                               ? "-"
@@ -310,8 +390,8 @@ const DynamicPdfGenerator = ({ jsonData }) => {
                             <td>{product.quantity}</td>
                           </tr>
                         ))}
-                        <tr className="total-row">
-                          <td colSpan="3">Total</td>
+                        <tr className='total-row'>
+                          <td colSpan='3'>Total</td>
                           <td>
                             $ {calculateTotalPrice(order?.products)?.toFixed(2)}
                           </td>
@@ -323,9 +403,9 @@ const DynamicPdfGenerator = ({ jsonData }) => {
                 ))}
               </Row>
             </TabPane>
-            <TabPane tabId="2">
+            <TabPane tabId='2'>
               <Row>
-                <table className="data-table">
+                <table className='data-table'>
                   <thead>
                     <tr>
                       <th>Item Name</th>

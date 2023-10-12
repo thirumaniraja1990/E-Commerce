@@ -100,7 +100,7 @@ const Cart = () => {
             <Col lg='3'>
               <div>
                 <h6 className='d-flex align-items-center justify-content-between'>
-                  Subtotal
+                  Total
                   <span className='fs-4 fw-bold'>
                     $
                     {cartItems
@@ -117,9 +117,15 @@ const Cart = () => {
                 taxes and shipping will calculate in checkout
               </p>
               <div>
-                <button className='buy__btn w-100 ' onClick={handleCheckout}>
-                  Checkout
-                </button>
+              {cartItems?.length > 0 ? (
+          <button className="buy__btn w-100" onClick={handleCheckout}>
+            Checkout
+          </button>
+        ) : (
+          <button className="buy__btn w-100" disabled>
+            Checkout
+          </button>
+        )}
                 <button className='buy__btn w-100 mt-4'>
                   <Link to='/shop'>Continue Shopping</Link>
                 </button>

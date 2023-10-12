@@ -28,3 +28,28 @@
     color: black;
 }
 
+.spinner {
+    display: flex;
+    align-items: center;
+  }
+  
+  .spinner .fa-spin {
+    font-size: 20px;
+    margin-right: 10px;
+    animation: spin 1s linear infinite; /* Add spinning animation */
+  }
+  
+  .auth__btn.loading {
+    /* Add styles to indicate loading state */
+    background-color: #ccc;
+  }
+  
+  /* Define the spinning animation */
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
