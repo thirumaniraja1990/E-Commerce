@@ -144,3 +144,19 @@ padding-top: 45px;
     background-color: #00b345; /* Choose a slightly different color on hover */
   }
   
+
+  .category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Media query for mobile screens */
+  @media (max-width: 768px) {
+    .category-header {
+      flex-direction: column;
+    }
+    .view-all-button {
+      margin-top: 1em;
+    }
+  }

@@ -108,8 +108,23 @@ const Home = () => {
                         navigation={true}
                         modules={[Navigation]}
                         className="categorySwiper"
-                        slidesPerView={4}
-                        spaceBetween={20}
+                        // slidesPerView={4}
+                        spaceBetween={10}
+                        breakpoints={{
+                          320: {
+                            slidesPerView: 2, // Adjust this as needed
+                          },
+                          640: {
+                            slidesPerView: 2, // Adjust this as needed
+                          },
+                          768: {
+                            slidesPerView: 2, // Adjust this as needed
+                          },
+                          1024: {
+                            slidesPerView: 4,
+                          },
+                          // Add more breakpoints as needed
+                        }}
                       >
                         {data.map((product, productIndex) => {
                           if (
