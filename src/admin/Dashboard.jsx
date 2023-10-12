@@ -7,6 +7,7 @@ import {
   Label,
   FormText,
   Button,
+  Input,
 } from "reactstrap";
 import "../styles/dashboard.css";
 import useGetData from "../custom-hooks/useGetData";
@@ -19,6 +20,8 @@ const Dashboard = () => {
   const { data: users } = useGetData("users");
   const { data: checkout } = useGetData("checkout");
   const [product, setProduct] = useState([]);
+  const [pickupLocation, setPickupLocation] = useState("");
+
   useEffect(() => {
     setProduct([
       ...checkout.map((e) => {
@@ -62,8 +65,8 @@ const Dashboard = () => {
       <section>
         <Container>
           <Row>
-            <Col className="lg-3">
-              <div className="revenue__box">
+            <Col className='lg-3'>
+              <div className='revenue__box'>
                 <h5>Total Sales</h5>
                 <span>
                   $
@@ -93,51 +96,74 @@ const Dashboard = () => {
                 </span>
               </div>
             </Col>
-            <Col className="lg-3">
-              <div className="order__box">
+            <Col className='lg-3'>
+              <div className='order__box'>
                 <h5>Total Orders</h5>
                 <span>{checkout.length}</span>
               </div>
             </Col>
-            <Col className="lg-3">
-              <div className="products__box">
+            <Col className='lg-3'>
+              <div className='products__box'>
                 <h5>Total Products</h5>
                 <span>{products.length}</span>
               </div>
             </Col>
-            <Col className="lg-3">
-              <div className="users__box">
+            <Col className='lg-3'>
+              <div className='users__box'>
                 <h5>Total Users</h5>
                 <span>{users.length}</span>
               </div>
             </Col>
           </Row>
           <Row>
-            <Col className="lg-3">
+            <Col className='lg-3'>
               <FormGroup>
                 <Label>From</Label>
                 <DatePicker
-                  id="example-datepicker"
+                  id='example-datepicker'
                   value={fromDate}
                   onChange={(v, f) => handleChangeDate("FROM", v, f)}
                 />
               </FormGroup>
             </Col>
-            <Col className="lg-3">
+            <Col className='lg-3'>
               <FormGroup>
                 <Label>To</Label>
                 <DatePicker
-                  id="example-datepicker1"
+                  id='example-datepicker1'
                   value={toDate}
                   onChange={(v, f) => handleChangeDate("TO", v, f)}
                 />
               </FormGroup>
             </Col>
-            <Col className="lg-3"></Col>
+            <Col className='lg-3' style={{ marginTop: "22px" }}>
+              <Input
+                className='mx-2 my-2'
+                required
+                value={pickupLocation}
+                type='select'
+                placeholder='Select pickup location'
+                style={{ width: "250px" }}
+                onChange={(e) => setPickupLocation(e.target.value)}>
+                <option>Select pickup location</option>
+
+                <option>Franklin, Ohio</option>
+                <option>Dayton, Ohio</option>
+                <option>Columbus, Ohio</option>
+                <option>Others</option>
+              </Input>
+            </Col>
           </Row>
+
           <Row>
             <DynamicPdfGenerator
-              jsonData={{ products, checkout, fromDate, toDate }}
+              jsonData={{
+                pickupLocation,
+                products,
+                checkout,
+                fromDate,
+                toDate,
+              }}
             />
           </Row>
         </Container>

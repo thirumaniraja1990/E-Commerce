@@ -55,7 +55,7 @@ const Shop = () => {
     } else {
       // Filter products based on selected categories
       const filteredProducts = products.filter((item) =>
-        item.category.includes(selectedCategories)
+        selectedCategories.includes(item.category)
       );
       setData(filteredProducts);
     }
@@ -71,13 +71,13 @@ const Shop = () => {
   return (
     <>
       <Helmet title={"Shop"}></Helmet>
-      <CommonSection title="Shop" />
+      <CommonSection title='Shop' />
       <section>
         <Container>
           <Row>
             <p>Filter by Category</p>
-            <Col lg="6" md="6">
-              <div className="filter__widget">
+            <Col lg='6' md='6'>
+              <div className='filter__widget'>
                 <Select
                   isMulti // Enable multi-select
                   options={categoryOptions} // Pass category options
@@ -89,15 +89,15 @@ const Shop = () => {
               </div>
             </Col>
 
-            <Col lg="6" md="12">
-              <div className="search__box">
+            <Col lg='6' md='12'>
+              <div className='search__box'>
                 <input
-                  type="text"
-                  placeholder="Search..."
+                  type='text'
+                  placeholder='Search...'
                   onChange={handleSearch}
                 />
                 <span>
-                  <i className="ri-search-line"></i>
+                  <i className='ri-search-line'></i>
                 </span>
               </div>
             </Col>
@@ -105,11 +105,11 @@ const Shop = () => {
         </Container>
       </section>
 
-      <section className="pt-0">
+      <section className='pt-0'>
         <Container>
           <Row>
             {data.length === 0 ? (
-              <h1 className="text-center fs-4">No products are found!</h1>
+              <h1 className='text-center fs-4'>No products are found!</h1>
             ) : (
               <ProductslistShop data={data} />
             )}

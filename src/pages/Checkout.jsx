@@ -151,11 +151,14 @@ const Checkout = () => {
       console.log("Error deleting product:", error);
     }
   };
+  const [isLoading, setIsLoading] = useState(false);
+
   const checkout = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     try {
       const docRef = await collection(db, "checkout");
-
+      // console.log(payload);
       await addDoc(docRef, {
         products: localStorage.getItem("products"),
         uid: JSON.parse(localStorage.getItem("user"))?.uid ?? "guest",
@@ -171,12 +174,15 @@ const Checkout = () => {
         orderedDate: new Date(),
       });
       sendEmail(payload).then(() => {
+        setIsLoading(false);
+
         toast.success("Product placed successfully");
         localStorage.removeItem("products");
         deleteProductFromCart();
         navigate("/order");
       });
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
       toast.error("error");
     }
@@ -384,12 +390,24 @@ const Checkout = () => {
                           .toFixed(2)}
                     </span>
                   </h4>
-                  <button type='submit' className='buy__btn auth__btn w-100'>
-                    Place an order
+                  <button
+                    type='submit'
+                    className={`buy__btn auth__btn w-100 ${
+                      isLoading ? "loading" : ""
+                    }`}
+                    disabled={isLoading}>
+                    {isLoading ? (
+                      <div className='spinner'>
+                        <i className=' ri-loader-4-line fa fa-spinner fa-spin'></i>{" "}
+                        Placing Order...
+                      </div>
+                    ) : (
+                      "Place an order"
+                    )}
                   </button>
                 </div>
-                <div className="mt-3">
-                <p
+                <div className='mt-3'>
+                  <p
                     style={{
                       color: "red",
                       fontFamily: "initial",
