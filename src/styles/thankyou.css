@@ -1,0 +1,43 @@
+.thankyou-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    background-color: #f5f5f5; 
+    font-family: Arial, sans-serif; /* Set your desired font */
+    
+  }
+  
+  .thankyou {
+    text-align: center;
+    background-color: #fff; /* Set the background color for the box */
+    padding: 20px;
+    width:1000px;
+    height:700px;
+    border-radius: 10px; /* Add rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    max-width: 1000px; /* Set the maximum width of the box */
+  }
+  
+  h1 {
+    font-size: 24px; /* Set your desired font size for the heading */
+    color: #333; /* Set the text color for the heading */
+    margin: 0;
+    padding: 10px 0;
+  }
+  
+  button {
+    background-color: #007BFF; /* Set your desired background color for the buttons */
+    color: #fff; /* Set the text color for the buttons */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: #0056b3; /* Change the background color on hover */
+  }
+  
