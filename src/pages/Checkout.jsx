@@ -326,6 +326,7 @@ const Checkout = () => {
                 </FormGroup>
                 <FormGroup className='form__group'>
                   <Input
+                    required
                     type='text'
                     bsSize='sm'
                     value={payload.city}
@@ -337,6 +338,7 @@ const Checkout = () => {
                 </FormGroup>
                 <FormGroup className='form__group'>
                   <Input
+                    required
                     type='text'
                     bsSize='sm'
                     value={payload.postalCode}
@@ -348,6 +350,7 @@ const Checkout = () => {
                 </FormGroup>
                 <FormGroup className='form__group'>
                   <Input
+                    required
                     type='text'
                     bsSize='sm'
                     value={payload.country}
