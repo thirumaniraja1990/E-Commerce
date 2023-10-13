@@ -152,7 +152,7 @@ const Order = () => {
     }
 
     // Calculate subtotal for all pages
-    const subtotal = products.reduce(
+    const subtotal = products?.reduce(
       (total, product) => total + product.price * product.quantity,
       0
     );

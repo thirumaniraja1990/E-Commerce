@@ -155,7 +155,15 @@ const Checkout = () => {
 
   const checkout = async (e) => {
     setIsLoading(true);
+    setIsPlacingOrder(true);
     e.preventDefault();
+    if (!payload.phNo.trim()) {
+      // Check if the phone number is empty
+      setIsLoading(false);
+      setIsPlacingOrder(false);
+      toast.error("Phone number is required.");
+      return; // Exit the function if the phone number is empty
+    }
     try {
       const docRef = await collection(db, "checkout");
       // console.log(payload);
@@ -187,6 +195,7 @@ const Checkout = () => {
       toast.error("error");
     }
   };
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   return (
     <>
       <Helmet title='Checkout'></Helmet>
@@ -238,6 +247,9 @@ const Checkout = () => {
                     }}
                     inputStyle={{ width: "735px", height: "50px" }}
                   />
+                  {isPlacingOrder && payload.phNo.trim() === "" && (
+                    <p className='error-message'>Phone number is required.</p>
+                  )}
                 </FormGroup>
                 {/* <FormGroup className='form__group'>
                   <Input
@@ -261,11 +273,11 @@ const Checkout = () => {
                     onChange={(e) =>
                       setPayload({ ...payload, pickupLocation: e.target.value })
                     }>
-                    <option>Select pickup location</option>
-                    <option>Franklin, Ohio</option>
-                    <option>Dayton, Ohio</option>
-                    <option>Columbus, Ohio</option>
-                    <option>Others</option>
+                    <option value=''>Select pickup location</option>
+                    <option value='Franklin, Ohio'>Franklin, Ohio</option>
+                    <option value='Dayton, Ohio'>Dayton, Ohio</option>
+                    <option value='Columbus, Ohio'>Columbus, Ohio</option>
+                    <option value='Others'>Others</option>
                   </Input>
                 </FormGroup>
 
@@ -351,7 +363,8 @@ const Checkout = () => {
                   <h6>
                     Total Quantity :{" "}
                     <span>
-                      {prod.length && prod?.reduce((a, b) => b.quantity + a, 0)}{" "}
+                      {prod?.length &&
+                        prod?.reduce((a, b) => b.quantity + a, 0)}{" "}
                       items
                     </span>
                   </h6>
