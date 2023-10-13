@@ -195,7 +195,7 @@ const ProductCardShop = ({ item }) => {
           <span>{item.shortDesc}</span>
         </div>
         <div className='product__card-bottom d-flex align-items-center justify-content-between'>
-          <span className='price'>{item.price}</span>
+          <span className='price'>${item.price}</span>
           {(
             isAuthenticated
               ? !cartItems.some((e) => e.productID === item.id)

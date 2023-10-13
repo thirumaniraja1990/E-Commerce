@@ -71,7 +71,7 @@ const Shop = () => {
   return (
     <>
       <Helmet title={"Shop"}></Helmet>
-      <CommonSection title='Shop' />
+      {/* <CommonSection title='Shop' /> */}
       <section>
         <Container>
           <Row>

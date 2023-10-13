@@ -426,10 +426,22 @@ const Checkout = () => {
                       fontFamily: "initial",
                       fontSize: "16px",
                       paddingLeft: "20px",
-                      marginBottom: "1em",
+                      // marginBottom: "1em",
                     }}>
-                    All Order amount will be collected at the time of delivery.
+                    Order amount will be collected at the time of delivery or pickup.
+                    <br />
+                    <br />
+
                   </p>
+
+                  <p style={{
+                      color: "#0a1d37",
+                      fontFamily: "initial",
+                      fontSize: "16px",
+                      paddingLeft: "20px",
+                      marginBottom: "1em",}}>Pre-order closing date 10/31/23
+                      <br />
+Expected delivery or Pickup on or before 11/12/23</p>
                 </div>
               </Col>
             </Row>

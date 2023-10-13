@@ -252,39 +252,54 @@ const Order = () => {
   const [payload, setPayload] = useState({
     phNo: "",
   });
-  const whereCondition = where("phNo", "==", payload.phNo);
 
-  const { data: checkout } = useGetData("checkout", whereCondition);
+  const { data: checkout } = useGetData("checkout");
   const handleTrackOrder = () => {
+    if (payload.phNo.trim() === "" || payload.phNo.length < 9) {
+      setLoggedOutOrders([]);
+      return;
+    }
+    const prefixes = ["+91", "+1"];
     setLoggedOutOrders(
-      checkout.map((el) => {
-        const orderedDate = Timestamp.fromDate(
-          new Date(el.orderedDate?.seconds * 1000)
-        ).toDate();
-        const formattedDate = orderedDate.toLocaleString(); // Adjust the date formatting as per your requirements
-        return {
-          ...el,
-          products: JSON.parse(el.products),
-          orderedDate: formattedDate,
-        };
-      })
+      checkout
+        .map((el) => {
+          const orderedDate = Timestamp.fromDate(
+            new Date(el.orderedDate?.seconds * 1000)
+          ).toDate();
+          const formattedDate = orderedDate.toLocaleString(); // Adjust the date formatting as per your requirements
+          return {
+            ...el,
+            products: JSON.parse(el.products),
+            orderedDate: formattedDate,
+          };
+        })
+        .filter((el) => {
+          const phoneNumber = el.phNo.toLowerCase();
+          let normalizedPhoneNumber = phoneNumber;
+          for (const prefix of prefixes) {
+            if (phoneNumber.startsWith(prefix)) {
+              normalizedPhoneNumber = phoneNumber.slice(prefix.length);
+            }
+          }
+          return normalizedPhoneNumber.includes(payload.phNo);
+        })
     );
   };
   return (
     <>
-      <Helmet title='Cart'></Helmet>
+      <Helmet title="Cart"></Helmet>
       {/* <CommonSection title="My Orders" /> */}
       <section>
         <Container>
           <Row>
             {currentUser ? (
-              <Col lg='12'>
+              <Col lg="12">
                 {myOrders?.length === 0 ? (
-                  <h2 className='fs-4 text-center'>
-                    No item added to the cart!
+                  <h2 className="fs-4 text-center">
+                    {/* No item added to the cart! */}
                   </h2>
                 ) : (
-                  <table className='table bordered'>
+                  <table className="table bordered">
                     <thead>
                       <tr>
                         <th>S.No</th>
@@ -336,7 +351,7 @@ const Order = () => {
                               <td>
                                 {/* <PrintIcon/> */}
                                 <div onClick={() => handlePrint(item)}>
-                                  <i class='ri-printer-fill'></i>
+                                  <i class="ri-printer-fill"></i>
                                 </div>
                               </td>
                               <td>{item.status ?? "Ordered"}</td>
@@ -347,10 +362,11 @@ const Order = () => {
                     </tbody>
                   </table>
                 )}
-                <div className='pagination'>
+                <div className="pagination">
                   <button
                     disabled={currentPage === 1}
-                    onClick={() => handlePageChange(currentPage - 1)}>
+                    onClick={() => handlePageChange(currentPage - 1)}
+                  >
                     Prev
                   </button>
                   {Array.from(
@@ -360,13 +376,15 @@ const Order = () => {
                     <button
                       key={page}
                       onClick={() => handlePageChange(page)}
-                      className={currentPage === page ? "active" : ""}>
+                      className={currentPage === page ? "active" : ""}
+                    >
                       {page}
                     </button>
                   ))}
                   <button
                     disabled={currentPage === totalPages}
-                    onClick={() => handlePageChange(currentPage + 1)}>
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
                     Next
                   </button>
                 </div>
@@ -376,13 +394,13 @@ const Order = () => {
                 <Row>
                   {" "}
                   <Col>
-                    <FormGroup className='form__group'>
+                    <FormGroup className="form__group">
                       <Input
                         required
-                        type='number'
-                        bsSize='sm'
+                        type="number"
+                        bsSize="sm"
                         value={payload.phNo}
-                        placeholder='Enter your Phone Number'
+                        placeholder="Enter your Phone Number"
                         onChange={(e) =>
                           setPayload({ ...payload, phNo: e.target.value })
                         }
@@ -390,19 +408,19 @@ const Order = () => {
                     </FormGroup>
                   </Col>
                   <Col>
-                    <Button className='mx-2' onClick={handleTrackOrder}>
+                    <Button className="mx-2" onClick={handleTrackOrder}>
                       Track Order
                     </Button>
                   </Col>
                 </Row>
-                <Col lg='12'>
+                <Col lg="12">
                   {loggedOutOrders?.length === 0 ? (
-                    <h2 className='fs-4 text-center'>
-                      No item added to the cart!
+                    <h2 className="fs-4 text-center">
+                      {/* No item added to the cart! */}
                     </h2>
                   ) : (
                     <>
-                      <table className='table bordered'>
+                      <table className="table bordered">
                         <thead>
                           <tr>
                             <th>S.No</th>
@@ -452,7 +470,7 @@ const Order = () => {
                                   <td>
                                     {/* <PrintIcon/> */}
                                     <div onClick={() => handlePrint(item)}>
-                                      <i class='ri-printer-fill'></i>
+                                      <i class="ri-printer-fill"></i>
                                     </div>
                                   </td>
                                   <td>{item.status ?? "Ordered"}</td>
@@ -462,10 +480,11 @@ const Order = () => {
                           })}
                         </tbody>
                       </table>
-                      <div className='pagination'>
+                      <div className="pagination">
                         <button
                           disabled={lcurrentPage === 1}
-                          onClick={() => lhandlePageChange(lcurrentPage - 1)}>
+                          onClick={() => lhandlePageChange(lcurrentPage - 1)}
+                        >
                           Prev
                         </button>
                         {Array.from(
@@ -475,13 +494,15 @@ const Order = () => {
                           <button
                             key={page}
                             onClick={() => lhandlePageChange(page)}
-                            className={lcurrentPage === page ? "active" : ""}>
+                            className={lcurrentPage === page ? "active" : ""}
+                          >
                             {page}
                           </button>
                         ))}
                         <button
                           disabled={lcurrentPage === ltotalPages}
-                          onClick={() => lhandlePageChange(lcurrentPage + 1)}>
+                          onClick={() => lhandlePageChange(lcurrentPage + 1)}
+                        >
                           Next
                         </button>
                       </div>
@@ -504,7 +525,7 @@ const Tr = ({ item, index, myOrders, setMyOrder }) => {
     <>
       <tr>
         <td>
-          <img src={item.imgUrl} alt='' />
+          <img src={item.imgUrl} alt="" />
         </td>
         <td>{item.productName}</td>
         <td>${item.price}</td>

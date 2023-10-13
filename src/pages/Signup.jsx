@@ -32,37 +32,59 @@ const Signup = () => {
         password
       );
       const user = userCredential.user;
-      const storageRef = ref(storage, `images/${Date.now() + username}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        (error) => {
-          toast.error(error.message);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            await updateProfile(user, {
-              displayName: username,
-              photoURL: downloadURL,
-            });
-            await setDoc(doc(db, "users", user.uid), {
-              uid: user.uid,
-              displayName: username,
-              email,
-              photoURL: downloadURL,
-              isAdmin: false,
-            });
-          });
-        }
-      );
+      // const storageRef = ref(storage, `images/${Date.now() + username}`);
+  //     const uploadTask = uploadBytesResumable(storageRef, file);
+  //     uploadTask.on(
+  //       (error) => {
+  //         toast.error(error.message);
+  //       },
+  //       () => {
+  //         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+  //           await updateProfile(user, {
+  //             displayName: username,
+  //             photoURL: downloadURL,
+  //           });
+  //           await setDoc(doc(db, "users", user.uid), {
+  //             uid: user.uid,
+  //             displayName: username,
+  //             email,
+  //             photoURL: downloadURL,
+  //             isAdmin: false,
+  //           });
+  //         });
+  //       }
+  //     );
 
-      setLoading(false);
-      toast.success("Account created");
-      navigate("/login");
-    } catch (error) {
-      setLoading(false);
-      toast.error("something went wrong");
-    }
-  };
+  //     setLoading(false);
+  //     toast.success("Account created");
+  //     navigate("/login");
+  //   } catch (error) {
+  //     setLoading(false);
+  //     toast.error("something went wrong");
+  //   }
+  // };
+
+  await updateProfile(user, {
+    displayName: username,
+  });
+
+  // Create a user document in Firestore
+  await setDoc(doc(db, "users", user.uid), {
+    uid: user.uid,
+    displayName: username,
+    email,
+    isAdmin: false,
+  });
+
+  setLoading(false);
+  toast.success("Account created");
+  navigate("/login");
+} catch (error) {
+  setLoading(false);
+  console.error("Error creating user:", error);
+  toast.error("Something went wrong");
+}
+};
 
   return (
     <>
@@ -82,7 +104,7 @@ const Signup = () => {
                   <FormGroup className="form__group">
                     <input
                       type="text"
-                      placeholder="Username"
+                      placeholder="Enter Your Name"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                     />
@@ -103,12 +125,7 @@ const Signup = () => {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </FormGroup>
-                  <FormGroup className="form__group">
-                    <input
-                      type="file"
-                      onChange={(e) => setFile(e.target.files[0])}
-                    />
-                  </FormGroup>
+                  
                   <button className="buy__btn auth__btn">
                     Create an Account
                   </button>
