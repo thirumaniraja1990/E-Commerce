@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Table,
+} from "reactstrap";
 
 function CommonProduct(props) {
   const { product } = props;
@@ -8,7 +15,7 @@ function CommonProduct(props) {
   const toggle = () => setModal(!modal);
 
   // Calculate total amount
-  const totalAmount = product.reduce((total, item) => {
+  const totalAmount = product?.reduce((total, item) => {
     const price = parseFloat(item.price);
     const quantity = parseInt(item.quantity);
     return total + price * quantity;
@@ -32,11 +39,15 @@ function CommonProduct(props) {
               </tr>
             </thead>
             <tbody>
-              {product.map((item, i) => (
+              {product?.map((item, i) => (
                 <tr key={item.id}>
                   <th scope="row">{i + 1}</th>
                   <td>
-                    <img src={item.imgUrl} alt="Product" style={{ width: "25px" }} />
+                    <img
+                      src={item.imgUrl}
+                      alt="Product"
+                      style={{ width: "25px" }}
+                    />
                   </td>
                   <td>{item.productName}</td>
                   <td>{item.quantity}</td>
@@ -46,8 +57,12 @@ function CommonProduct(props) {
               ))}
               <tr>
                 <td colSpan="4"></td>
-                <td><strong>Total Amount:</strong></td>
-                <td><strong>${totalAmount}</strong></td>
+                <td>
+                  <strong>Total Amount:</strong>
+                </td>
+                <td>
+                  <strong>${totalAmount}</strong>
+                </td>
               </tr>
             </tbody>
           </Table>
