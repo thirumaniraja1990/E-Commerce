@@ -61,7 +61,7 @@ function CommonProduct(props) {
                   <strong>Total Amount:</strong>
                 </td>
                 <td>
-                  <strong>${(totalAmount).toFixed(2)}</strong>
+                  <strong>${totalAmount.toFixed(2)}</strong>
                 </td>
               </tr>
             </tbody>

@@ -9,7 +9,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import useGetData from "../custom-hooks/useGetData";
 import Address from "../components/UI/CommonAddress";
-import { Divider, FormGroup, formControlClasses } from "@mui/material";
+import {
+  Box,
+  Divider,
+  FormGroup,
+  IconButton,
+  Tooltip,
+  formControlClasses,
+} from "@mui/material";
 import { firestore, where } from "firebase/firestore";
 import logo from "../assets/images/Logo-Latest.jpeg";
 import CommonProduct from "../components/UI/CommonProduct";
@@ -18,6 +25,8 @@ import { db } from "../firebase.config";
 import { Timestamp, doc, updateDoc } from "firebase/firestore";
 import emailjs from "@emailjs/browser";
 import { toast } from "react-toastify";
+import MuiTable from "../components/MuiTable";
+import { Delete, Edit } from "@mui/icons-material";
 const Order = () => {
   const [myOrders, setMyOrder] = useState([]);
   const navigate = useNavigate();
@@ -633,186 +642,95 @@ const Order = () => {
   const handlePickupLocationChange = (e) => {
     setFilters({ ...filters, pickupLocation: e.target.value });
   };
+  const columns = [
+    {
+      accessorKey: "name",
+      header: "Name",
+    },
+    {
+      accessorKey: "email",
+      header: "Email",
+    },
+    {
+      accessorKey: "phNo",
+      header: "Mobile",
+    },
+    {
+      accessorKey: "pickupLocation",
+      header: "Pick up location",
+    },
+    {
+      accessorKey: "orderedDate",
+      header: "Order Date",
+      enableSorting: true,
+    },
+    {
+      accessorKey: "address",
+      header: "Address",
+    },
+    {
+      accessorKey: "city",
+      header: "City",
+    },
+    {
+      accessorKey: "postalCode",
+      header: "Postal Code",
+    },
+   
+  ];
+  const actions = ({ row, table }) => (
+    <Box sx={{ display: "flow", gap: "1rem" }}>
+      <FormGroup className="form__group w-50">
+        <select
+          className="p-2"
+          value={row.status}
+          onChange={(e) =>
+            updateOrderStatus(row.original.id, e.target.value, row.original)
+          }
+          required
+        >
+          <option>Select Status</option>
+
+          <option value="Hold">Hold</option>
+          <option value="Shipped">Shipped</option>
+          <option value="Completed">Completed</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+      </FormGroup>
+      <CommonProduct product={row.original.products} />
+    </Box>
+  );
+  const data = [...sortedOrders];
+
   return (
     <>
-      <Helmet title='Cart'></Helmet>
+      <Helmet title="Cart"></Helmet>
       {/* <CommonSection title="My Orders" /> */}
       <section>
         <Container>
           <Row>
-            <div>
-              <Row>
-                <Col>
-                  <FormGroup className='form__group'>
-                    <Input
-                      type='text'
-                      bsSize='sm'
-                      value={filters.customerName}
-                      placeholder='Customer Name'
-                      onChange={handleCustomerNameChange}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col>
-                  <FormGroup className='form__group'>
-                    <Input
-                      type='text'
-                      bsSize='sm'
-                      value={filters.phoneNumber}
-                      placeholder='Phone Number'
-                      onChange={handlePhoneNumberChange}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col>
-                  <FormGroup className='form__group'>
-                    <Input
-                      type='text'
-                      bsSize='sm'
-                      value={filters.pickupLocation}
-                      placeholder='Pickup Location'
-                      onChange={handlePickupLocationChange}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col>
-                  <Button className='mx-2' onClick={handleFilter}>
-                    Filter
-                  </Button>
-                </Col>
-              </Row>
-            </div>
             {currentUser ? (
-              <Col lg='12'>
+              <Col lg="12">
                 {myOrders?.length === 0 ? (
-                  <h2 className='fs-4 text-center'>No item!</h2>
+                  <h2 className="fs-4 text-center">No item!</h2>
                 ) : (
-                  <table className='table bordered'>
-                    <thead>
-                      <tr>
-                        <th>S.No</th>
-                        <th>Address</th>
-                        <th>View Products</th>
-                        <th>Total Amount</th>
-                        <th>Ordered Date</th>
-                        <th>Actions</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {sortedOrders?.map((item, index) => {
-                        const productCount = item.products?.length + 1;
-                        const totalAmount =
-                          item?.products?.reduce(
-                            (total, product) =>
-                              total + product.quantity * product.price,
-                            0
-                          ) || 0;
-
-                        return (
-                          <React.Fragment key={index}>
-                            <tr>
-                              <td>{index + 1}</td>
-
-                              <td>
-                                <Address
-                                  details={{
-                                    name: item.name,
-                                    phNo: item.phNo,
-                                    email: item.email,
-                                    address: item.address,
-                                    city: item.city,
-                                    pickuplocation: item.pickupLocation,
-                                    otherAddress: item.otherAddress,
-                                    // State: item.country,
-                                  }}
-                                />
-                              </td>
-                              <td>
-                                <CommonProduct product={item.products} />
-                              </td>
-                              <td>${totalAmount.toFixed(2)}</td>
-                              <td>
-                                {item.orderedDate === "Invalid Date"
-                                  ? "-"
-                                  : item.orderedDate}
-                              </td>
-                              <td>
-                                {/* <PrintIcon/> */}
-                                <div onClick={() => handlePrint(item)}>
-                                  <i class='ri-printer-fill'></i>
-                                </div>
-                              </td>
-                              <td>
-                                    <FormGroup className="form__group w-50">
-                                      <select
-                                        className="p-2"
-                                        value={item.status}
-                                        onChange={(e) =>
-                                          updateOrderStatus(
-                                            item.id,
-                                            e.target.value,
-                                            item
-                                          )
-                                        }
-                                        required
-                                      >
-                                        <option>Select Status</option>
-
-                                        <option value="Hold">Hold</option>
-                                        <option value="Shipped">Shipped</option>
-                                        <option value="Completed">
-                                          Completed
-                                        </option>
-                                        <option value="Rejected">
-                                          Rejected
-                                        </option>
-                                      </select>
-                                    </FormGroup>
-                                  </td>
-                            </tr>
-                          </React.Fragment>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+                  <>
+                    <MuiTable columns={columns} data={data} actions={actions} />
+                  </>
                 )}{" "}
-                <div className='pagination'>
-                  <button
-                    disabled={currentPage === 1}
-                    onClick={() => handlePageChange(currentPage - 1)}>
-                    Prev
-                  </button>
-                  {Array.from(
-                    { length: totalPages },
-                    (_, index) => index + 1
-                  ).map((page) => (
-                    <button
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={currentPage === page ? "active" : ""}>
-                      {page}
-                    </button>
-                  ))}
-                  <button
-                    disabled={currentPage === totalPages}
-                    onClick={() => handlePageChange(currentPage + 1)}>
-                    Next
-                  </button>
-                </div>
               </Col>
             ) : (
               <div>
                 <Row>
                   {" "}
                   <Col>
-                    <FormGroup className='form__group'>
+                    <FormGroup className="form__group">
                       <Input
                         required
-                        type='number'
-                        bsSize='sm'
+                        type="number"
+                        bsSize="sm"
                         value={payload.phNo}
-                        placeholder='Enter your Phone Number'
+                        placeholder="Enter your Phone Number"
                         onChange={(e) =>
                           setPayload({ ...payload, phNo: e.target.value })
                         }
@@ -820,19 +738,19 @@ const Order = () => {
                     </FormGroup>
                   </Col>
                   <Col>
-                    <Button className='mx-2' onClick={handleTrackOrder}>
+                    <Button className="mx-2" onClick={handleTrackOrder}>
                       Track Order
                     </Button>
                   </Col>
                 </Row>
-                <Col lg='12'>
+                <Col lg="12">
                   {loggedOutOrders?.length === 0 ? (
-                    <h2 className='fs-4 text-center'>
+                    <h2 className="fs-4 text-center">
                       No item added to the cart!
                     </h2>
                   ) : (
                     <>
-                      <table className='table bordered'>
+                      <table className="table bordered">
                         <thead>
                           <tr>
                             <th>S.No</th>
@@ -880,20 +798,47 @@ const Order = () => {
                                   <td>
                                     {/* <PrintIcon/> */}
                                     <div onClick={() => handlePrint(item)}>
-                                      <i class='ri-printer-fill'></i>
+                                      <i class="ri-printer-fill"></i>
                                     </div>
                                   </td>
-                                  <td>{item.status ?? "Ordered"}</td>
+                                  <td>
+                                    <FormGroup className="form__group w-50">
+                                      <select
+                                        className="p-2"
+                                        value={item.status}
+                                        onChange={(e) =>
+                                          updateOrderStatus(
+                                            item.id,
+                                            e.target.value,
+                                            item
+                                          )
+                                        }
+                                        required
+                                      >
+                                        <option>Select Status</option>
+
+                                        <option value="Hold">Hold</option>
+                                        <option value="Shipped">Shipped</option>
+                                        <option value="Completed">
+                                          Completed
+                                        </option>
+                                        <option value="Rejected">
+                                          Rejected
+                                        </option>
+                                      </select>
+                                    </FormGroup>
+                                  </td>
                                 </tr>
                               </React.Fragment>
                             );
                           })}
                         </tbody>
                       </table>
-                      <div className='pagination'>
+                      <div className="pagination">
                         <button
                           disabled={lcurrentPage === 1}
-                          onClick={() => lhandlePageChange(lcurrentPage - 1)}>
+                          onClick={() => lhandlePageChange(lcurrentPage - 1)}
+                        >
                           Prev
                         </button>
                         {Array.from(
@@ -903,13 +848,15 @@ const Order = () => {
                           <button
                             key={page}
                             onClick={() => lhandlePageChange(page)}
-                            className={lcurrentPage === page ? "active" : ""}>
+                            className={lcurrentPage === page ? "active" : ""}
+                          >
                             {page}
                           </button>
                         ))}
                         <button
                           disabled={lcurrentPage === ltotalPages}
-                          onClick={() => lhandlePageChange(lcurrentPage + 1)}>
+                          onClick={() => lhandlePageChange(lcurrentPage + 1)}
+                        >
                           Next
                         </button>
                       </div>
@@ -931,7 +878,7 @@ const Tr = ({ item, index, myOrders, setMyOrder }) => {
     <>
       <tr>
         <td>
-          <img src={item.imgUrl} alt='' />
+          <img src={item.imgUrl} alt="" />
         </td>
         <td>{item.productName}</td>
         <td>${item.price}</td>
