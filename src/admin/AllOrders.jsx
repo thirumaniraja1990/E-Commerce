@@ -724,6 +724,7 @@ const Order = () => {
                                     city: item.city,
                                     pickuplocation: item.pickupLocation,
                                     otherAddress: item.otherAddress,
+                                    // State: item.country,
                                   }}
                                 />
                               </td>
@@ -742,7 +743,33 @@ const Order = () => {
                                   <i class='ri-printer-fill'></i>
                                 </div>
                               </td>
-                              <td>{item.status ?? "Ordered"}</td>
+                              <td>
+                                    <FormGroup className="form__group w-50">
+                                      <select
+                                        className="p-2"
+                                        value={item.status}
+                                        onChange={(e) =>
+                                          updateOrderStatus(
+                                            item.id,
+                                            e.target.value,
+                                            item
+                                          )
+                                        }
+                                        required
+                                      >
+                                        <option>Select Status</option>
+
+                                        <option value="Hold">Hold</option>
+                                        <option value="Shipped">Shipped</option>
+                                        <option value="Completed">
+                                          Completed
+                                        </option>
+                                        <option value="Rejected">
+                                          Rejected
+                                        </option>
+                                      </select>
+                                    </FormGroup>
+                                  </td>
                             </tr>
                           </React.Fragment>
                         );
@@ -838,7 +865,6 @@ const Order = () => {
                                         phNo: item.phNo,
                                         email: item.email,
                                         address: item.address,
-                                        city: item.city,
                                       }}
                                     />
                                   </td>

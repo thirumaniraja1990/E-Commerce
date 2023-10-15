@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { Container, Row, Col } from "reactstrap";
 import useAuth from "../custom-hooks/useAuth";
 import "../styles/admin-nav.css";
+// import logo from "../../assets/images/Logo-Latest.jpeg";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase.config";
@@ -76,18 +77,24 @@ const AdminNav = () => {
           <Container>
             <div className="admin__nav-wrapper-top">
               <div className="logo">
+
+              {/* <a href="/home">
+                <img src={logo} alt="logo" />
+              </a> */}
                 <h2>MSM Angadi</h2>
               </div>
-              <div className="search__box">
+
+              {/* <div className="search__box">
                 <input type="text" placeholder="Search...." />
                 <span>
                   <i className="ri-search-line"></i>
                 </span>
-              </div>
+              </div> */}
               <div className="admin__nav-top-right">
                 <motion.img
                   whileTap={{ scale: 1.2 }}
-                  src={currentUser ? currentUser.photoURL : userIcon}
+                  // src={currentUser ? currentUser.photoURL : userIcon}
+                  src={userIcon}
                   onClick={toggleProfileActions}
                 />
                 <span>
