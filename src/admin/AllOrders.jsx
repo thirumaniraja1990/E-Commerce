@@ -36,19 +36,17 @@ const Order = () => {
   const { data: checkoutProducts, loading } = useGetData("checkout");
   useEffect(() => {
     setMyOrder(
-      checkoutProducts
-        .filter((e) => e.uid === JSON.parse(localStorage.getItem("user"))?.uid)
-        .map((el) => {
-          const orderedDate = Timestamp.fromDate(
-            new Date(el.orderedDate?.seconds * 1000)
-          ).toDate();
-          const formattedDate = orderedDate.toLocaleString(); // Adjust the date formatting as per your requirements
-          return {
-            ...el,
-            products: JSON.parse(el.products),
-            orderedDate: formattedDate,
-          };
-        })
+      checkoutProducts.map((el) => {
+        const orderedDate = Timestamp.fromDate(
+          new Date(el.orderedDate?.seconds * 1000)
+        ).toDate();
+        const formattedDate = orderedDate.toLocaleString(); // Adjust the date formatting as per your requirements
+        return {
+          ...el,
+          products: JSON.parse(el.products),
+          orderedDate: formattedDate,
+        };
+      })
     );
   }, [checkoutProducts]);
 
@@ -509,11 +507,8 @@ const Order = () => {
   const totalPages = Math.ceil(myOrders.length / ordersPerPage);
 
   // Get the orders for the current page
-  const currentOrders = myOrders.slice(
-    (currentPage - 1) * ordersPerPage,
-    currentPage * ordersPerPage
-  );
-  const sortedOrders = currentOrders.slice().sort((a, b) => {
+
+  const sortedOrders = myOrders.slice().sort((a, b) => {
     const dateA = new Date(a.orderedDate);
     const dateB = new Date(b.orderedDate);
     return dateB - dateA;
