@@ -199,7 +199,7 @@ const Checkout = () => {
   return (
     <>
       <Helmet title='Checkout'></Helmet>
-      <CommonSection title='Checkout' />
+      {/* <CommonSection title='Checkout' /> */}
       <Form className='billing__form' onSubmit={checkout}>
         <section>
           <Container>
@@ -245,7 +245,7 @@ const Checkout = () => {
                     onChange={(e) => {
                       setPayload({ ...payload, phNo: e });
                     }}
-                    inputStyle={{ width: "735px", height: "50px" }}
+                    inputStyle={{ width: "100%", height: "50px" }}
                   />
                   {isPlacingOrder && payload.phNo.trim() === "" && (
                     <p className='error-message'>Phone number is required.</p>
@@ -354,7 +354,7 @@ const Checkout = () => {
                     type='text'
                     bsSize='sm'
                     value={payload.country}
-                    placeholder='Enter your country'
+                    placeholder='Enter your State'
                     onChange={(e) =>
                       setPayload({ ...payload, country: e.target.value })
                     }
@@ -445,9 +445,9 @@ const Checkout = () => {
                       paddingLeft: "20px",
                       marginBottom: "1em",
                     }}>
-                    Pre-order closing date 10/31/23
+                    Pre-order closing date 10/31/2023
                     <br />
-                    Expected delivery or Pickup on or before 11/12/23
+                    Expected delivery or Pickup on or before 11/11/2023
                   </p>
                 </div>
               </Col>

@@ -17,7 +17,7 @@ function MuiTable(props) {
     renderRowActions: actions,
     enableSorting: false,
     enableSortingRemoval: false,
-    positionActionsColumn: "last",
+    positionActionsColumn: "first",
     muiTableHeadCellProps: {
       sx: () => ({
         backgroundColor: "#0a1d37",

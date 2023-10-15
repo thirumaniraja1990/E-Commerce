@@ -114,7 +114,7 @@ const Cart = () => {
                 </h6>
               </div>
               <p className='fs-6 mt-2'>
-                taxes and shipping will calculate in checkout
+              Taxes and shipping will be calculated in checkout
               </p>
               <div>
               {cartItems?.length > 0 ? (
@@ -236,9 +236,11 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
             </div>
           </div>
           <div className='msmCartButtonDetailSec'>
-            <div className='msmCartButtonSec' style={{ paddingTop: "4px" }}>
+            <div className='msmCartButtonSec'>
               <div className='msmCartButton'>
                 <InputGroup>
+
+
                   <Button
                     color='danger'
                     onClick={() =>
@@ -250,12 +252,18 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
                               1,
                         item
                       )
-                    }>
+                    }
+                    className="m-0"
+                    >
                     -
                   </Button>
+
+
                   <Input
                     type='number'
                     bsSize='sm'
+
+                   
                     onChange={(e) => {
                       if (
                         /^[0-9]+$/.test(e.target.value) ||
@@ -267,7 +275,9 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
                     value={item.quantity}
                     placeholder='Quantity'
                   />
+
                   <Button
+                  className="m-0"
                     color='success'
                     onClick={() =>
                       handleQuantityChange(
@@ -278,9 +288,13 @@ const Tr = ({ item, index, cartItems, setCartItems, cartItems2 }) => {
                               1,
                         item
                       )
-                    }>
+                    }
+                    
+                    >
                     +
                   </Button>
+
+
                 </InputGroup>
               </div>
               <div className='msmCartCloseSec'>

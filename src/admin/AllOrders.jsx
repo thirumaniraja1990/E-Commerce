@@ -651,6 +651,15 @@ const Order = () => {
       header: "Mobile",
     },
     {
+      accessorKey: "pickupLocation",
+      header: "Pick up location",
+    },
+    {
+      accessorKey: "orderedDate",
+      header: "Order Date",
+      enableSorting: true,
+    },
+    {
       accessorKey: "address",
       header: "Address",
     },
@@ -662,15 +671,7 @@ const Order = () => {
       accessorKey: "postalCode",
       header: "Postal Code",
     },
-    {
-      accessorKey: "pickupLocation",
-      header: "Pick up location",
-    },
-    {
-      accessorKey: "orderedDate",
-      header: "Order Date",
-      enableSorting: true,
-    },
+   
   ];
   const actions = ({ row, table }) => (
     <Box sx={{ display: "flow", gap: "1rem" }}>
@@ -777,7 +778,6 @@ const Order = () => {
                                         phNo: item.phNo,
                                         email: item.email,
                                         address: item.address,
-                                        city: item.city,
                                       }}
                                     />
                                   </td>
