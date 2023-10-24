@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
-import {getAuth} from 'firebase/auth';
-import {getFirestore} from 'firebase/firestore'
-import {getStorage} from 'firebase/storage'
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBvlfz2o5XqybvaJ5oqSn72j2Fi61r76ys",
@@ -9,7 +9,7 @@ const firebaseConfig = {
   projectId: "msm-angadi",
   storageBucket: "msm-angadi.appspot.com",
   messagingSenderId: "403195702895",
-  appId: "1:403195702895:web:c05d917ad3f8666ae8a79a"
+  appId: "1:403195702895:web:c05d917ad3f8666ae8a79a",
 };
 
 // Initialize Firebase

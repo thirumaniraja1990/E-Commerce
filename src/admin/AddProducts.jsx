@@ -73,7 +73,7 @@ const AddProducts = () => {
     }
 
     try {
-      const docRef = await collection(db, "products");
+      const docRef = collection(db, "products");
       const storageRef = ref(
         storage,
         `productImages/${Date.now() + enterProductImg.name}`
@@ -81,10 +81,19 @@ const AddProducts = () => {
       const uploadTask = uploadBytesResumable(storageRef, enterProductImg);
 
       uploadTask.on(
-        () => {
-          toast.error("Image not uploaded!");
+        "state_changed",
+        (snapshot) => {
+          // Handle progress, if needed
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`Upload is ${progress}% done`);
+        },
+        (error) => {
+          // Handle upload error
+          console.error("Image not uploaded:", error);
         },
         () => {
+          // Upload completed successfully
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             await addDoc(docRef, {
               productName: enterTitle,
@@ -95,13 +104,14 @@ const AddProducts = () => {
               imgUrl: downloadURL,
               status: 1,
             });
+            setLoading(false);
+            toast.success("Product successfully added!");
+            navigate("/dashboard/all-products");
           });
         }
       );
-      setLoading(false);
-      toast.success("Product successfully added!");
-      navigate("/dashboard/all-products");
     } catch (err) {
+      console.log(err);
       setLoading(false);
       toast.error("Product not added!");
     }
