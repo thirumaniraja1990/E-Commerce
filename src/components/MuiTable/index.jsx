@@ -18,6 +18,7 @@ function MuiTable(props) {
     enableSorting: false,
     enableSortingRemoval: false,
     positionActionsColumn: "first",
+    enablePagination: true,
     muiTableHeadCellProps: {
       sx: () => ({
         backgroundColor: "#0a1d37",
@@ -36,7 +37,7 @@ function MuiTable(props) {
   });
   return (
     <div style={{ display: "grid" }}>
-      <MaterialReactTable table={table} />
+      <MaterialReactTable key={data.length} table={table} />
     </div>
   );
 }
