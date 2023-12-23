@@ -13,6 +13,7 @@ import {
   TabPane,
 } from "reactstrap";
 import logo from "../assets/images/Logo-Latest.jpeg";
+import * as XLSX from "xlsx";
 
 const DynamicPdfGenerator = ({ jsonData }) => {
   const orderedData = jsonData.checkout
@@ -224,15 +225,21 @@ const DynamicPdfGenerator = ({ jsonData }) => {
     //   return order.pickupLocation === jsonData.pickupLocation;
     // });
     console.log(jsonData.pickupLocation);
-    orderedData
-      .filter((order) => {
-        return order.pickupLocation === jsonData.pickupLocation;
-      })
-      .forEach((order, index) => {
+    const pickupLocations = Array.from(
+      new Set(orderedData.map((order) => order.pickupLocation))
+    );
+
+    pickupLocations.forEach((location) => {
+      const locationOrders = orderedData.filter(
+        (order) => order.pickupLocation === location
+      );
+
+      locationOrders.forEach((order, index) => {
         if (index > 0) {
           doc.addPage();
         }
-        doc.setFontSize(6); // Reduce the font size for Name
+
+        doc.setFontSize(6);
         doc.text(
           `Pickup Location Report from ${new Date(
             jsonData.fromDate
@@ -245,40 +252,29 @@ const DynamicPdfGenerator = ({ jsonData }) => {
 
         doc.text(
           `Pickup Location: ${
-            order.pickupLocation === "Others"
-              ? "Others:" + order.otherAddress
-              : order.pickupLocation
+            location === "Others" ? "Others:" + order.otherAddress : location
           }`,
           10,
           20
         );
-        doc.setFontSize(8); // Reduce the font size for Name
-        doc.setFont("helvetica", "bold");
-        doc.text(`Name: ${order.name}`, 10, 37); // Name on the left
 
-        // Create a table for products
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "bold");
+        doc.text(`Name: ${order.name}`, 10, 37);
+
         const tableData = order.products?.map((product) => [
           product.productName,
-
           product.price,
           product.quantity,
         ]);
 
-        // Calculate the total price
-        // const totalPrice = order.products?.reduce((total, product) => {
-        //   return total + parseFloat(product.price) * product.quantity;
-        // }, 0);
-
-        // Add the "Total Price" row with colspan
-        // tableData?.push(["Total Price", "", "", totalPrice?.toFixed(2), ""]);
-        // doc.text("", 10, 120);
-
         doc.autoTable({
           head: [["Product Name", "Price", "Quantity"]],
           body: tableData,
-          startY: 45, // Adjust the Y position to avoid overlapping with the name
+          startY: 45,
         });
       });
+    });
 
     doc.save(
       `Pickup_location_Report_${new Date(
@@ -311,58 +307,174 @@ const DynamicPdfGenerator = ({ jsonData }) => {
       setActiveTab(tab);
     }
   };
+
+  const generatePickupLocationReportinExcel = () => {
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(
+      orderedData.map((e) => {
+        return {
+          name: e.name,
+          email: e.email,
+          products: JSON.stringify(e.products),
+          address: e.address,
+          city: e.city,
+          pickupLocation: e.pickupLocation,
+          otherAddress: e.otherAddress,
+          postalCode: e.postalCode,
+          country: e.country,
+          phNo: e.phNo,
+          orderedDate: `${new Date(e.orderedDate).getFullYear()} ${String(
+            new Date(e.orderedDate).getMonth() + 1
+          ).padStart(2, "0")} ${String(
+            new Date(e.orderedDate).getDate()
+          ).padStart(2, "0")}`,
+        };
+      })
+    );
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet 1");
+    XLSX.writeFile(workbook, "excel" + ".xlsx");
+  };
+
+  const generateSaleReportinExcel = () => {
+    const wb = XLSX.utils.book_new();
+
+    orderedData.forEach((order, index) => {
+      const wsData = [
+        [
+          `Name: ${order?.name}`,
+          `Mobile: ${order.phNo}`,
+          `Email: ${order.email}`,
+        ],
+        [
+          `Address: ${order.address}, ${order.city}, ${order.country}, ${order.postalCode}`,
+        ],
+        [
+          "Pick up location",
+          order?.pickupLocation === "" ? "-" : order?.pickupLocation,
+        ],
+        [
+          "",
+          order?.pickupLocation === "Others"
+            ? `(${order.otherAddress ?? "-"})`
+            : "",
+        ],
+        ["Product Name", "Description", "Short Desc", "Price", "Quantity"],
+        ...order.products.map((product) => [
+          product.productName,
+          product.description,
+          product.shortDesc,
+          `$ ${product.price}`,
+          product.quantity,
+        ]),
+        [
+          "Total",
+          "",
+          "",
+          `$ ${calculateTotalPrice(order.products)?.toFixed(2)}`,
+          calculateTotalQuant(order.products),
+        ],
+      ];
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+      XLSX.utils.book_append_sheet(wb, ws, `Order ${index + 1}`);
+    });
+    XLSX.writeFile(wb, "salesorders.xlsx");
+  };
+
+  const generateItemReportinExcel = () => {
+    const wb = XLSX.utils.book_new();
+
+    // Create worksheet data
+    const wsData = [
+      ["Item Name", "Quantity", "Price", "Total"],
+      ...viewTableData.map((item) => [
+        item[0],
+        item[1],
+        `$ ${item[2]}`,
+        `$ ${item[3]}`,
+      ]),
+      ["Total", viewTotalQuantity, "", `$ ${viewTotalPrice.toFixed(2)}`],
+    ];
+
+    // Convert to worksheet
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+    // Append worksheet to workbook
+    XLSX.utils.book_append_sheet(wb, ws, "ItemData");
+
+    // Save the workbook to a file
+    XLSX.writeFile(wb, "item_wise_report.xlsx");
+  };
   return (
     <div>
-      <Button className='mx-2 my-2' onClick={() => handleSubmit()}>
+      <Button className="mx-2 my-2" onClick={() => handleSubmit()}>
         {!viewtable ? "View" : "Hide"}
       </Button>
       <Button onClick={generateAndDownloadPDF}>Download Sale Report</Button>
-      <Button className='mx-2 my-2' onClick={generateItemReport}>
+      <Button className="mx-2 my-2" onClick={generateItemReport}>
         Download Item Report
       </Button>
 
-      <Button className='mx-2 my-2' onClick={generatePickupLocationReport}>
+      <Button className="mx-2 my-2" onClick={generatePickupLocationReport}>
         Download Pickup Location Report
+      </Button>
+
+      <Button
+        className="mx-2 my-2"
+        onClick={generatePickupLocationReportinExcel}
+      >
+        Download Pickup Location Report in Excel
+      </Button>
+
+      <Button className="mx-2 my-2" onClick={generateSaleReportinExcel}>
+        Download Sale Report in Excel
+      </Button>
+      <Button className="mx-2 my-2" onClick={generateItemReportinExcel}>
+        Download Item Report in Excel
       </Button>
 
       {viewtable && (
         <>
           {" "}
-          <Nav fill pills tabs children='my-2'>
+          <Nav fill pills tabs children="my-2">
             <NavItem>
               <NavLink
                 className={activeTab === "1" ? "active" : ""}
-                onClick={() => toggleTab("1")}>
+                onClick={() => toggleTab("1")}
+                style={{ cursor: "pointer" }}
+              >
                 Sale wise
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink
+                style={{ cursor: "pointer" }}
                 className={activeTab === "2" ? "active" : ""}
-                onClick={() => toggleTab("2")}>
+                onClick={() => toggleTab("2")}
+              >
                 Item wise
               </NavLink>
             </NavItem>
           </Nav>
           <TabContent activeTab={activeTab}>
-            <TabPane tabId='1'>
+            <TabPane tabId="1">
               <Row>
                 {orderedData.map((order, index) => (
-                  <div key={index} className='order'>
-                    <table className='order-table'>
+                  <div key={index} className="order">
+                    <table className="order-table">
                       <thead>
                         <tr>
-                          <th colSpan='2'>Name: {order?.name}</th>
-                          <th colSpan='3'>
+                          <th colSpan="2">Name: {order?.name}</th>
+                          <th colSpan="3">
                             Mobile: {order.phNo}, Email: {order.email}
                           </th>
                         </tr>
                         <tr>
-                          <th colSpan='3'>
+                          <th colSpan="3">
                             Address: {order.address}, {order.city},{" "}
                             {order.country}, {order.postalCode}
                           </th>
-                          <th colSpan='2'>
+                          <th colSpan="2">
                             Pick up location:{" "}
                             {order?.pickupLocation === ""
                               ? "-"
@@ -390,8 +502,8 @@ const DynamicPdfGenerator = ({ jsonData }) => {
                             <td>{product.quantity}</td>
                           </tr>
                         ))}
-                        <tr className='total-row'>
-                          <td colSpan='3'>Total</td>
+                        <tr className="total-row">
+                          <td colSpan="3">Total</td>
                           <td>
                             $ {calculateTotalPrice(order?.products)?.toFixed(2)}
                           </td>
@@ -403,9 +515,9 @@ const DynamicPdfGenerator = ({ jsonData }) => {
                 ))}
               </Row>
             </TabPane>
-            <TabPane tabId='2'>
+            <TabPane tabId="2">
               <Row>
-                <table className='data-table'>
+                <table className="data-table">
                   <thead>
                     <tr>
                       <th>Item Name</th>
