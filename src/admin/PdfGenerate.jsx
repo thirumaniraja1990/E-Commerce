@@ -338,8 +338,8 @@ const DynamicPdfGenerator = ({ jsonData }) => {
   const generateSaleReportinExcel = () => {
     const wb = XLSX.utils.book_new();
 
-    orderedData.forEach((order, index) => {
-      const wsData = [
+    const wsData = orderedData.reduce((accumulator, order, index) => {
+      const orderRows = [
         [
           `Name: ${order?.name}`,
           `Mobile: ${order.phNo}`,
@@ -374,10 +374,14 @@ const DynamicPdfGenerator = ({ jsonData }) => {
           calculateTotalQuant(order.products),
         ],
       ];
-      const ws = XLSX.utils.aoa_to_sheet(wsData);
 
-      XLSX.utils.book_append_sheet(wb, ws, `Order ${index + 1}`);
-    });
+      return [...accumulator, ...orderRows, []]; // Add an empty row between orders
+    }, []);
+
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+    XLSX.utils.book_append_sheet(wb, ws, "SalesOrders");
+
     XLSX.writeFile(wb, "salesorders.xlsx");
   };
 

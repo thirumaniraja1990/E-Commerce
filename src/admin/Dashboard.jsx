@@ -14,14 +14,15 @@ import useGetData from "../custom-hooks/useGetData";
 import { DatePicker } from "reactstrap-date-picker";
 import { generateCSV } from "../custom-hooks/utils";
 import DynamicPdfGenerator from "./PdfGenerate";
+import { where } from "firebase/firestore";
 
 const Dashboard = () => {
   const { data: products } = useGetData("products");
   const { data: users } = useGetData("users");
-  const { data: checkout } = useGetData("checkout");
   const [product, setProduct] = useState([]);
   const [pickupLocation, setPickupLocation] = useState("");
-
+  const whereCondition = where("orderedDate", ">", new Date("2023-12-1"));
+  const { data: checkout, loading } = useGetData("checkout", whereCondition);
   useEffect(() => {
     setProduct([
       ...checkout.map((e) => {

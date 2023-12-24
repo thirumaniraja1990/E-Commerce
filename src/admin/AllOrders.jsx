@@ -6,14 +6,22 @@ import useGetData from "../custom-hooks/useGetData";
 import { Box, FormGroup } from "@mui/material";
 import CommonProduct from "../components/UI/CommonProduct";
 import { db } from "../firebase.config";
-import { Timestamp, doc, updateDoc } from "firebase/firestore";
+import { Timestamp, doc, updateDoc, where } from "firebase/firestore";
 import emailjs from "@emailjs/browser";
 import { toast } from "react-toastify";
 import MuiTable from "../components/MuiTable";
 const Order = () => {
   const [myOrders, setMyOrder] = useState([]);
+  const whereConditionCheckout = where(
+    "orderedDate",
+    ">",
+    new Date("2023-12-1")
+  );
 
-  const { data: checkoutProducts } = useGetData("checkout");
+  const { data: checkoutProducts } = useGetData(
+    "checkout",
+    whereConditionCheckout
+  );
   useEffect(() => {
     setMyOrder(
       checkoutProducts.map((el) => {

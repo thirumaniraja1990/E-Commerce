@@ -21,8 +21,11 @@ const Order = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const [loggedOutOrders, setLoggedOutOrders] = useState([]);
-
-  const { data: checkoutProducts, loading } = useGetData("checkout");
+  const whereCondition = where("orderedDate", ">", new Date("2023-12-1"));
+  const { data: checkoutProducts, loading } = useGetData(
+    "checkout",
+    whereCondition
+  );
   useEffect(() => {
     setMyOrder(
       checkoutProducts
@@ -252,8 +255,13 @@ const Order = () => {
   const [payload, setPayload] = useState({
     phNo: "",
   });
+  const whereConditionCheckout = where(
+    "orderedDate",
+    ">",
+    new Date("2023-12-1")
+  );
 
-  const { data: checkout } = useGetData("checkout");
+  const { data: checkout } = useGetData("checkout", whereConditionCheckout);
   const handleTrackOrder = () => {
     if (payload.phNo.trim() === "" || payload.phNo.length < 9) {
       setLoggedOutOrders([]);
