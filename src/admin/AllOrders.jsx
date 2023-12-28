@@ -147,7 +147,7 @@ const Order = () => {
       const templateParams = {
         to: item.email,
         to_name: item.name,
-        reply_to: "msmangadi.etagers@gmail.com",
+        reply_to: "msm.eangadi@gmail.com",
         emailBody: emailBody,
         // Other template parameters...
       };
@@ -276,7 +276,7 @@ const Order = () => {
       const templateParams = {
         to: item.email,
         to_name: item.name,
-        reply_to: "msmangadi.etagers@gmail.com",
+        reply_to: "msm.eangadi@gmail.com",
         emailBody: emailBody,
         // Other template parameters...
       };

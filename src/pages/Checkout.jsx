@@ -102,7 +102,7 @@ const Checkout = () => {
       const templateParams = {
         to: payload.email,
         to_name: payload.name,
-        reply_to: "msmangadi.etagers@gmail.com",
+        reply_to: "msm.eangadi@gmail.com",
         emailBody: emailBody,
         // Other template parameters...
       };
@@ -198,41 +198,41 @@ const Checkout = () => {
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   return (
     <>
-      <Helmet title='Checkout'></Helmet>
+      <Helmet title="Checkout"></Helmet>
       {/* <CommonSection title='Checkout' /> */}
-      <Form className='billing__form' onSubmit={checkout}>
+      <Form className="billing__form" onSubmit={checkout}>
         <section>
           <Container>
             <Row>
-              <Col lg='8'>
-                <h6 className='mb-4 fw-bold'>
+              <Col lg="8">
+                <h6 className="mb-4 fw-bold">
                   Contact Information & Pickup location
                 </h6>
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     required
-                    type='text'
-                    bsSize='sm'
+                    type="text"
+                    bsSize="sm"
                     value={payload.name}
-                    placeholder='Enter your name'
+                    placeholder="Enter your name"
                     onChange={(e) =>
                       setPayload({ ...payload, name: e.target.value })
                     }
                   />
                 </FormGroup>
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     required
-                    type='text'
-                    bsSize='sm'
+                    type="text"
+                    bsSize="sm"
                     value={payload.email}
-                    placeholder='Enter your email'
+                    placeholder="Enter your email"
                     onChange={(e) =>
                       setPayload({ ...payload, email: e.target.value })
                     }
                   />
                 </FormGroup>
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <PhoneInput
                     country={"us"}
                     // enableSearch={true}
@@ -248,7 +248,7 @@ const Checkout = () => {
                     inputStyle={{ width: "100%", height: "50px" }}
                   />
                   {isPlacingOrder && payload.phNo.trim() === "" && (
-                    <p className='error-message'>Phone number is required.</p>
+                    <p className="error-message">Phone number is required.</p>
                   )}
                 </FormGroup>
                 {/* <FormGroup className='form__group'>
@@ -263,21 +263,22 @@ const Checkout = () => {
                     }
                   />
                 </FormGroup> */}
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     // className='mb-3'
                     required
-                    type='select'
+                    type="select"
                     value={payload.pickupLocation}
-                    placeholder='Select pickup location'
+                    placeholder="Select pickup location"
                     onChange={(e) =>
                       setPayload({ ...payload, pickupLocation: e.target.value })
-                    }>
-                    <option value=''>Select pickup location</option>
-                    <option value='Franklin, Ohio'>Franklin, Ohio</option>
-                    <option value='Dayton, Ohio'>Dayton, Ohio</option>
-                    <option value='Columbus, Ohio'>Columbus, Ohio</option>
-                    <option value='Others'>Others</option>
+                    }
+                  >
+                    <option value="">Select pickup location</option>
+                    <option value="Franklin, Ohio">Franklin, Ohio</option>
+                    <option value="Dayton, Ohio">Dayton, Ohio</option>
+                    <option value="Columbus, Ohio">Columbus, Ohio</option>
+                    <option value="Others">Others</option>
                   </Input>
                 </FormGroup>
 
@@ -290,17 +291,18 @@ const Checkout = () => {
                         fontSize: "16px",
                         paddingLeft: "20px",
                         marginBottom: "1em",
-                      }}>
+                      }}
+                    >
                       MSM team will reach you to arrange your shipping as you
                       choose the pickup location not listed in the list.
                     </p>
-                    <FormGroup className='form__group'>
+                    <FormGroup className="form__group">
                       <Input
                         required
-                        type='text'
-                        bsSize='sm'
+                        type="text"
+                        bsSize="sm"
                         value={payload.otherAddress}
-                        placeholder='Enter Other Location'
+                        placeholder="Enter Other Location"
                         onChange={(e) =>
                           setPayload({
                             ...payload,
@@ -312,57 +314,57 @@ const Checkout = () => {
                   </div>
                 )}
 
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     required
-                    type='text'
-                    bsSize='sm'
+                    type="text"
+                    bsSize="sm"
                     value={payload.address}
-                    placeholder='Enter your address'
+                    placeholder="Enter your address"
                     onChange={(e) =>
                       setPayload({ ...payload, address: e.target.value })
                     }
                   />
                 </FormGroup>
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     required
-                    type='text'
-                    bsSize='sm'
+                    type="text"
+                    bsSize="sm"
                     value={payload.city}
-                    placeholder='Enter your city'
+                    placeholder="Enter your city"
                     onChange={(e) =>
                       setPayload({ ...payload, city: e.target.value })
                     }
                   />
                 </FormGroup>
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     required
-                    type='text'
-                    bsSize='sm'
+                    type="text"
+                    bsSize="sm"
                     value={payload.postalCode}
-                    placeholder='Enter your Postal Code'
+                    placeholder="Enter your Postal Code"
                     onChange={(e) =>
                       setPayload({ ...payload, postalCode: e.target.value })
                     }
                   />
                 </FormGroup>
-                <FormGroup className='form__group'>
+                <FormGroup className="form__group">
                   <Input
                     required
-                    type='text'
-                    bsSize='sm'
+                    type="text"
+                    bsSize="sm"
                     value={payload.country}
-                    placeholder='Enter your State'
+                    placeholder="Enter your State"
                     onChange={(e) =>
                       setPayload({ ...payload, country: e.target.value })
                     }
                   />
                 </FormGroup>
               </Col>
-              <Col lg='4'>
-                <div className='checkout__cart'>
+              <Col lg="4">
+                <div className="checkout__cart">
                   <h6>
                     Total Quantity :{" "}
                     <span>
@@ -407,14 +409,15 @@ const Checkout = () => {
                     </span>
                   </h4>
                   <button
-                    type='submit'
+                    type="submit"
                     className={`buy__btn auth__btn w-100 ${
                       isLoading ? "loading" : ""
                     }`}
-                    disabled={isLoading}>
+                    disabled={isLoading}
+                  >
                     {isLoading ? (
-                      <div className='spinner'>
-                        <i className=' ri-loader-4-line fa fa-spinner fa-spin'></i>{" "}
+                      <div className="spinner">
+                        <i className=" ri-loader-4-line fa fa-spinner fa-spin"></i>{" "}
                         Placing Order...
                       </div>
                     ) : (
@@ -422,7 +425,7 @@ const Checkout = () => {
                     )}
                   </button>
                 </div>
-                <div className='mt-3'>
+                <div className="mt-3">
                   <p
                     style={{
                       color: "red",
@@ -430,7 +433,8 @@ const Checkout = () => {
                       fontSize: "16px",
                       paddingLeft: "20px",
                       // marginBottom: "1em",
-                    }}>
+                    }}
+                  >
                     Order amount will be collected at the time of delivery or
                     pickup.
                     <br />
@@ -444,7 +448,8 @@ const Checkout = () => {
                       fontSize: "16px",
                       paddingLeft: "20px",
                       marginBottom: "1em",
-                    }}>
+                    }}
+                  >
                     Pre-order closing date 10/31/2023
                     <br />
                     Expected delivery or Pickup on or before 11/11/2023
