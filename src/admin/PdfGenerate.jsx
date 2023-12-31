@@ -310,29 +310,60 @@ const DynamicPdfGenerator = ({ jsonData }) => {
 
   const generatePickupLocationReportinExcel = () => {
     const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.json_to_sheet(
-      orderedData.map((e) => {
-        return {
-          name: e.name,
-          email: e.email,
-          products: JSON.stringify(e.products),
-          address: e.address,
-          city: e.city,
-          pickupLocation: e.pickupLocation,
-          otherAddress: e.otherAddress,
-          postalCode: e.postalCode,
-          country: e.country,
-          phNo: e.phNo,
-          orderedDate: `${new Date(e.orderedDate).getFullYear()} ${String(
-            new Date(e.orderedDate).getMonth() + 1
+
+    const wsData = orderedData.reduce((accumulator, order) => {
+      const orderRows = [
+        [
+          `Name: ${order?.name}`,
+          `Mobile: ${order.phNo}`,
+          `Email: ${order.email}`,
+          `Ordered Date: ${new Date(order.orderedDate).getFullYear()} ${String(
+            new Date(order.orderedDate).getMonth() + 1
           ).padStart(2, "0")} ${String(
-            new Date(e.orderedDate).getDate()
+            new Date(order.orderedDate).getDate()
           ).padStart(2, "0")}`,
-        };
-      })
-    );
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet 1");
-    XLSX.writeFile(workbook, "excel" + ".xlsx");
+        ],
+        [
+          `Address: ${order.address}, ${order.city}, ${order.country}, ${order.postalCode}`,
+        ],
+        [
+          "Pick up location",
+          order?.pickupLocation === "" ? "-" : order?.pickupLocation,
+        ],
+        [
+          "",
+          order?.pickupLocation === "Others"
+            ? `(${order.otherAddress ?? "-"})`
+            : "",
+        ],
+        ["Product Name", "Description", "Short Desc", "Price", "Quantity"],
+      ];
+
+      // Add product rows
+      order.products.forEach((product) => {
+        orderRows.push([
+          product.productName,
+          product.description,
+          product.shortDesc,
+          `$ ${product.price}`,
+          product.quantity,
+        ]);
+      });
+
+      orderRows.push([
+        "Total",
+        "",
+        "",
+        `$ ${calculateTotalPrice(order.products)?.toFixed(2)}`,
+        calculateTotalQuant(order.products),
+      ]);
+
+      return [...accumulator, ...orderRows, []]; // Add an empty row between orders
+    }, []);
+
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    XLSX.utils.book_append_sheet(workbook, ws, "PickupLocationOrders");
+    XLSX.writeFile(workbook, "pickuplocationorders.xlsx");
   };
 
   const generateSaleReportinExcel = () => {
