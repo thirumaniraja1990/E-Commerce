@@ -44,14 +44,14 @@ const Order = () => {
       const { quantity, price } = product;
       totalPrice += quantity * price;
     });
-    return totalPrice;
+    return totalPrice.toFixed(2);
   };
   const sendEmail = (status, item) => {
     return new Promise((resolve, reject) => {
       // Your email service configuration
-      const serviceId = "service_jtcn1v8";
-      const templateId = "template_c1aydzs";
-      const userId = "1U-pNmW5LeO3UJgUA";
+      const serviceId = "service_9eid4bz";
+      const templateId = "template_19k4ddr";
+      const userId = "ye0WTciM_JJM6lcbZ";
 
       // Construct the email body with dynamic data
       let emailBody = `<html>
@@ -172,9 +172,9 @@ const Order = () => {
   const sendEmailOrderCompleted = (status, item) => {
     return new Promise((resolve, reject) => {
       // Your email service configuration
-      const serviceId = "service_jtcn1v8";
-      const templateId = "template_c1aydzs";
-      const userId = "1U-pNmW5LeO3UJgUA";
+      const serviceId = "service_9eid4bz";
+      const templateId = "template_19k4ddr";
+      const userId = "ye0WTciM_JJM6lcbZ";
 
       // Construct the email body with dynamic data
       const emailBody = `<html>
