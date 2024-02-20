@@ -1,0 +1,35 @@
+.running-text-container {
+    margin-top: 1rem;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .running-text {
+    font-size: 18px;
+    font-weight: 600;
+    white-space: nowrap;
+    animation: scroll-left 45s linear infinite; /* Adjust the animation duration as needed */
+  }
+  
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  @media (max-width: 768px) {
+    .running-text {
+      font-size: 16px; 
+    }
+    
+    .running-text-container {
+      width: 100%; 
+      margin-top: 1rem;
+    }
+  }
+  .discount-text {
+    color: #162D5D; 
+    font-weight: bold;
+  }

@@ -21,6 +21,7 @@ import banner1 from "../assets/images/Banner_1.webp";
 import banner2 from "../assets/images/Banner_2.webp";
 import banner3 from "../assets/images/Banner_3.jpg";
 import { getDocuments } from "../utils/crud";
+import RunningText from "../components/RunningText";
 
 const Home = () => {
   const whereCondition = where("status", "==", 1);
@@ -45,6 +46,7 @@ const Home = () => {
   return (
     <>
       <Helmet title={"Home"}></Helmet>
+      <RunningText />
       <section className="hero__section">
         <Container>
           <Row>
@@ -72,11 +74,11 @@ const Home = () => {
         <Container>
           <Row>
             <Col lg="12">
-            <img src={service} alt="" />
+              <img src={service} alt="" />
             </Col>
-            </Row>
-            </Container>
-            </section>
+          </Row>
+        </Container>
+      </section>
 
       <section className="hero__section">
         <Container>
