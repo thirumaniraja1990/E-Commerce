@@ -450,9 +450,9 @@ const Checkout = () => {
                       marginBottom: "1em",
                     }}
                   >
-                    Pre-order Closing date 11/03/2024
+                    Pre-order Closing date 01/04/2024
                     <br />
-                    Expected delivery or Pickup on or before 24/03/2024
+                    Expected delivery or Pickup on or before 13/04/2024
                   </p>
                 </div>
               </Col>
